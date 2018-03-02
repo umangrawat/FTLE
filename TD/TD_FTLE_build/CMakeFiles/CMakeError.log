@@ -1,0 +1,312 @@
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_ba5d0/fast"
+/usr/bin/make -f CMakeFiles/cmTC_ba5d0.dir/build.make CMakeFiles/cmTC_ba5d0.dir/build
+make[1]: Entering directory '/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_ba5d0.dir/CheckSymbolExists.c.o
+/usr/bin/cc    -fPIC    -o CMakeFiles/cmTC_ba5d0.dir/CheckSymbolExists.c.o   -c /export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_ba5d0
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_ba5d0.dir/link.txt --verbose=1
+/usr/bin/cc  -fPIC     CMakeFiles/cmTC_ba5d0.dir/CheckSymbolExists.c.o  -o cmTC_ba5d0 -rdynamic 
+CMakeFiles/cmTC_ba5d0.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x1b): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_ba5d0.dir/build.make:97: recipe for target 'cmTC_ba5d0' failed
+make[1]: *** [cmTC_ba5d0] Error 1
+make[1]: Leaving directory '/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_ba5d0/fast' failed
+make: *** [cmTC_ba5d0/fast] Error 2
+
+File /export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_8a04e/fast"
+/usr/bin/make -f CMakeFiles/cmTC_8a04e.dir/build.make CMakeFiles/cmTC_8a04e.dir/build
+make[1]: Entering directory '/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_8a04e.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -fPIC -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_8a04e.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_8a04e
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_8a04e.dir/link.txt --verbose=1
+/usr/bin/cc  -fPIC -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_8a04e.dir/CheckFunctionExists.c.o  -o cmTC_8a04e -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_8a04e.dir/build.make:97: recipe for target 'cmTC_8a04e' failed
+make[1]: *** [cmTC_8a04e] Error 1
+make[1]: Leaving directory '/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_8a04e/fast' failed
+make: *** [cmTC_8a04e/fast] Error 2
+
+
+Determining if the Q_WS_WIN exist failed with the following output:
+Change Dir: /export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_d0303/fast"
+/usr/bin/make -f CMakeFiles/cmTC_d0303.dir/build.make CMakeFiles/cmTC_d0303.dir/build
+make[1]: Entering directory '/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_d0303.dir/CheckSymbolExists.cxx.o
+/usr/bin/c++    -I/usr/include/qt4   -o CMakeFiles/cmTC_d0303.dir/CheckSymbolExists.cxx.o -c /export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
+/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx: In function ‘int main(int, char**)’:
+/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:8:19: error: ‘Q_WS_WIN’ was not declared in this scope
+   return ((int*)(&Q_WS_WIN))[argc];
+                   ^
+CMakeFiles/cmTC_d0303.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_d0303.dir/CheckSymbolExists.cxx.o' failed
+make[1]: *** [CMakeFiles/cmTC_d0303.dir/CheckSymbolExists.cxx.o] Error 1
+make[1]: Leaving directory '/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_d0303/fast' failed
+make: *** [cmTC_d0303/fast] Error 2
+
+File /export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
+/* */
+#include <QtCore/qglobal.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef Q_WS_WIN
+  return ((int*)(&Q_WS_WIN))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the Q_WS_QWS exist failed with the following output:
+Change Dir: /export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_64369/fast"
+/usr/bin/make -f CMakeFiles/cmTC_64369.dir/build.make CMakeFiles/cmTC_64369.dir/build
+make[1]: Entering directory '/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_64369.dir/CheckSymbolExists.cxx.o
+/usr/bin/c++    -I/usr/include/qt4   -o CMakeFiles/cmTC_64369.dir/CheckSymbolExists.cxx.o -c /export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
+/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx: In function ‘int main(int, char**)’:
+/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:8:19: error: ‘Q_WS_QWS’ was not declared in this scope
+   return ((int*)(&Q_WS_QWS))[argc];
+                   ^
+CMakeFiles/cmTC_64369.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_64369.dir/CheckSymbolExists.cxx.o' failed
+make[1]: *** [CMakeFiles/cmTC_64369.dir/CheckSymbolExists.cxx.o] Error 1
+make[1]: Leaving directory '/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_64369/fast' failed
+make: *** [cmTC_64369/fast] Error 2
+
+File /export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
+/* */
+#include <QtCore/qglobal.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef Q_WS_QWS
+  return ((int*)(&Q_WS_QWS))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the Q_WS_MAC exist failed with the following output:
+Change Dir: /export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_4c1df/fast"
+/usr/bin/make -f CMakeFiles/cmTC_4c1df.dir/build.make CMakeFiles/cmTC_4c1df.dir/build
+make[1]: Entering directory '/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_4c1df.dir/CheckSymbolExists.cxx.o
+/usr/bin/c++    -I/usr/include/qt4   -o CMakeFiles/cmTC_4c1df.dir/CheckSymbolExists.cxx.o -c /export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
+/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx: In function ‘int main(int, char**)’:
+/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:8:19: error: ‘Q_WS_MAC’ was not declared in this scope
+   return ((int*)(&Q_WS_MAC))[argc];
+                   ^
+CMakeFiles/cmTC_4c1df.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_4c1df.dir/CheckSymbolExists.cxx.o' failed
+make[1]: *** [CMakeFiles/cmTC_4c1df.dir/CheckSymbolExists.cxx.o] Error 1
+make[1]: Leaving directory '/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_4c1df/fast' failed
+make: *** [cmTC_4c1df/fast] Error 2
+
+File /export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
+/* */
+#include <QtCore/qglobal.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef Q_WS_MAC
+  return ((int*)(&Q_WS_MAC))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the pthread_create exist failed with the following output:
+Change Dir: /export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_3d835/fast"
+make[1]: Entering directory '/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_3d835.dir/build.make CMakeFiles/cmTC_3d835.dir/build
+make[2]: Entering directory '/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_3d835.dir/CheckSymbolExists.c.o
+/usr/bin/cc    -fPIC    -o CMakeFiles/cmTC_3d835.dir/CheckSymbolExists.c.o   -c /export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp/CheckSymbolExists.c
+Linking C executable cmTC_3d835
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_3d835.dir/link.txt --verbose=1
+/usr/bin/cc  -fPIC     CMakeFiles/cmTC_3d835.dir/CheckSymbolExists.c.o  -o cmTC_3d835 -rdynamic 
+CMakeFiles/cmTC_3d835.dir/CheckSymbolExists.c.o: In function `main':
+CheckSymbolExists.c:(.text+0x1b): undefined reference to `pthread_create'
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_3d835.dir/build.make:97: recipe for target 'cmTC_3d835' failed
+make[2]: *** [cmTC_3d835] Error 1
+make[2]: Leaving directory '/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_3d835/fast' failed
+make[1]: *** [cmTC_3d835/fast] Error 2
+make[1]: Leaving directory '/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp'
+
+File /export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
+/* */
+#include <pthread.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef pthread_create
+  return ((int*)(&pthread_create))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the function pthread_create exists in the pthreads failed with the following output:
+Change Dir: /export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_104b5/fast"
+make[1]: Entering directory '/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp'
+/usr/bin/make -f CMakeFiles/cmTC_104b5.dir/build.make CMakeFiles/cmTC_104b5.dir/build
+make[2]: Entering directory '/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp'
+Building C object CMakeFiles/cmTC_104b5.dir/CheckFunctionExists.c.o
+/usr/bin/cc    -fPIC -DCHECK_FUNCTION_EXISTS=pthread_create   -o CMakeFiles/cmTC_104b5.dir/CheckFunctionExists.c.o   -c /usr/share/cmake-3.5/Modules/CheckFunctionExists.c
+Linking C executable cmTC_104b5
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_104b5.dir/link.txt --verbose=1
+/usr/bin/cc  -fPIC -DCHECK_FUNCTION_EXISTS=pthread_create    CMakeFiles/cmTC_104b5.dir/CheckFunctionExists.c.o  -o cmTC_104b5 -rdynamic -lpthreads 
+/usr/bin/ld: cannot find -lpthreads
+collect2: error: ld returned 1 exit status
+CMakeFiles/cmTC_104b5.dir/build.make:97: recipe for target 'cmTC_104b5' failed
+make[2]: *** [cmTC_104b5] Error 1
+make[2]: Leaving directory '/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_104b5/fast' failed
+make[1]: *** [cmTC_104b5/fast] Error 2
+make[1]: Leaving directory '/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp'
+
+
+Determining if the Q_WS_WIN exist failed with the following output:
+Change Dir: /export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_38c75/fast"
+/usr/bin/make -f CMakeFiles/cmTC_38c75.dir/build.make CMakeFiles/cmTC_38c75.dir/build
+make[1]: Entering directory '/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_38c75.dir/CheckSymbolExists.cxx.o
+/usr/bin/c++    -I/usr/include/qt4   -o CMakeFiles/cmTC_38c75.dir/CheckSymbolExists.cxx.o -c /export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
+/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx: In function ‘int main(int, char**)’:
+/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:8:19: error: ‘Q_WS_WIN’ was not declared in this scope
+   return ((int*)(&Q_WS_WIN))[argc];
+                   ^
+CMakeFiles/cmTC_38c75.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_38c75.dir/CheckSymbolExists.cxx.o' failed
+make[1]: *** [CMakeFiles/cmTC_38c75.dir/CheckSymbolExists.cxx.o] Error 1
+make[1]: Leaving directory '/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_38c75/fast' failed
+make: *** [cmTC_38c75/fast] Error 2
+
+File /export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
+/* */
+#include <QtCore/qglobal.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef Q_WS_WIN
+  return ((int*)(&Q_WS_WIN))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the Q_WS_QWS exist failed with the following output:
+Change Dir: /export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_badf2/fast"
+/usr/bin/make -f CMakeFiles/cmTC_badf2.dir/build.make CMakeFiles/cmTC_badf2.dir/build
+make[1]: Entering directory '/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_badf2.dir/CheckSymbolExists.cxx.o
+/usr/bin/c++    -I/usr/include/qt4   -o CMakeFiles/cmTC_badf2.dir/CheckSymbolExists.cxx.o -c /export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
+/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx: In function ‘int main(int, char**)’:
+/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:8:19: error: ‘Q_WS_QWS’ was not declared in this scope
+   return ((int*)(&Q_WS_QWS))[argc];
+                   ^
+CMakeFiles/cmTC_badf2.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_badf2.dir/CheckSymbolExists.cxx.o' failed
+make[1]: *** [CMakeFiles/cmTC_badf2.dir/CheckSymbolExists.cxx.o] Error 1
+make[1]: Leaving directory '/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_badf2/fast' failed
+make: *** [cmTC_badf2/fast] Error 2
+
+File /export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
+/* */
+#include <QtCore/qglobal.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef Q_WS_QWS
+  return ((int*)(&Q_WS_QWS))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+
+Determining if the Q_WS_MAC exist failed with the following output:
+Change Dir: /export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp
+
+Run Build Command:"/usr/bin/make" "cmTC_b4fe4/fast"
+/usr/bin/make -f CMakeFiles/cmTC_b4fe4.dir/build.make CMakeFiles/cmTC_b4fe4.dir/build
+make[1]: Entering directory '/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp'
+Building CXX object CMakeFiles/cmTC_b4fe4.dir/CheckSymbolExists.cxx.o
+/usr/bin/c++    -I/usr/include/qt4   -o CMakeFiles/cmTC_b4fe4.dir/CheckSymbolExists.cxx.o -c /export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
+/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx: In function ‘int main(int, char**)’:
+/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:8:19: error: ‘Q_WS_MAC’ was not declared in this scope
+   return ((int*)(&Q_WS_MAC))[argc];
+                   ^
+CMakeFiles/cmTC_b4fe4.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_b4fe4.dir/CheckSymbolExists.cxx.o' failed
+make[1]: *** [CMakeFiles/cmTC_b4fe4.dir/CheckSymbolExists.cxx.o] Error 1
+make[1]: Leaving directory '/export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp'
+Makefile:126: recipe for target 'cmTC_b4fe4/fast' failed
+make: *** [cmTC_b4fe4/fast] Error 2
+
+File /export/home/urawat/Desktop/TD/TD_FTLE_build/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
+/* */
+#include <QtCore/qglobal.h>
+
+int main(int argc, char** argv)
+{
+  (void)argv;
+#ifndef Q_WS_MAC
+  return ((int*)(&Q_WS_MAC))[argc];
+#else
+  (void)argc;
+  return 0;
+#endif
+}
+

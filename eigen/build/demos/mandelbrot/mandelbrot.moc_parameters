@@ -1,0 +1,7 @@
+-I/export/home/urawat/Desktop/eigen
+-I/export/home/urawat/Desktop/eigen/build
+-I/usr/include/qt4
+-DNDEBUG
+-o
+/export/home/urawat/Desktop/eigen/build/demos/mandelbrot/mandelbrot.moc
+/export/home/urawat/Desktop/eigen/demos/mandelbrot/mandelbrot.h
