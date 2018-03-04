@@ -1,0 +1,118 @@
+<html>
+    <head>
+        <title>FTLE CUDA</title>
+        <meta name="proxy_name" contents="filters.FTLECUDA"/>
+        <meta name="filename" contents="filters.FTLECUDA.html"/>
+    </head>
+    <body>
+        <h2>FTLE CUDA (FTLECUDA)</h2>
+        <i>
+            <p>Computes FTLE on the given patch of the dataset</p>
+        </i>
+        <div class="description">
+                Computes Finite-Time Lyapunov Exponents on uniform grids.
+            </div>
+        <table width="97%" border="2px">
+            <tr bgcolor="#9acd32">
+                <th>Property</th>
+                <th width="60%">Description</th>
+                <th width="5%">Default(s)</th>
+                <th width="20%">Restrictions</th>
+            </tr>
+            <tr>
+                <th>Input</th>
+                <td>
+                    Compute Finite-Time Lyapunov exponent, which characterizes the rate of seperatation of massless
+                    tracer particles within a flow.
+                </td>
+                <td>
+                    <span/>
+                </td>
+                <td>
+                    <p>Accepts input of following types:<ul>
+                            <li>vtkImageData</li>
+                        </ul>
+                    </p>
+                    <p>
+      The dataset must contain a field array (point)
+      
+        with 3 component(s).
+      </p>
+                </td>
+            </tr>
+            <tr>
+                <th>Start time</th>
+                <td>Set initial advection time for the flow map computation</td>
+                <td>0.0<span/>
+                </td>
+                <td/>
+            </tr>
+            <tr>
+                <th>End time</th>
+                <td>Set final advection time for the flow map computation</td>
+                <td>15000.0<span/>
+                </td>
+                <td/>
+            </tr>
+            <tr>
+                <th>Maximum Number of Steps</th>
+                <td>The maximum number of steps for the integrator.</td>
+                <td>10000<span/>
+                </td>
+                <td/>
+            </tr>
+            <tr>
+                <th>Seed grid origin, relative to input</th>
+                <td>
+                    Origin of seeding grid.
+                </td>
+                <td>0 0 0<span/>
+                </td>
+                <td/>
+            </tr>
+            <tr>
+                <th>Seed grid physical extent</th>
+                <td>
+                    Size of seeding grid.
+                </td>
+                <td>2.0 1.0 0.0<span/>
+                </td>
+                <td/>
+            </tr>
+            <tr>
+                <th>Seed grid resolution</th>
+                <td>
+                    Resolution of seeding grid.
+                </td>
+                <td>200.0 100.0 2.0<span/>
+                </td>
+                <td/>
+            </tr>
+            <tr>
+                <th>UseGPU</th>
+                <td>Use GPU for stream/path line integration, not yet implemented.</td>
+                <td>0<span/>
+                </td>
+                <td>
+                    <p>Accepts boolean values (0 or 1).</p>
+                </td>
+            </tr>
+            <tr>
+                <th>ShowStreamLines(CPU only)</th>
+                <td>Return streamlines within the multiBlock</td>
+                <td>0<span/>
+                </td>
+                <td>
+                    <p>Accepts boolean values (0 or 1).</p>
+                </td>
+            </tr>
+            <tr>
+                <th>Integration step size</th>
+                <td>Set step size for the fixed step size RK4 integration scheme.</td>
+                <td>0.1<span/>
+                </td>
+                <td/>
+            </tr>
+        </table>
+    </body>
+</html>
