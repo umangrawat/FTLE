@@ -39,9 +39,6 @@ public:
     vtkSetMacro(tauFinal, double);
     vtkGetMacro(tauFinal, double);
 
-    //vtkSetMacro(tau, double);
-    //vtkGetMacro(tau, double);
-
     vtkSetMacro(maxNumberOfSteps, int);
     vtkGetMacro(maxNumberOfSteps, int);
 
@@ -69,14 +66,10 @@ public:
     double* inputGridSpacing;
     int* inputGridDimensions;
 
-    //vtkSmartPointer<vtkDoubleArray> endpoints;
-
-    //std::vector<vector<double>> endpoints;
-
     vtkSmartPointer<vtkImageData> nextinputGrid;
     double* nextinputGridSpacing;
     int* nextinputGridDimensions;
-    //int blockNum;
+
 
 
 
@@ -99,15 +92,12 @@ protected:
 
     double tauInitial;
     double tauFinal;
-    //double tau;
-
 
     double originSeedGrid[3];
     double boundsSeedGrid[3];
     double dimensionSeedGrid[3];
     double spacingSeedGrid[3];
     int maxNumberOfSteps;
-    int TimeStepValues;
 
     double integrationStepSize;
     bool useGPU;

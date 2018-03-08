@@ -83,7 +83,7 @@ public:
     Integrator();
     Integrator(int intDirection, double stepsize, double starttime, double endtime, double stagThresh,
                vtkSmartPointer<vtkImageData> inputGrid, vtkSmartPointer<vtkImageData> source,
-               vtkSmartPointer<vtkImageData> nextinputGrid,  int blockNum, std::vector<vector<double>> previousPts);
+               vtkSmartPointer<vtkImageData> nextinputGrid, int blockNum,  int initialnum, int finalnum, double* time, std::vector<vector<double>> previousPts);
     ~Integrator();
 
     int integrationDirection;
@@ -101,10 +101,13 @@ public:
 
     double startTime;               ////
     double endTime;                 ////
+    int initialNum;
+    int finalNum;
     double origin[2];
     double originSource[2];
     bool calcStreamlines;
     int iter;
+    double* timestep;
 
 
 ////changed 3 to 2 and removed e,f,g,h and spacingZ and changed the name from tri to bi

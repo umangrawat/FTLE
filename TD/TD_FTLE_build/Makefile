@@ -56,21 +56,10 @@ CMAKE_BINARY_DIR = /export/home/urawat/Desktop/TD/TD_FTLE_build
 #=============================================================================
 # Targets provided globally by CMake.
 
-# Special rule for the target rebuild_cache
-rebuild_cache:
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
-	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
-.PHONY : rebuild_cache
-
-# Special rule for the target rebuild_cache
-rebuild_cache/fast: rebuild_cache
-
-.PHONY : rebuild_cache/fast
-
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake cache editor..."
-	/usr/bin/cmake-gui -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+	/usr/bin/ccmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
 .PHONY : edit_cache
 
 # Special rule for the target edit_cache
@@ -88,6 +77,28 @@ install/local: preinstall
 install/local/fast: install/local
 
 .PHONY : install/local/fast
+
+# Special rule for the target install/strip
+install/strip: preinstall
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Installing the project stripped..."
+	/usr/bin/cmake -DCMAKE_INSTALL_DO_STRIP=1 -P cmake_install.cmake
+.PHONY : install/strip
+
+# Special rule for the target install/strip
+install/strip/fast: install/strip
+
+.PHONY : install/strip/fast
+
+# Special rule for the target rebuild_cache
+rebuild_cache:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running CMake to regenerate build system..."
+	/usr/bin/cmake -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR)
+.PHONY : rebuild_cache
+
+# Special rule for the target rebuild_cache
+rebuild_cache/fast: rebuild_cache
+
+.PHONY : rebuild_cache/fast
 
 # Special rule for the target install
 install: preinstall
@@ -157,35 +168,30 @@ cudaIntegrator/fast:
 .PHONY : cudaIntegrator/fast
 
 #=============================================================================
-# Target rules for targets named FTLECUDAv4
+# Target rules for targets named FTLECUDAv5
 
 # Build rule for target.
-FTLECUDAv4: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 FTLECUDAv4
-.PHONY : FTLECUDAv4
+FTLECUDAv5: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 FTLECUDAv5
+.PHONY : FTLECUDAv5
 
 # fast build rule for target.
-FTLECUDAv4/fast:
-	$(MAKE) -f CMakeFiles/FTLECUDAv4.dir/build.make CMakeFiles/FTLECUDAv4.dir/build
-.PHONY : FTLECUDAv4/fast
-
-# Manual pre-install relink rule for target.
-FTLECUDAv4/preinstall:
-	$(MAKE) -f CMakeFiles/FTLECUDAv4.dir/build.make CMakeFiles/FTLECUDAv4.dir/preinstall
-.PHONY : FTLECUDAv4/preinstall
+FTLECUDAv5/fast:
+	$(MAKE) -f CMakeFiles/FTLECUDAv5.dir/build.make CMakeFiles/FTLECUDAv5.dir/build
+.PHONY : FTLECUDAv5/fast
 
 #=============================================================================
-# Target rules for targets named FTLECUDACPUv4
+# Target rules for targets named FTLECUDACPUv5
 
 # Build rule for target.
-FTLECUDACPUv4: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 FTLECUDACPUv4
-.PHONY : FTLECUDACPUv4
+FTLECUDACPUv5: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 FTLECUDACPUv5
+.PHONY : FTLECUDACPUv5
 
 # fast build rule for target.
-FTLECUDACPUv4/fast:
-	$(MAKE) -f CMakeFiles/FTLECUDACPUv4.dir/build.make CMakeFiles/FTLECUDACPUv4.dir/build
-.PHONY : FTLECUDACPUv4/fast
+FTLECUDACPUv5/fast:
+	$(MAKE) -f CMakeFiles/FTLECUDACPUv5.dir/build.make CMakeFiles/FTLECUDACPUv5.dir/build
+.PHONY : FTLECUDACPUv5/fast
 
 #=============================================================================
 # Target rules for targets named Tests
@@ -200,113 +206,113 @@ Tests/fast:
 	$(MAKE) -f CMakeFiles/Tests.dir/build.make CMakeFiles/Tests.dir/build
 .PHONY : Tests/fast
 
-FTLECUDACPUv4Init.o: FTLECUDACPUv4Init.cxx.o
+FTLECUDACPUv5Init.o: FTLECUDACPUv5Init.cxx.o
 
-.PHONY : FTLECUDACPUv4Init.o
-
-# target to build an object file
-FTLECUDACPUv4Init.cxx.o:
-	$(MAKE) -f CMakeFiles/FTLECUDACPUv4.dir/build.make CMakeFiles/FTLECUDACPUv4.dir/FTLECUDACPUv4Init.cxx.o
-.PHONY : FTLECUDACPUv4Init.cxx.o
-
-FTLECUDACPUv4Init.i: FTLECUDACPUv4Init.cxx.i
-
-.PHONY : FTLECUDACPUv4Init.i
-
-# target to preprocess a source file
-FTLECUDACPUv4Init.cxx.i:
-	$(MAKE) -f CMakeFiles/FTLECUDACPUv4.dir/build.make CMakeFiles/FTLECUDACPUv4.dir/FTLECUDACPUv4Init.cxx.i
-.PHONY : FTLECUDACPUv4Init.cxx.i
-
-FTLECUDACPUv4Init.s: FTLECUDACPUv4Init.cxx.s
-
-.PHONY : FTLECUDACPUv4Init.s
-
-# target to generate assembly for a file
-FTLECUDACPUv4Init.cxx.s:
-	$(MAKE) -f CMakeFiles/FTLECUDACPUv4.dir/build.make CMakeFiles/FTLECUDACPUv4.dir/FTLECUDACPUv4Init.cxx.s
-.PHONY : FTLECUDACPUv4Init.cxx.s
-
-FTLECUDACPUv4_Plugin.o: FTLECUDACPUv4_Plugin.cxx.o
-
-.PHONY : FTLECUDACPUv4_Plugin.o
+.PHONY : FTLECUDACPUv5Init.o
 
 # target to build an object file
-FTLECUDACPUv4_Plugin.cxx.o:
-	$(MAKE) -f CMakeFiles/FTLECUDACPUv4.dir/build.make CMakeFiles/FTLECUDACPUv4.dir/FTLECUDACPUv4_Plugin.cxx.o
-.PHONY : FTLECUDACPUv4_Plugin.cxx.o
+FTLECUDACPUv5Init.cxx.o:
+	$(MAKE) -f CMakeFiles/FTLECUDACPUv5.dir/build.make CMakeFiles/FTLECUDACPUv5.dir/FTLECUDACPUv5Init.cxx.o
+.PHONY : FTLECUDACPUv5Init.cxx.o
 
-FTLECUDACPUv4_Plugin.i: FTLECUDACPUv4_Plugin.cxx.i
+FTLECUDACPUv5Init.i: FTLECUDACPUv5Init.cxx.i
 
-.PHONY : FTLECUDACPUv4_Plugin.i
+.PHONY : FTLECUDACPUv5Init.i
 
 # target to preprocess a source file
-FTLECUDACPUv4_Plugin.cxx.i:
-	$(MAKE) -f CMakeFiles/FTLECUDACPUv4.dir/build.make CMakeFiles/FTLECUDACPUv4.dir/FTLECUDACPUv4_Plugin.cxx.i
-.PHONY : FTLECUDACPUv4_Plugin.cxx.i
+FTLECUDACPUv5Init.cxx.i:
+	$(MAKE) -f CMakeFiles/FTLECUDACPUv5.dir/build.make CMakeFiles/FTLECUDACPUv5.dir/FTLECUDACPUv5Init.cxx.i
+.PHONY : FTLECUDACPUv5Init.cxx.i
 
-FTLECUDACPUv4_Plugin.s: FTLECUDACPUv4_Plugin.cxx.s
+FTLECUDACPUv5Init.s: FTLECUDACPUv5Init.cxx.s
 
-.PHONY : FTLECUDACPUv4_Plugin.s
+.PHONY : FTLECUDACPUv5Init.s
 
 # target to generate assembly for a file
-FTLECUDACPUv4_Plugin.cxx.s:
-	$(MAKE) -f CMakeFiles/FTLECUDACPUv4.dir/build.make CMakeFiles/FTLECUDACPUv4.dir/FTLECUDACPUv4_Plugin.cxx.s
-.PHONY : FTLECUDACPUv4_Plugin.cxx.s
+FTLECUDACPUv5Init.cxx.s:
+	$(MAKE) -f CMakeFiles/FTLECUDACPUv5.dir/build.make CMakeFiles/FTLECUDACPUv5.dir/FTLECUDACPUv5Init.cxx.s
+.PHONY : FTLECUDACPUv5Init.cxx.s
 
-FTLECUDAv4Init.o: FTLECUDAv4Init.cxx.o
+FTLECUDACPUv5_Plugin.o: FTLECUDACPUv5_Plugin.cxx.o
 
-.PHONY : FTLECUDAv4Init.o
+.PHONY : FTLECUDACPUv5_Plugin.o
 
 # target to build an object file
-FTLECUDAv4Init.cxx.o:
-	$(MAKE) -f CMakeFiles/FTLECUDAv4.dir/build.make CMakeFiles/FTLECUDAv4.dir/FTLECUDAv4Init.cxx.o
-.PHONY : FTLECUDAv4Init.cxx.o
+FTLECUDACPUv5_Plugin.cxx.o:
+	$(MAKE) -f CMakeFiles/FTLECUDACPUv5.dir/build.make CMakeFiles/FTLECUDACPUv5.dir/FTLECUDACPUv5_Plugin.cxx.o
+.PHONY : FTLECUDACPUv5_Plugin.cxx.o
 
-FTLECUDAv4Init.i: FTLECUDAv4Init.cxx.i
+FTLECUDACPUv5_Plugin.i: FTLECUDACPUv5_Plugin.cxx.i
 
-.PHONY : FTLECUDAv4Init.i
+.PHONY : FTLECUDACPUv5_Plugin.i
 
 # target to preprocess a source file
-FTLECUDAv4Init.cxx.i:
-	$(MAKE) -f CMakeFiles/FTLECUDAv4.dir/build.make CMakeFiles/FTLECUDAv4.dir/FTLECUDAv4Init.cxx.i
-.PHONY : FTLECUDAv4Init.cxx.i
+FTLECUDACPUv5_Plugin.cxx.i:
+	$(MAKE) -f CMakeFiles/FTLECUDACPUv5.dir/build.make CMakeFiles/FTLECUDACPUv5.dir/FTLECUDACPUv5_Plugin.cxx.i
+.PHONY : FTLECUDACPUv5_Plugin.cxx.i
 
-FTLECUDAv4Init.s: FTLECUDAv4Init.cxx.s
+FTLECUDACPUv5_Plugin.s: FTLECUDACPUv5_Plugin.cxx.s
 
-.PHONY : FTLECUDAv4Init.s
+.PHONY : FTLECUDACPUv5_Plugin.s
 
 # target to generate assembly for a file
-FTLECUDAv4Init.cxx.s:
-	$(MAKE) -f CMakeFiles/FTLECUDAv4.dir/build.make CMakeFiles/FTLECUDAv4.dir/FTLECUDAv4Init.cxx.s
-.PHONY : FTLECUDAv4Init.cxx.s
+FTLECUDACPUv5_Plugin.cxx.s:
+	$(MAKE) -f CMakeFiles/FTLECUDACPUv5.dir/build.make CMakeFiles/FTLECUDACPUv5.dir/FTLECUDACPUv5_Plugin.cxx.s
+.PHONY : FTLECUDACPUv5_Plugin.cxx.s
 
-FTLECUDAv4_Plugin.o: FTLECUDAv4_Plugin.cxx.o
+FTLECUDAv5Init.o: FTLECUDAv5Init.cxx.o
 
-.PHONY : FTLECUDAv4_Plugin.o
+.PHONY : FTLECUDAv5Init.o
 
 # target to build an object file
-FTLECUDAv4_Plugin.cxx.o:
-	$(MAKE) -f CMakeFiles/FTLECUDAv4.dir/build.make CMakeFiles/FTLECUDAv4.dir/FTLECUDAv4_Plugin.cxx.o
-.PHONY : FTLECUDAv4_Plugin.cxx.o
+FTLECUDAv5Init.cxx.o:
+	$(MAKE) -f CMakeFiles/FTLECUDAv5.dir/build.make CMakeFiles/FTLECUDAv5.dir/FTLECUDAv5Init.cxx.o
+.PHONY : FTLECUDAv5Init.cxx.o
 
-FTLECUDAv4_Plugin.i: FTLECUDAv4_Plugin.cxx.i
+FTLECUDAv5Init.i: FTLECUDAv5Init.cxx.i
 
-.PHONY : FTLECUDAv4_Plugin.i
+.PHONY : FTLECUDAv5Init.i
 
 # target to preprocess a source file
-FTLECUDAv4_Plugin.cxx.i:
-	$(MAKE) -f CMakeFiles/FTLECUDAv4.dir/build.make CMakeFiles/FTLECUDAv4.dir/FTLECUDAv4_Plugin.cxx.i
-.PHONY : FTLECUDAv4_Plugin.cxx.i
+FTLECUDAv5Init.cxx.i:
+	$(MAKE) -f CMakeFiles/FTLECUDAv5.dir/build.make CMakeFiles/FTLECUDAv5.dir/FTLECUDAv5Init.cxx.i
+.PHONY : FTLECUDAv5Init.cxx.i
 
-FTLECUDAv4_Plugin.s: FTLECUDAv4_Plugin.cxx.s
+FTLECUDAv5Init.s: FTLECUDAv5Init.cxx.s
 
-.PHONY : FTLECUDAv4_Plugin.s
+.PHONY : FTLECUDAv5Init.s
 
 # target to generate assembly for a file
-FTLECUDAv4_Plugin.cxx.s:
-	$(MAKE) -f CMakeFiles/FTLECUDAv4.dir/build.make CMakeFiles/FTLECUDAv4.dir/FTLECUDAv4_Plugin.cxx.s
-.PHONY : FTLECUDAv4_Plugin.cxx.s
+FTLECUDAv5Init.cxx.s:
+	$(MAKE) -f CMakeFiles/FTLECUDAv5.dir/build.make CMakeFiles/FTLECUDAv5.dir/FTLECUDAv5Init.cxx.s
+.PHONY : FTLECUDAv5Init.cxx.s
+
+FTLECUDAv5_Plugin.o: FTLECUDAv5_Plugin.cxx.o
+
+.PHONY : FTLECUDAv5_Plugin.o
+
+# target to build an object file
+FTLECUDAv5_Plugin.cxx.o:
+	$(MAKE) -f CMakeFiles/FTLECUDAv5.dir/build.make CMakeFiles/FTLECUDAv5.dir/FTLECUDAv5_Plugin.cxx.o
+.PHONY : FTLECUDAv5_Plugin.cxx.o
+
+FTLECUDAv5_Plugin.i: FTLECUDAv5_Plugin.cxx.i
+
+.PHONY : FTLECUDAv5_Plugin.i
+
+# target to preprocess a source file
+FTLECUDAv5_Plugin.cxx.i:
+	$(MAKE) -f CMakeFiles/FTLECUDAv5.dir/build.make CMakeFiles/FTLECUDAv5.dir/FTLECUDAv5_Plugin.cxx.i
+.PHONY : FTLECUDAv5_Plugin.cxx.i
+
+FTLECUDAv5_Plugin.s: FTLECUDAv5_Plugin.cxx.s
+
+.PHONY : FTLECUDAv5_Plugin.s
+
+# target to generate assembly for a file
+FTLECUDAv5_Plugin.cxx.s:
+	$(MAKE) -f CMakeFiles/FTLECUDAv5.dir/build.make CMakeFiles/FTLECUDAv5.dir/FTLECUDAv5_Plugin.cxx.s
+.PHONY : FTLECUDAv5_Plugin.cxx.s
 
 Integrator.o: Integrator.cxx.o
 
@@ -314,8 +320,8 @@ Integrator.o: Integrator.cxx.o
 
 # target to build an object file
 Integrator.cxx.o:
-	$(MAKE) -f CMakeFiles/FTLECUDAv4.dir/build.make CMakeFiles/FTLECUDAv4.dir/Integrator.cxx.o
-	$(MAKE) -f CMakeFiles/FTLECUDACPUv4.dir/build.make CMakeFiles/FTLECUDACPUv4.dir/Integrator.cxx.o
+	$(MAKE) -f CMakeFiles/FTLECUDAv5.dir/build.make CMakeFiles/FTLECUDAv5.dir/Integrator.cxx.o
+	$(MAKE) -f CMakeFiles/FTLECUDACPUv5.dir/build.make CMakeFiles/FTLECUDACPUv5.dir/Integrator.cxx.o
 	$(MAKE) -f CMakeFiles/Tests.dir/build.make CMakeFiles/Tests.dir/Integrator.cxx.o
 .PHONY : Integrator.cxx.o
 
@@ -325,8 +331,8 @@ Integrator.i: Integrator.cxx.i
 
 # target to preprocess a source file
 Integrator.cxx.i:
-	$(MAKE) -f CMakeFiles/FTLECUDAv4.dir/build.make CMakeFiles/FTLECUDAv4.dir/Integrator.cxx.i
-	$(MAKE) -f CMakeFiles/FTLECUDACPUv4.dir/build.make CMakeFiles/FTLECUDACPUv4.dir/Integrator.cxx.i
+	$(MAKE) -f CMakeFiles/FTLECUDAv5.dir/build.make CMakeFiles/FTLECUDAv5.dir/Integrator.cxx.i
+	$(MAKE) -f CMakeFiles/FTLECUDACPUv5.dir/build.make CMakeFiles/FTLECUDACPUv5.dir/Integrator.cxx.i
 	$(MAKE) -f CMakeFiles/Tests.dir/build.make CMakeFiles/Tests.dir/Integrator.cxx.i
 .PHONY : Integrator.cxx.i
 
@@ -336,8 +342,8 @@ Integrator.s: Integrator.cxx.s
 
 # target to generate assembly for a file
 Integrator.cxx.s:
-	$(MAKE) -f CMakeFiles/FTLECUDAv4.dir/build.make CMakeFiles/FTLECUDAv4.dir/Integrator.cxx.s
-	$(MAKE) -f CMakeFiles/FTLECUDACPUv4.dir/build.make CMakeFiles/FTLECUDACPUv4.dir/Integrator.cxx.s
+	$(MAKE) -f CMakeFiles/FTLECUDAv5.dir/build.make CMakeFiles/FTLECUDAv5.dir/Integrator.cxx.s
+	$(MAKE) -f CMakeFiles/FTLECUDACPUv5.dir/build.make CMakeFiles/FTLECUDACPUv5.dir/Integrator.cxx.s
 	$(MAKE) -f CMakeFiles/Tests.dir/build.make CMakeFiles/Tests.dir/Integrator.cxx.s
 .PHONY : Integrator.cxx.s
 
@@ -401,8 +407,8 @@ vtkFTLE.o: vtkFTLE.cxx.o
 
 # target to build an object file
 vtkFTLE.cxx.o:
-	$(MAKE) -f CMakeFiles/FTLECUDAv4.dir/build.make CMakeFiles/FTLECUDAv4.dir/vtkFTLE.cxx.o
-	$(MAKE) -f CMakeFiles/FTLECUDACPUv4.dir/build.make CMakeFiles/FTLECUDACPUv4.dir/vtkFTLE.cxx.o
+	$(MAKE) -f CMakeFiles/FTLECUDAv5.dir/build.make CMakeFiles/FTLECUDAv5.dir/vtkFTLE.cxx.o
+	$(MAKE) -f CMakeFiles/FTLECUDACPUv5.dir/build.make CMakeFiles/FTLECUDACPUv5.dir/vtkFTLE.cxx.o
 	$(MAKE) -f CMakeFiles/Tests.dir/build.make CMakeFiles/Tests.dir/vtkFTLE.cxx.o
 .PHONY : vtkFTLE.cxx.o
 
@@ -412,8 +418,8 @@ vtkFTLE.i: vtkFTLE.cxx.i
 
 # target to preprocess a source file
 vtkFTLE.cxx.i:
-	$(MAKE) -f CMakeFiles/FTLECUDAv4.dir/build.make CMakeFiles/FTLECUDAv4.dir/vtkFTLE.cxx.i
-	$(MAKE) -f CMakeFiles/FTLECUDACPUv4.dir/build.make CMakeFiles/FTLECUDACPUv4.dir/vtkFTLE.cxx.i
+	$(MAKE) -f CMakeFiles/FTLECUDAv5.dir/build.make CMakeFiles/FTLECUDAv5.dir/vtkFTLE.cxx.i
+	$(MAKE) -f CMakeFiles/FTLECUDACPUv5.dir/build.make CMakeFiles/FTLECUDACPUv5.dir/vtkFTLE.cxx.i
 	$(MAKE) -f CMakeFiles/Tests.dir/build.make CMakeFiles/Tests.dir/vtkFTLE.cxx.i
 .PHONY : vtkFTLE.cxx.i
 
@@ -423,8 +429,8 @@ vtkFTLE.s: vtkFTLE.cxx.s
 
 # target to generate assembly for a file
 vtkFTLE.cxx.s:
-	$(MAKE) -f CMakeFiles/FTLECUDAv4.dir/build.make CMakeFiles/FTLECUDAv4.dir/vtkFTLE.cxx.s
-	$(MAKE) -f CMakeFiles/FTLECUDACPUv4.dir/build.make CMakeFiles/FTLECUDACPUv4.dir/vtkFTLE.cxx.s
+	$(MAKE) -f CMakeFiles/FTLECUDAv5.dir/build.make CMakeFiles/FTLECUDAv5.dir/vtkFTLE.cxx.s
+	$(MAKE) -f CMakeFiles/FTLECUDACPUv5.dir/build.make CMakeFiles/FTLECUDACPUv5.dir/vtkFTLE.cxx.s
 	$(MAKE) -f CMakeFiles/Tests.dir/build.make CMakeFiles/Tests.dir/vtkFTLE.cxx.s
 .PHONY : vtkFTLE.cxx.s
 
@@ -434,8 +440,8 @@ vtkFTLEClientServer.o: vtkFTLEClientServer.cxx.o
 
 # target to build an object file
 vtkFTLEClientServer.cxx.o:
-	$(MAKE) -f CMakeFiles/FTLECUDAv4.dir/build.make CMakeFiles/FTLECUDAv4.dir/vtkFTLEClientServer.cxx.o
-	$(MAKE) -f CMakeFiles/FTLECUDACPUv4.dir/build.make CMakeFiles/FTLECUDACPUv4.dir/vtkFTLEClientServer.cxx.o
+	$(MAKE) -f CMakeFiles/FTLECUDAv5.dir/build.make CMakeFiles/FTLECUDAv5.dir/vtkFTLEClientServer.cxx.o
+	$(MAKE) -f CMakeFiles/FTLECUDACPUv5.dir/build.make CMakeFiles/FTLECUDACPUv5.dir/vtkFTLEClientServer.cxx.o
 .PHONY : vtkFTLEClientServer.cxx.o
 
 vtkFTLEClientServer.i: vtkFTLEClientServer.cxx.i
@@ -444,8 +450,8 @@ vtkFTLEClientServer.i: vtkFTLEClientServer.cxx.i
 
 # target to preprocess a source file
 vtkFTLEClientServer.cxx.i:
-	$(MAKE) -f CMakeFiles/FTLECUDAv4.dir/build.make CMakeFiles/FTLECUDAv4.dir/vtkFTLEClientServer.cxx.i
-	$(MAKE) -f CMakeFiles/FTLECUDACPUv4.dir/build.make CMakeFiles/FTLECUDACPUv4.dir/vtkFTLEClientServer.cxx.i
+	$(MAKE) -f CMakeFiles/FTLECUDAv5.dir/build.make CMakeFiles/FTLECUDAv5.dir/vtkFTLEClientServer.cxx.i
+	$(MAKE) -f CMakeFiles/FTLECUDACPUv5.dir/build.make CMakeFiles/FTLECUDACPUv5.dir/vtkFTLEClientServer.cxx.i
 .PHONY : vtkFTLEClientServer.cxx.i
 
 vtkFTLEClientServer.s: vtkFTLEClientServer.cxx.s
@@ -454,8 +460,8 @@ vtkFTLEClientServer.s: vtkFTLEClientServer.cxx.s
 
 # target to generate assembly for a file
 vtkFTLEClientServer.cxx.s:
-	$(MAKE) -f CMakeFiles/FTLECUDAv4.dir/build.make CMakeFiles/FTLECUDAv4.dir/vtkFTLEClientServer.cxx.s
-	$(MAKE) -f CMakeFiles/FTLECUDACPUv4.dir/build.make CMakeFiles/FTLECUDACPUv4.dir/vtkFTLEClientServer.cxx.s
+	$(MAKE) -f CMakeFiles/FTLECUDAv5.dir/build.make CMakeFiles/FTLECUDAv5.dir/vtkFTLEClientServer.cxx.s
+	$(MAKE) -f CMakeFiles/FTLECUDACPUv5.dir/build.make CMakeFiles/FTLECUDACPUv5.dir/vtkFTLEClientServer.cxx.s
 .PHONY : vtkFTLEClientServer.cxx.s
 
 # Help Target
@@ -464,27 +470,28 @@ help:
 	@echo "... all (the default if no target is provided)"
 	@echo "... clean"
 	@echo "... depend"
-	@echo "... rebuild_cache"
 	@echo "... edit_cache"
 	@echo "... install/local"
+	@echo "... install/strip"
 	@echo "... cudaIntegrator"
-	@echo "... FTLECUDAv4"
+	@echo "... rebuild_cache"
+	@echo "... FTLECUDAv5"
+	@echo "... FTLECUDACPUv5"
 	@echo "... install"
 	@echo "... list_install_components"
-	@echo "... FTLECUDACPUv4"
 	@echo "... Tests"
-	@echo "... FTLECUDACPUv4Init.o"
-	@echo "... FTLECUDACPUv4Init.i"
-	@echo "... FTLECUDACPUv4Init.s"
-	@echo "... FTLECUDACPUv4_Plugin.o"
-	@echo "... FTLECUDACPUv4_Plugin.i"
-	@echo "... FTLECUDACPUv4_Plugin.s"
-	@echo "... FTLECUDAv4Init.o"
-	@echo "... FTLECUDAv4Init.i"
-	@echo "... FTLECUDAv4Init.s"
-	@echo "... FTLECUDAv4_Plugin.o"
-	@echo "... FTLECUDAv4_Plugin.i"
-	@echo "... FTLECUDAv4_Plugin.s"
+	@echo "... FTLECUDACPUv5Init.o"
+	@echo "... FTLECUDACPUv5Init.i"
+	@echo "... FTLECUDACPUv5Init.s"
+	@echo "... FTLECUDACPUv5_Plugin.o"
+	@echo "... FTLECUDACPUv5_Plugin.i"
+	@echo "... FTLECUDACPUv5_Plugin.s"
+	@echo "... FTLECUDAv5Init.o"
+	@echo "... FTLECUDAv5Init.i"
+	@echo "... FTLECUDAv5Init.s"
+	@echo "... FTLECUDAv5_Plugin.o"
+	@echo "... FTLECUDAv5_Plugin.i"
+	@echo "... FTLECUDAv5_Plugin.s"
 	@echo "... Integrator.o"
 	@echo "... Integrator.i"
 	@echo "... Integrator.s"

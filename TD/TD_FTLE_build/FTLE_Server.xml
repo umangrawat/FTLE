@@ -41,19 +41,19 @@
             <label>Start time</label>
             <documentation>
                 <brief/>
-                <long>Set initial advection time for the flow map computation</long>
+                <long>Set initial timestep for the flow map computation</long>
             </documentation>
-            <defaults>2.2</defaults>
+            <defaults>0.0</defaults>
             <domains/>
         </property>
         <property>
-            <name>End time</name>
-            <label>End time</label>
+            <name>Advection time</name>
+            <label>Advection time</label>
             <documentation>
                 <brief/>
-                <long>Set final advection time for the flow map computation</long>
+                <long>Set final timestep for the flow map computation</long>
             </documentation>
-            <defaults>6.3</defaults>
+            <defaults>15.0</defaults>
             <domains/>
         </property>
         <property>
@@ -79,27 +79,27 @@
             <domains/>
         </property>
         <property>
-            <name>Seed grid bounds</name>
-            <label>Seed grid bounds</label>
+            <name>Seed grid physical extent</name>
+            <label>Seed grid physical extent</label>
             <documentation>
                 <brief/>
                 <long>
                     Size of seeding grid.
                 </long>
             </documentation>
-            <defaults>20.0 10.0 0.0</defaults>
+            <defaults>2.0 1.0 0.0</defaults>
             <domains/>
         </property>
         <property>
-            <name>Seed grid dimension</name>
-            <label>Seed grid dimension</label>
+            <name>Seed grid resolution</name>
+            <label>Seed grid resolution</label>
             <documentation>
                 <brief/>
                 <long>
                     Resolution of seeding grid.
                 </long>
             </documentation>
-            <defaults>200.0 100.0 2.0</defaults>
+            <defaults>20.0 10.0 2.0</defaults>
             <domains/>
         </property>
         <property>

@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<VTKFile type="ImageData" version="0.1" byte_order="LittleEndian" header_type="UInt32" compressor="vtkZLibDataCompressor">
+  <ImageData WholeExtent="0 199 0 99 0 1" Origin="0 0 0" Spacing="1 1 1">
+    <Piece Extent="0 199 0 99 0 1"                                                    >
+      <PointData Scalars="ImageScalars" Vectors="ImageScalars">
+        <DataArray type="Float32" Name="ImageScalars" NumberOfComponents="3" format="appended" RangeMin="1"                    RangeMax="1"                    offset="0"                   />
+      </PointData>
+      <CellData>
+      </CellData>
+    </Piece>
+  </ImageData>
+  <AppendedData encoding="base64">
+   _DwAAAACAAAAAUwAAWwAAAF0AAABbAAAAWwAAAF0AAABbAAAAWwAAAF0AAABbAAAAWwAAAF0AAABbAAAAWwAAAF0AAABGAAAAeJztxjEBAAAIA6A1s5rR91lCuEh2ctzd3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3X++5oX1/3ic7cYxEQAACASgb2Y1o3sulhAmktWV4+7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u/u8DDmD1/3ic7cYxAQAACAOgNbOa0XeZQrhIzk7c3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d2fvjfp9UB4nO3GMQEAAAgDoDWzmtH3WUK4SHZy3N3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3df77mhfX/eJztxjERAAAIBKBvZjWjey6WECaS1ZXj7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7+7wMOYPX/eJztxjEBAAAIA6A1s5rRd5lCuEjOTtzd3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3Z++N+n1QHic7cYxAQAACAOgNbOa0fdZQrhIdnLc3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d1/vuaF9f94nO3GMREAAAgEoG9mNaN7LpYQJpLVlePu7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7v7vAw5g9f94nO3GMQEAAAgDoDWzmtF3mUK4SM5O3N3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3dn7436fVAeJztxjEBAAAIA6A1s5rR91lCuEh2ctzd3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3X++5oX1/3ic7cYxEQAACASgb2Y1o3sulhAmktWV4+7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u/u8DDmD1/3ic7cYxAQAACAOgNbOa0XeZQrhIzk7c3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d2fvjfp9UB4nO3GMQEAAAgDoDWzmtH3WUK4SHZy3N3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3df77mhfX/eJztxjERAAAIBKBvZjWjey6WECaS1ZXj7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7u7+7wMOYPX/eJztxiEBAAAIA7A3oxrRr2iA3NSSsxN3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d39+cXfDso4g==
+  </AppendedData>
+</VTKFile>
