@@ -459,142 +459,264 @@ int vtkFTLE::RequestData(vtkInformation *vtkNotUsed(request),
 
     ////iterators
     int InitialTime, FinalTime;
-
-    if ( this->tauFinal + this->tauInitial > times[numInTimes - 1] || this->tauInitial < times[0])
-    {
-        std::cerr << "Incorrect time values" << std::endl;
-        return false;
-    }
-
-    else
-    {
-        for ( int k = 0; k < numInTimes - 1; k++)
-        {
-            if ( this->tauInitial >= times[k] && this->tauInitial < times[k + 1])
-            {
-                InitialTime = k;
-            }
-
-        }
-
-        for (  int l = 0; l < numInTimes - 1; l++)
-        {
-            if ( this->tauFinal + this->tauInitial > times[l] && this->tauFinal + this->tauInitial <= times[l + 1] )
-            {
-                FinalTime = l + 1;
-            }
-        }
-
-    }
-
-    std::cout << "time iterators" << InitialTime << " " <<FinalTime << std::endl;
-
     std::vector<vector<double>> previousPts;
 
-    for ( int i = InitialTime; i < FinalTime;  i ++)
-    {
+    ///Forward FTLE
 
-        std::cout << "_________________________________________________________________" << std::endl;
+    if (this->tauFinal > 0) {
 
-        ////storing the consecutive time step data for computations
-        vtkSmartPointer<vtkImageData> data = vtkImageData::SafeDownCast(inData->GetBlock(i));
-        vtkSmartPointer<vtkImageData> nextdata = vtkImageData::SafeDownCast(inData->GetBlock(i + 1));
-
-
-        vtkIndent indentMyAss(4);
-        this->inputGrid = data;
-        this->inputGridSpacing = data->GetSpacing();
-        this->inputGridDimensions = data->GetDimensions();
-
-        this->nextinputGrid = nextdata;
-        this->nextinputGridSpacing = nextdata->GetSpacing();
-        this->nextinputGridDimensions = nextdata->GetDimensions();
-
-
-        callBack->SetCallback(progressFunction);
-
-        cout << "Integrate stream lines" << endl;
-
-        ///Needed to tell the stream tracer which vectors to use
-        this->inputGrid->GetPointData()->SetActiveVectors(this->inputGrid->GetPointData()->GetArrayName(0));
-        this->nextinputGrid->GetPointData()->SetActiveVectors(this->nextinputGrid->GetPointData()->GetArrayName(0));
-
-        if (this->useGPU) {
-
-            int temp = 1;
-            if (this->tauFinal < 0)
-                temp = -1;
-            cout << "Start Integration" << endl;
-
-
-            Integrator *customIntegrator = new Integrator(temp, this->integrationStepSize, fabs(this->tauInitial),
-                                                              fabs(this->tauFinal), LIMIT_DOUBLE,
-                                                              this->inputGrid, this->seedGrid, this->nextinputGrid, i,
-                                                              InitialTime, FinalTime, times, previousPts);
-            cout << "init integrator" << endl;
-            this->inputGrid->GetOrigin(customIntegrator->origin);
-            customIntegrator->setOriginSource(this->originSeedGrid);
-            customIntegrator->calcStreamlines = this->showStreamLines;
-            customIntegrator->maxNumberOfSteps = this->maxNumberOfSteps;
-
-            ////storing the values of enpoints of every iteration in a vector array, to be used for next iteration
-            previousPts = customIntegrator->PathlineEndPoints;
-
-            ////freeing up the memory
-            customIntegrator->PathlineEndPoints.erase(customIntegrator->PathlineEndPoints.begin(),
-                                                          customIntegrator->PathlineEndPoints.end());
-            customIntegrator->NewEndPoints.erase(customIntegrator->NewEndPoints.begin(),
-                                                     customIntegrator->NewEndPoints.end());
-
-
-            customIntegrator->integrateRK4GPUWrapper();
-            this->seedGrid = customIntegrator->source;
-            delete customIntegrator;
-
+        if (this->tauFinal + this->tauInitial > times[numInTimes - 1] || this->tauInitial < times[0]) {
+            std::cerr << "Incorrect time values" << std::endl;
+            return false;
+        } else {
+            for (int k = 0; k < numInTimes - 1; k++) {
+                if (this->tauInitial >= times[k] && this->tauInitial < times[k + 1]) {
+                    InitialTime = k;
+                }
             }
-        else
-        {
 
-            int temp = 1;
-            if (this->tauFinal < 0)
-               temp = -1;
-            cout << "Start Integration" << endl;
-
-            Integrator *customIntegrator = new Integrator(temp, this->integrationStepSize, fabs(this->tauInitial),
-                                                              fabs(this->tauFinal), LIMIT_DOUBLE,
-                                                              this->inputGrid, this->seedGrid, this->nextinputGrid, i,
-                                                              InitialTime, FinalTime, times, previousPts);
-            cout << "init integrator" << endl;
-            this->inputGrid->GetOrigin(customIntegrator->origin);
-            customIntegrator->setOriginSource(this->originSeedGrid);
-            customIntegrator->calcStreamlines = this->showStreamLines;
-            customIntegrator->maxNumberOfSteps = this->maxNumberOfSteps;
-
-            streamLines = customIntegrator->integrateRK4();
-
-            ////storing the values of enpoints of every iteration in a vector array, to be used for next iteration
-            previousPts = customIntegrator->PathlineEndPoints;
-
-            std::cout << "previous pts size " << previousPts.size() << std::endl;
-
-            ////freeing up the memory
-            customIntegrator->PathlineEndPoints.erase(customIntegrator->PathlineEndPoints.begin(),
-                                                          customIntegrator->PathlineEndPoints.end());
-            customIntegrator->NewEndPoints.erase(customIntegrator->NewEndPoints.begin(),
-                                                     customIntegrator->NewEndPoints.end());
-
-            delete customIntegrator;
+            for (int l = 0; l < numInTimes - 1; l++) {
+                if (this->tauFinal + this->tauInitial > times[l] && this->tauFinal + this->tauInitial <= times[l + 1]) {
+                    FinalTime = l + 1;
+                }
+            }
 
         }
 
-        cout << "Number of stream line cells " << streamLines->GetNumberOfCells() << endl;
-        cout << "Number of stream lines " << streamLines->GetNumberOfLines() << endl;
+        std::cout << "time iterators" << InitialTime << " " <<FinalTime << std::endl;
 
-        StreamLinesappendFilter->AddInputData(streamLines);
-        StreamLinesappendFilter->Update();
+        for ( int i = InitialTime; i < FinalTime;  i++ )
+        {
 
-        std::cout<< "Current Progress " << int((double(i + 1 - InitialTime)/double(FinalTime - InitialTime))* 100.0)<< std::endl;
+            std::cout << "_________________________________________________________________" << std::endl;
+
+            ////storing the consecutive time step data for computations
+            vtkSmartPointer<vtkImageData> data = vtkImageData::SafeDownCast(inData->GetBlock(i));
+            vtkSmartPointer<vtkImageData> nextdata = vtkImageData::SafeDownCast(inData->GetBlock(i + 1));
+
+
+            vtkIndent indentMyAss(4);
+            this->inputGrid = data;
+            this->inputGridSpacing = data->GetSpacing();
+            this->inputGridDimensions = data->GetDimensions();
+
+            this->nextinputGrid = nextdata;
+            this->nextinputGridSpacing = nextdata->GetSpacing();
+            this->nextinputGridDimensions = nextdata->GetDimensions();
+
+
+            callBack->SetCallback(progressFunction);
+
+            cout << "Integrate stream lines" << endl;
+
+            ///Needed to tell the stream tracer which vectors to use
+            this->inputGrid->GetPointData()->SetActiveVectors(this->inputGrid->GetPointData()->GetArrayName(0));
+            this->nextinputGrid->GetPointData()->SetActiveVectors(this->nextinputGrid->GetPointData()->GetArrayName(0));
+
+            if (this->useGPU) {
+
+                int temp = 1;
+
+                cout << "Start Integration" << endl;
+
+
+                Integrator *customIntegrator = new Integrator(temp, this->integrationStepSize, fabs(this->tauInitial),
+                                                              fabs(this->tauFinal), LIMIT_DOUBLE,
+                                                              this->inputGrid, this->seedGrid, this->nextinputGrid, i,
+                                                              InitialTime, FinalTime, times, previousPts);
+                cout << "init integrator" << endl;
+                this->inputGrid->GetOrigin(customIntegrator->origin);
+                customIntegrator->setOriginSource(this->originSeedGrid);
+                customIntegrator->calcStreamlines = this->showStreamLines;
+                customIntegrator->maxNumberOfSteps = this->maxNumberOfSteps;
+
+                ////storing the values of enpoints of every iteration in a vector array, to be used for next iteration
+                previousPts = customIntegrator->PathlineEndPoints;
+
+                ////freeing up the memory
+                customIntegrator->PathlineEndPoints.erase(customIntegrator->PathlineEndPoints.begin(),
+                                                          customIntegrator->PathlineEndPoints.end());
+                customIntegrator->NewEndPoints.erase(customIntegrator->NewEndPoints.begin(),
+                                                     customIntegrator->NewEndPoints.end());
+
+
+                customIntegrator->integrateRK4GPUWrapper();
+                this->seedGrid = customIntegrator->source;
+                delete customIntegrator;
+
+            }
+            else
+            {
+
+                int temp = 1;
+
+                cout << "Start Integration" << endl;
+
+                Integrator *customIntegrator = new Integrator(temp, this->integrationStepSize, fabs(this->tauInitial),
+                                                              fabs(this->tauFinal), LIMIT_DOUBLE,
+                                                              this->inputGrid, this->seedGrid, this->nextinputGrid, i,
+                                                              InitialTime, FinalTime, times, previousPts);
+                cout << "init integrator" << endl;
+                this->inputGrid->GetOrigin(customIntegrator->origin);
+                customIntegrator->setOriginSource(this->originSeedGrid);
+                customIntegrator->calcStreamlines = this->showStreamLines;
+                customIntegrator->maxNumberOfSteps = this->maxNumberOfSteps;
+
+                streamLines = customIntegrator->integrateRK4();
+
+                ////storing the values of enpoints of every iteration in a vector array, to be used for next iteration
+                previousPts = customIntegrator->PathlineEndPoints;
+
+                std::cout << "previous pts size " << previousPts.size() << std::endl;
+
+                ////freeing up the memory
+                customIntegrator->PathlineEndPoints.erase(customIntegrator->PathlineEndPoints.begin(),
+                                                          customIntegrator->PathlineEndPoints.end());
+                customIntegrator->NewEndPoints.erase(customIntegrator->NewEndPoints.begin(),
+                                                     customIntegrator->NewEndPoints.end());
+
+                delete customIntegrator;
+
+            }
+
+            cout << "Number of stream line cells " << streamLines->GetNumberOfCells() << endl;
+            cout << "Number of stream lines " << streamLines->GetNumberOfLines() << endl;
+
+            StreamLinesappendFilter->AddInputData(streamLines);
+            StreamLinesappendFilter->Update();
+
+            std::cout<< "Current Progress " << int((double(i + 1 - InitialTime)/double(FinalTime - InitialTime))* 100.0)<< std::endl;
+        }
     }
+
+    ////Backward FTLE
+    else {
+
+        if ( this->tauInitial > times[numInTimes - 1] || this->tauInitial + this->tauFinal < times[0]) {
+            std::cerr << "Incorrect time values" << std::endl;
+            return false;
+        } else {
+            for (int k = 0; k < numInTimes - 1; k++) {
+                if (this->tauInitial > times[k] && this->tauInitial <= times[k + 1]) {
+                    InitialTime = k + 1;
+                }
+
+            }
+
+            for (int l = 0; l < numInTimes - 1; l++) {
+                if ( this->tauInitial + this->tauFinal >= times[l] && this->tauInitial + this->tauFinal < times[l + 1]) {
+                    FinalTime = l;
+                }
+            }
+
+        }
+
+
+        std::cout << "time iterators" << InitialTime << " " <<FinalTime << std::endl;
+
+        for ( int i = InitialTime; i > FinalTime;  i-- )
+        {
+
+            std::cout << "_________________________________________________________________" << std::endl;
+
+            ////storing the consecutive time step data for computations
+            vtkSmartPointer<vtkImageData> data = vtkImageData::SafeDownCast(inData->GetBlock(i));
+            vtkSmartPointer<vtkImageData> nextdata = vtkImageData::SafeDownCast(inData->GetBlock(i - 1));
+
+
+            vtkIndent indentMyAss(4);
+            this->inputGrid = data;
+            this->inputGridSpacing = data->GetSpacing();
+            this->inputGridDimensions = data->GetDimensions();
+
+            this->nextinputGrid = nextdata;
+            this->nextinputGridSpacing = nextdata->GetSpacing();
+            this->nextinputGridDimensions = nextdata->GetDimensions();
+
+
+            callBack->SetCallback(progressFunction);
+
+            cout << "Integrate stream lines" << endl;
+
+            ///Needed to tell the stream tracer which vectors to use
+            this->inputGrid->GetPointData()->SetActiveVectors(this->inputGrid->GetPointData()->GetArrayName(0));
+            this->nextinputGrid->GetPointData()->SetActiveVectors(this->nextinputGrid->GetPointData()->GetArrayName(0));
+
+            if (this->useGPU) {
+
+                int temp = -1;                                      ////Backward FTLE
+
+                cout << "Start Integration" << endl;
+
+
+                Integrator *customIntegrator = new Integrator(temp, this->integrationStepSize, this->tauInitial,
+                                                              this->tauFinal, LIMIT_DOUBLE,
+                                                              this->inputGrid, this->seedGrid, this->nextinputGrid, i,
+                                                              InitialTime, FinalTime, times, previousPts);
+                cout << "init integrator" << endl;
+                this->inputGrid->GetOrigin(customIntegrator->origin);
+                customIntegrator->setOriginSource(this->originSeedGrid);
+                customIntegrator->calcStreamlines = this->showStreamLines;
+                customIntegrator->maxNumberOfSteps = this->maxNumberOfSteps;
+
+                ////storing the values of enpoints of every iteration in a vector array, to be used for next iteration
+                previousPts = customIntegrator->PathlineEndPoints;
+
+                ////freeing up the memory
+                customIntegrator->PathlineEndPoints.erase(customIntegrator->PathlineEndPoints.begin(),
+                                                          customIntegrator->PathlineEndPoints.end());
+                customIntegrator->NewEndPoints.erase(customIntegrator->NewEndPoints.begin(),
+                                                     customIntegrator->NewEndPoints.end());
+
+
+                customIntegrator->integrateRK4GPUWrapper();
+                this->seedGrid = customIntegrator->source;
+                delete customIntegrator;
+
+            }
+            else
+            {
+
+                int temp = -1;
+
+                cout << "Start Integration" << endl;
+
+                Integrator *customIntegrator = new Integrator(temp, this->integrationStepSize, this->tauInitial, this->tauFinal, LIMIT_DOUBLE,
+                                                              this->inputGrid, this->seedGrid, this->nextinputGrid, i,
+                                                              InitialTime, FinalTime, times, previousPts);
+                cout << "init integrator" << endl;
+                this->inputGrid->GetOrigin(customIntegrator->origin);
+                customIntegrator->setOriginSource(this->originSeedGrid);
+                customIntegrator->calcStreamlines = this->showStreamLines;
+                customIntegrator->maxNumberOfSteps = this->maxNumberOfSteps;
+
+                streamLines = customIntegrator->integrateRK4();
+
+                ////storing the values of enpoints of every iteration in a vector array, to be used for next iteration
+                previousPts = customIntegrator->PathlineEndPoints;
+
+                std::cout << "previous pts size " << previousPts.size() << std::endl;
+
+                ////freeing up the memory
+                customIntegrator->PathlineEndPoints.erase(customIntegrator->PathlineEndPoints.begin(),
+                                                          customIntegrator->PathlineEndPoints.end());
+                customIntegrator->NewEndPoints.erase(customIntegrator->NewEndPoints.begin(),
+                                                     customIntegrator->NewEndPoints.end());
+
+                delete customIntegrator;
+
+            }
+
+            cout << "Number of stream line cells " << streamLines->GetNumberOfCells() << endl;
+            cout << "Number of stream lines " << streamLines->GetNumberOfLines() << endl;
+
+            StreamLinesappendFilter->AddInputData(streamLines);
+            StreamLinesappendFilter->Update();
+
+            std::cout<< "Current Progress " << int((double( InitialTime - i + 1)/double(InitialTime - FinalTime))* 100.0)<< std::endl;
+        }
+    }
+
 
     pathLines->ShallowCopy(StreamLinesappendFilter->GetOutput());
     std::cout << "pathlines " << pathLines->GetNumberOfCells() << std::endl;

@@ -65,7 +65,7 @@ Integrator::Integrator(int intDirection, double stepsize, double starttime, doub
 
     this->integrationDirection = intDirection;
     this->stepSize = stepsize;
-    this->integrationTime = starttime + endtime;
+    this->integrationTime = (starttime + endtime) * intDirection;
     this->stagnationThreshold = stagThresh;
     this->input = inputGrid;
     this->source = sourcePoints;
@@ -552,6 +552,8 @@ bool Integrator::pointInterpolator(vec2 currentLocation, vec2& vecNextLocation, 
         vecNextLocation[0] *=-1;
         vecNextLocation[1] *=-1;
         ////vecNextLocation[2] *=-1;
+        vecNextSliceLocation[0] *=-1;
+        vecNextSliceLocation[1] *=-1;
     }
 
     return result;
@@ -925,16 +927,19 @@ vtkSmartPointer<vtkPoints> Integrator::integratePointRK4(vec2 startLocation)
     vtkSmartPointer<vtkPoints> outputPoints = vtkSmartPointer<vtkPoints>::New();
     double intFac;
     double currentIntTime = 0.;
-    double currentIntLength = this->timestep[this->iter];                             /// start from the particular iteration time step
-    double timeDiff = this->timestep[this->iter + 1] - this->timestep[this->iter];     /// Time gap between 2 consecutive intervals
+    double currentIntLength = this->timestep[this->iter] * this->integrationDirection;                             /// start from the particular iteration time step
+    double timeDiff = (this->timestep[this->iter + 1 * this->integrationDirection ] - this->timestep[this->iter]) * this->integrationDirection;                ////                /// Time gap between 2 consecutive intervals
 
 
     ////setting initial currenttime only for the first iteration
     if (this->iter == this->initialNum)
     {
-        currentIntTime = this->startTime - this->timestep[this->iter];
-        currentIntLength = currentIntTime;
+        currentIntTime = (this->startTime - this->timestep[this->iter]) * this->integrationDirection;
+        currentIntLength = this->startTime * this->integrationDirection;
     }
+
+    //std::cout << " " << currentIntTime << " " << currentIntLength<< " " << timeDiff << " " << this->integrationTime <<std::endl;
+
 
     ////changed 3 to 2 and removed currentLocation[2] + this->origin[2]
     double point[2] = {currentLocation[0] + this->origin[0],
@@ -1062,7 +1067,7 @@ vtkSmartPointer<vtkPoints> Integrator::integratePointRK4(vec2 startLocation)
         int iterator = 0;
 
         //// very first Starting point, first step, need to calculate the new timestep
-        if (this->iter == this->initialNum && currentIntTime == this->startTime - this->timestep[this->iter] )
+        if (this->iter == this->initialNum && currentIntTime == (this->startTime - this->timestep[this->iter]) * this->integrationDirection )
         {
             int count = 0;
             double starttimevalue = fabs(this->startTime);
@@ -1159,7 +1164,7 @@ vtkSmartPointer<vtkPoints> Integrator::integratePointRK4(vec2 startLocation)
             iter3 += 1;
         }
 
-        //std::cout << " " << currentIntTime << " " << currentIntLength<< " " << timeDiff << " " << this->integrationTime <<std::endl;
+        std::cout << " " << currentIntTime << " " << currentIntLength<< " " << timeDiff << " " << this->integrationTime <<std::endl;
 
         if (currentIntTime >= timeDiff || currentIntLength >= this->integrationTime)
         {
