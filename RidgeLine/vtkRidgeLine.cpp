@@ -30,6 +30,8 @@
 #include <vtkCellArray.h>
 #include <vtkPoints.h>
 #include <vtkPolyLine.h>
+#include <vtkLine.h>
+#include <vtkLineSource.h>
 
 #include <vtkXMLImageDataWriter.h>
 #include <vtkFieldData.h>
@@ -141,6 +143,8 @@ int vtkRidgeLine::RequestInformation(vtkInformation *vtkNotUsed(request), vtkInf
     vtkInformation *outInfo = outputVector->GetInformationObject(0);
     vtkInformation *inInfo = inputVector[0]->GetInformationObject(0);
 
+    /*
+
     int resolutionSeedGrid[6];
     resolutionSeedGrid[0] = 0;
     resolutionSeedGrid[1] = static_cast<int>(this->dimensionSeedGrid[0])-1;
@@ -158,6 +162,7 @@ int vtkRidgeLine::RequestInformation(vtkInformation *vtkNotUsed(request), vtkInf
     outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), resolutionSeedGrid,6);
     outInfo->Set(vtkDataObject::SPACING(), this->spacingSeedGrid,3);
     outInfo->Set(vtkDataObject::ORIGIN(),this->originSeedGrid,3);
+*/
 
     return 1;
 
@@ -241,8 +246,12 @@ int vtkRidgeLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInformatio
     Ridges(input, gradient, hessian, MinEigenvecs, dims, RidgePoints);
 
     vtkIdType numPoints = RidgePoints->GetNumberOfPoints();
+    std::cout<< "numpoints" << numPoints << std::endl;
 
     //// Create a line
+
+    /*
+
     vtkSmartPointer<vtkPolyLine> polyLine = vtkSmartPointer<vtkPolyLine>::New();
     polyLine->GetPointIds()->SetNumberOfIds(numPoints);
 
@@ -254,16 +263,40 @@ int vtkRidgeLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInformatio
     //// Create a cell array to store the lines in and add the lines to it
     vtkSmartPointer<vtkCellArray> cells = vtkSmartPointer<vtkCellArray>::New();
     cells->InsertNextCell(polyLine);
+    */
+
+
+    vtkSmartPointer<vtkCellArray> outputLines = vtkSmartPointer<vtkCellArray>::New();
+    //lines->Initialize();
+
+    vtkSmartPointer<vtkPoints> outputPoints = vtkSmartPointer<vtkPoints>::New();
+
+    for ( int i = 0; i < numPoints - 1; i+= 2)
+    {
+        outputLines->InsertNextCell(2);
+
+        for (int j = 0; j < 2; j++) {
+
+            double point[3] = {0.};
+
+            vtkIdType id = vtkIdType(i + j);
+            RidgePoints->GetPoint(id, point);
+
+            outputPoints->InsertNextPoint(point);
+            vtkIdType nextPoint = outputPoints->InsertNextPoint(point);
+            outputLines->InsertCellPoint(nextPoint);
+        }
+    }
 
     vtkSmartPointer<vtkPolyData> linesPolyData = vtkSmartPointer<vtkPolyData>::New();
 
-    linesPolyData->SetPoints(RidgePoints);
-    linesPolyData->SetLines(cells);
+    linesPolyData->SetPoints(outputPoints);
+    linesPolyData->SetLines(outputLines);
+
 
     //// Copying in the output array
     output->ShallowCopy(linesPolyData);
-
-
+    
     return 1;
 }
 
@@ -2103,7 +2136,7 @@ bool RidgeEigenValue (double IntHessian[4])
 
     if (lambda[0] <= limit || lambda[1] <= limit)
     {
-        std::cout << "eigenvalues " << lambda[0] << ", " << lambda[1] << ", " <<  limit << std::endl;
+        //std::cout << "eigenvalues " << lambda[0] << ", " << lambda[1] << ", " <<  limit << std::endl;
         return true;
     }
 
