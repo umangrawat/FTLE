@@ -1,0 +1,36 @@
+<xml>
+    <proxy>
+        <group>filters</group>
+        <name>RidgeLine</name>
+        <label>RidgeLine</label>
+        <documentation>
+            <brief>Extracts ridge lines on the given patch of the dataset</brief>
+            <long>
+                Extracts ridge lines on uniform grids.
+            </long>
+        </documentation>
+        <property>
+            <name>Input</name>
+            <label>Input</label>
+            <defaults/>
+            <domains>
+                <domain>
+                    <text>Accepts input of following types:</text>
+                    <list>
+                        <item>vtkImageData</item>
+                    </list>
+                </domain>
+            </domains>
+        </property>
+        <property>
+            <name>LimitEigenValue</name>
+            <label>LimitEigenValue</label>
+            <documentation>
+                <brief/>
+                <long>Set the minimum limit of eigenvalue of the data.</long>
+            </documentation>
+            <defaults>1</defaults>
+            <domains/>
+        </property>
+    </proxy>
+</xml>

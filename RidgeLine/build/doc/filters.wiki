@@ -1,0 +1,34 @@
+
+==RidgeLine==
+
+Extracts ridge lines on the given patch of the dataset
+Extracts ridge lines on uniform grids.
+
+
+{| class="PropertiesTable" border="1" cellpadding="5"
+|-
+| '''Property'''
+| '''Description'''
+| '''Default Value(s)'''
+| '''Restrictions'''
+
+|-
+|'''Input''' (Input)
+|
+
+|
+
+|
+Accepts input of following types:
+* vtkImageData
+|-
+|'''LimitEigenValue''' (LimitEigenValue)
+|
+Set the minimum limit of eigenvalue of the data.
+|
+1
+|
+
+
+|}
+

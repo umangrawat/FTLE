@@ -1,0 +1,37 @@
+<ServerManagerConfiguration>
+    <ProxyGroup name="filters">
+        <SourceProxy
+                name="RidgeLine"
+                class="vtkRidgeLine"
+                label="RidgeLine">	<!-- name as it will appear in ParaView under "Filters" menu -->
+
+            <Documentation
+                    long_help="Extracts ridge lines on the given patch of the dataset"
+                    short_help="Extracts ridge lines">
+                Extracts ridge lines on uniform grids.
+            </Documentation>
+
+            <InputProperty
+                    name="Input"
+                    command="AddInputConnection"
+                    clean_command="RemoveAllInputs">
+                <ProxyGroupDomain name="groups">
+                    <Group name="sources"/> <!-- the input might come either from a reader-->
+                    <Group name="filters"/> <!-- ... or from another filter -->
+                </ProxyGroupDomain>
+                <DataTypeDomain name="input_type">
+                    <DataType value="vtkImageData"/> <!-- We require that the data has type vtkDataSet; might as well be more specific (e.g., vtkRectilinearGrid) -->
+                </DataTypeDomain>
+            </InputProperty>
+
+            <IntVectorProperty
+                    name="LimitEigenValue"
+                    command="SetLimitEigenValue"
+                    number_of_elements="1"
+                    default_values="1">
+                <Documentation>Set the minimum limit of eigenvalue of the data.</Documentation>
+            </IntVectorProperty>
+
+        </SourceProxy>
+    </ProxyGroup>
+</ServerManagerConfiguration>
