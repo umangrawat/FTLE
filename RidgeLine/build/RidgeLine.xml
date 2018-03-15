@@ -29,7 +29,7 @@
                 <brief/>
                 <long>Set the minimum limit of eigenvalue of the data.</long>
             </documentation>
-            <defaults>1</defaults>
+            <defaults>0</defaults>
             <domains/>
         </property>
     </proxy>

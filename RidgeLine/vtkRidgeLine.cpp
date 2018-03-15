@@ -32,6 +32,7 @@
 #include <vtkPolyLine.h>
 #include <vtkLine.h>
 #include <vtkLineSource.h>
+#include <vtkPolyDataConnectivityFilter.h>
 
 #include <vtkXMLImageDataWriter.h>
 #include <vtkFieldData.h>
@@ -52,10 +53,18 @@
 #include "vtkTable.h"
 
 #include <random>
+#include <vector>
+#include <math.h>
+#include <limits>
+#include <iomanip>
+
+#include <memory>
 
 
 using namespace std;
 using namespace std::chrono;
+
+const double LIMIT_DOUBLE = 1000* std::numeric_limits<double>::epsilon();
 
 int getIndex(int z,int y, int x, int* dataDims);
 double centralDiff(double fx, double fz, double dist);
@@ -245,8 +254,8 @@ int vtkRidgeLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInformatio
     vtkSmartPointer<vtkPoints> RidgePoints = vtkSmartPointer <vtkPoints>::New();
     Ridges(input, gradient, hessian, MinEigenvecs, dims, RidgePoints);
 
-    vtkIdType numPoints = RidgePoints->GetNumberOfPoints();
-    std::cout<< "numpoints" << numPoints << std::endl;
+    vtkIdType numRidgePoints = RidgePoints->GetNumberOfPoints();
+    //std::cout<< "numpoints" << numPoints << std::endl;
 
     //// Create a line
 
@@ -271,7 +280,7 @@ int vtkRidgeLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInformatio
 
     vtkSmartPointer<vtkPoints> outputPoints = vtkSmartPointer<vtkPoints>::New();
 
-    for ( int i = 0; i < numPoints - 1; i+= 2)
+    for ( int k = 0; k < numRidgePoints - 1; k+= 2)
     {
         outputLines->InsertNextCell(2);
 
@@ -279,7 +288,7 @@ int vtkRidgeLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInformatio
 
             double point[3] = {0.};
 
-            vtkIdType id = vtkIdType(i + j);
+            vtkIdType id = vtkIdType(k + j);
             RidgePoints->GetPoint(id, point);
 
             outputPoints->InsertNextPoint(point);
@@ -288,6 +297,7 @@ int vtkRidgeLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInformatio
         }
     }
 
+    /*
     vtkSmartPointer<vtkPolyData> linesPolyData = vtkSmartPointer<vtkPolyData>::New();
 
     linesPolyData->SetPoints(outputPoints);
@@ -296,7 +306,193 @@ int vtkRidgeLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInformatio
 
     //// Copying in the output array
     output->ShallowCopy(linesPolyData);
-    
+*/
+
+    std::vector<vector<double>> cellpoints;
+
+    ////storing all the points in a vector
+    for( int p = 0; p < numRidgePoints; p++ )
+    {
+        double cellpoint[3] = {0.};
+        vtkIdType id = vtkIdType(p);
+        RidgePoints->GetPoint(p, cellpoint);
+        std::vector<double> point = {cellpoint[0], cellpoint[1], cellpoint[2]};
+        //std::cout<<"ridgepoints " << p <<"     " <<cellpoint[0] << " " << cellpoint[1] <<" " <<cellpoint[2] <<std::endl;
+
+        cellpoints.push_back(point);
+    }
+
+    //std::cout<<"old size "<<cellpoints.size()<<std::endl;
+
+    vtkSmartPointer<vtkCellArray> linesridge = vtkSmartPointer<vtkCellArray>::New();
+    vtkSmartPointer<vtkPoints> pointsOfline = vtkSmartPointer<vtkPoints>::New();
+
+    //int i = 0;
+
+    while (cellpoints.size() > 0)
+    //{
+    //for (int i = 0; i < cellpoints.size(); i ++) {
+    //for (int i = 0; i < cellpoints.size() - 1; i ++)
+    {
+        vtkSmartPointer<vtkPoints> linepts = vtkSmartPointer<vtkPoints>::New();
+        int iter = 0;
+        std::vector<double> point = cellpoints.at( 0 );
+        std::vector<double> nextpoint = cellpoints.at( 1 );
+
+        std::vector<int> storeid;
+
+        for (int j = 2; j < cellpoints.size() - 1; j+=2)
+        //for (int j = 2; j < 50; j++)
+        {
+            std::vector<double> nextcellpoint = cellpoints.at(j);
+
+            if ((nextpoint[0] - nextcellpoint[0]) < LIMIT_DOUBLE && (nextpoint[1] - nextcellpoint[1]) < LIMIT_DOUBLE && (nextpoint[2] - nextcellpoint[2]) < LIMIT_DOUBLE)
+            //if (nextpoint == nextcellpoint)
+            {
+                std::vector<double> nextcellSecondpoint = cellpoints.at(j + 1);
+
+                if (iter == 0)
+                {
+                    linepts->InsertNextPoint(point[0], point[1], point[2]);
+                    std::cout<<"first point " <<"  " << point[0] << " "<<point[1] <<" " <<point[2] <<std::endl;
+                }
+
+                linepts->InsertNextPoint(nextpoint[0], nextpoint[1], nextpoint[2]);
+                linepts->InsertNextPoint(nextcellpoint[0], nextcellpoint[1], nextcellpoint[2]);
+
+                //cellpoints.erase(j);                                ////because it removes 2 elements in earlier step
+
+                std::cout<<"nextpoint before " << nextpoint[0]<<" " << nextpoint[1] <<" " << nextpoint[2] <<std::endl;
+                nextpoint = nextcellSecondpoint;
+
+                std::cout<<"nextcellpoint "<< j << "  "<< nextcellpoint[0]<<" " << nextcellpoint[1] <<" " << nextcellpoint[2] <<std::endl;
+                std::cout<<"nextcellSecondpoint "<< j + 1 << " " << nextcellSecondpoint[0]<<" " << nextcellSecondpoint[1] <<" " << nextcellSecondpoint[2] <<std::endl;
+                std::cout<<"nextpoint after  " << j + 1 << " "<< nextpoint[0]<<" " << nextpoint[1] <<" " << nextpoint[2] <<std::endl;
+
+                iter += 1;
+                storeid.push_back( j );
+                storeid.push_back( j+1 );
+
+                //std::cout<< "iterator "<< iter << std::endl;
+            }
+
+        }
+
+        int idPoints = storeid.size();
+        linesridge->InsertNextCell(idPoints);
+
+        for (int pt = 0; pt < linepts->GetNumberOfPoints(); pt++ )
+        {
+            double ridgept[3] = {0.};
+            vtkIdType ptId = vtkIdType(pt);
+            linepts->GetPoint(ptId, ridgept);
+            pointsOfline->InsertNextPoint(ridgept);
+            vtkIdType nextPt = pointsOfline->InsertNextPoint(ridgept);
+            linesridge->InsertCellPoint(nextPt);
+        }
+
+        std::cout <<"old size " << cellpoints.size() << std::endl;
+
+        for (int l = 0; l < storeid.size(); l++)
+        {
+            int indexvalue = storeid.at(l);
+            std::vector<vector<double>>::iterator indexIt = cellpoints.begin() + indexvalue - l;
+            cellpoints.erase(indexIt);
+        }
+
+        std::cout <<"new size 1 " << cellpoints.size() << std::endl;
+
+        cellpoints.erase( cellpoints.begin(), cellpoints.begin() + 2 );
+        std::cout <<"new size 2 " << cellpoints.size() << std::endl;
+
+        storeid.erase(storeid.begin(), storeid.end());
+
+    }
+    //}
+
+    std::cout<< "reaches here1 "<<std::endl;
+
+    vtkSmartPointer<vtkPolyData> linesPolyData = vtkSmartPointer<vtkPolyData>::New();
+
+    linesPolyData->SetPoints(pointsOfline);
+    linesPolyData->SetLines(linesridge);
+
+    std::cout<< "reaches here2 "<<std::endl;
+
+    //// Copying in the output array
+    output->ShallowCopy(linesPolyData);
+
+    std::cout<< "reaches here3 "<<std::endl;
+
+    /*
+
+    vtkSmartPointer<vtkPolyData> ridgelines = vtkSmartPointer<vtkPolyData>::New();
+    ridgelines->ShallowCopy(linesPolyData);
+
+    for ( int i = 0; i < ridgelines->GetNumberOfPoints(); i+= 2 )
+    {
+        vtkSmartPointer<vtkPoints> linepoints = vtkSmartPointer<vtkPoints>::New();
+        double nextpoint[3] = {0.};
+        vtkIdType id = vtkIdType(i+1);
+        ridgelines->GetPoint(i+1, nextpoint);
+
+        for (int j = i + 2; j < ridgelines->GetNumberofPoints() ; j++)
+        {
+            double nextcellpoint[3] = {0.};
+            vtkIdType id2 = vtkIdType(j);
+            ridgelines->GetPoint(j, nextcellpoint);
+
+            if ( (nextpoint[0] - nextcellpoint[0]) < LIMIT_DOUBLE && (nextpoint[1] - nextcellpoint[1]) < LIMIT_DOUBLE && (nextpoint[2] - nextcellpoint[2]) < LIMIT_DOUBLE )
+            {
+                double nextcellSecondPoint[3] = {0.};
+                vtkIdType id3 = vtkIdType(j+1);
+                ridgelines->GetPoint(j+1, nextcellSecondPoint);
+
+                linepoints->InsertNextPoint(nextpoint);
+                linepoints->InsertNextPoint(nextcellpoint);
+                linepoints->InsertNextPoint(nextcellSecondPoint);
+
+                ridgelines->GetPoint(j+1, nextpoint);
+
+            }
+
+
+        }
+    }
+*/
+    /*
+    std::cout<< "cells no" << output->GetNumberOfCells() << std::endl;
+
+    vtkCellArray *cellArray;
+
+    for(vtkIdType i = 0; i < output->GetNumberOfCells(); i++) {
+
+        vtkIdType nextcell = output->GetCell(i);
+        cellArray->InsertNextCell(nextcell);
+    }
+
+
+
+
+
+    for(vtkIdType j = 0; j < cellArray->GetNumberOfCells(); j++)
+    {
+        vtkCell* edge = cellArray->GetEdge(j);
+
+        vtkIdList* pointIdList = edge->GetPointIds();
+
+        std::cout << "Edge " << j << " has " << pointIdList->GetNumberOfIds()
+                  << " points."  << std::endl;
+
+        for(vtkIdType p = 0; p < pointIdList->GetNumberOfIds(); p++)
+        {
+            std::cout << "Edge " << i << " uses point " << pointIdList->GetId(p)
+                      << std::endl;
+        }
+
+    }*/
+
+
     return 1;
 }
 

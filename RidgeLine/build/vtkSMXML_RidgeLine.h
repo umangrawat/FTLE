@@ -40,7 +40,7 @@ static const char* const RidgeLineRidgeLineInterfaces0 =
 "                    name=\"LimitEigenValue\"\n"
 "                    command=\"SetLimitEigenValue\"\n"
 "                    number_of_elements=\"1\"\n"
-"                    default_values=\"1\">\n"
+"                    default_values=\"0\">\n"
 "                <Documentation>Set the minimum limit of eigenvalue of the data.</Documentation>\n"
 "            </IntVectorProperty>\n"
 "\n"

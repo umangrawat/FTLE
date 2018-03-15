@@ -28,7 +28,7 @@
                     name="LimitEigenValue"
                     command="SetLimitEigenValue"
                     number_of_elements="1"
-                    default_values="1">
+                    default_values="0">
                 <Documentation>Set the minimum limit of eigenvalue of the data.</Documentation>
             </IntVectorProperty>
 
