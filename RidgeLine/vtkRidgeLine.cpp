@@ -71,6 +71,7 @@ double centralDiff(double fx, double fz, double dist);
 double forwardDiff(double fy, double fz, double dist);
 double backwardDiff(double fx, double fy, double dist);
 double DotProd(double x[2], double y[2]);
+double distance(std::vector<double> x, std::vector<double> y);
 //void Interpolation (vtkImageData* oldinput, vtkDoubleArray* oldfield, int* olddims, int* dims,  int ResolutionFactor, vtkStructuredGrid* input);
 void Gradient (vtkImageData* input, vtkDoubleArray* field, int* dims, vtkDoubleArray* gradient);
 void Hessian ( vtkImageData* input, vtkDoubleArray* gradient, int* dims, vtkDoubleArray* hessian );
@@ -198,7 +199,7 @@ int vtkRidgeLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInformatio
 
     //// Getting the scalar values in an array
     vtkSmartPointer<vtkDoubleArray> field = vtkSmartPointer<vtkDoubleArray>::New();
-    field = vtkDoubleArray::SafeDownCast(input->GetPointData()->GetArray(0));
+    field = vtkDoubleArray::SafeDownCast(input->GetPointData()->GetArray(2));
 
     /*
     //// New grid with an increased resolution
@@ -276,7 +277,6 @@ int vtkRidgeLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInformatio
 
 
     vtkSmartPointer<vtkCellArray> outputLines = vtkSmartPointer<vtkCellArray>::New();
-    //lines->Initialize();
 
     vtkSmartPointer<vtkPoints> outputPoints = vtkSmartPointer<vtkPoints>::New();
 
@@ -297,7 +297,7 @@ int vtkRidgeLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInformatio
         }
     }
 
-    /*
+
     vtkSmartPointer<vtkPolyData> linesPolyData = vtkSmartPointer<vtkPolyData>::New();
 
     linesPolyData->SetPoints(outputPoints);
@@ -306,191 +306,132 @@ int vtkRidgeLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInformatio
 
     //// Copying in the output array
     output->ShallowCopy(linesPolyData);
-*/
 
+
+    /////////////////// Get the Length of ridge lines ///////////////////////////////
+
+
+    //// storing all the cellpoints of ridges
     std::vector<vector<double>> cellpoints;
+    std::vector<double> ridgeLinelength;
 
-    ////storing all the points in a vector
-    for( int p = 0; p < numRidgePoints; p++ )
+    ////storing all the ridge points in a vector
+    for( int pointIndex = 0; pointIndex < numRidgePoints; pointIndex++ )
     {
         double cellpoint[3] = {0.};
-        vtkIdType id = vtkIdType(p);
-        RidgePoints->GetPoint(p, cellpoint);
+        vtkIdType id = vtkIdType(pointIndex);
+        RidgePoints->GetPoint(id, cellpoint);
         std::vector<double> point = {cellpoint[0], cellpoint[1], cellpoint[2]};
-        //std::cout<<"ridgepoints " << p <<"     " <<cellpoint[0] << " " << cellpoint[1] <<" " <<cellpoint[2] <<std::endl;
 
         cellpoints.push_back(point);
     }
 
-    //std::cout<<"old size "<<cellpoints.size()<<std::endl;
-
-    vtkSmartPointer<vtkCellArray> linesridge = vtkSmartPointer<vtkCellArray>::New();
-    vtkSmartPointer<vtkPoints> pointsOfline = vtkSmartPointer<vtkPoints>::New();
-
-    //int i = 0;
-
     while (cellpoints.size() > 0)
-    //{
-    //for (int i = 0; i < cellpoints.size(); i ++) {
-    //for (int i = 0; i < cellpoints.size() - 1; i ++)
     {
-        vtkSmartPointer<vtkPoints> linepts = vtkSmartPointer<vtkPoints>::New();
         int iter = 0;
-        std::vector<double> point = cellpoints.at( 0 );
+        double ridgeLength = 0.;
+        vtkSmartPointer<vtkPoints> linepts = vtkSmartPointer<vtkPoints>::New();
+
+        std::vector<double> firstpoint = cellpoints.at( 0 );
         std::vector<double> nextpoint = cellpoints.at( 1 );
+
+        ridgeLength += distance(firstpoint, nextpoint);                                                            /// length between first two points
 
         std::vector<int> storeid;
 
         for (int j = 2; j < cellpoints.size() - 1; j+=2)
-        //for (int j = 2; j < 50; j++)
         {
             std::vector<double> nextcellpoint = cellpoints.at(j);
 
-            if ((nextpoint[0] - nextcellpoint[0]) < LIMIT_DOUBLE && (nextpoint[1] - nextcellpoint[1]) < LIMIT_DOUBLE && (nextpoint[2] - nextcellpoint[2]) < LIMIT_DOUBLE)
-            //if (nextpoint == nextcellpoint)
+            if ((std::fabs(nextpoint[0]) - std::fabs(nextcellpoint[0])) < LIMIT_DOUBLE
+                && (std::fabs(nextpoint[1]) - std::fabs(nextcellpoint[1])) < LIMIT_DOUBLE
+                && (std::fabs(nextpoint[2]) - std::fabs(nextcellpoint[2])) < LIMIT_DOUBLE)
             {
                 std::vector<double> nextcellSecondpoint = cellpoints.at(j + 1);
 
                 if (iter == 0)
                 {
-                    linepts->InsertNextPoint(point[0], point[1], point[2]);
-                    std::cout<<"first point " <<"  " << point[0] << " "<<point[1] <<" " <<point[2] <<std::endl;
+                    linepts->InsertNextPoint(firstpoint[0], firstpoint[1], firstpoint[2]);
                 }
 
                 linepts->InsertNextPoint(nextpoint[0], nextpoint[1], nextpoint[2]);
                 linepts->InsertNextPoint(nextcellpoint[0], nextcellpoint[1], nextcellpoint[2]);
 
-                //cellpoints.erase(j);                                ////because it removes 2 elements in earlier step
+                ridgeLength += distance(nextcellpoint, nextcellSecondpoint);                                        /// length in the next cell and hence forth
 
-                std::cout<<"nextpoint before " << nextpoint[0]<<" " << nextpoint[1] <<" " << nextpoint[2] <<std::endl;
                 nextpoint = nextcellSecondpoint;
-
-                std::cout<<"nextcellpoint "<< j << "  "<< nextcellpoint[0]<<" " << nextcellpoint[1] <<" " << nextcellpoint[2] <<std::endl;
-                std::cout<<"nextcellSecondpoint "<< j + 1 << " " << nextcellSecondpoint[0]<<" " << nextcellSecondpoint[1] <<" " << nextcellSecondpoint[2] <<std::endl;
-                std::cout<<"nextpoint after  " << j + 1 << " "<< nextpoint[0]<<" " << nextpoint[1] <<" " << nextpoint[2] <<std::endl;
 
                 iter += 1;
                 storeid.push_back( j );
                 storeid.push_back( j+1 );
 
-                //std::cout<< "iterator "<< iter << std::endl;
             }
 
         }
 
-        int idPoints = storeid.size();
-        linesridge->InsertNextCell(idPoints);
+        //// storing the length in the vector
+        ridgeLinelength.push_back(ridgeLength);
 
+        int idPoints = storeid.size();
+
+        /*
         for (int pt = 0; pt < linepts->GetNumberOfPoints(); pt++ )
         {
             double ridgept[3] = {0.};
             vtkIdType ptId = vtkIdType(pt);
             linepts->GetPoint(ptId, ridgept);
+
+            std::cout<< ridgept[0] << " " << ridgept[1] << " " <<ridgept[2] << std::endl;
+
             pointsOfline->InsertNextPoint(ridgept);
             vtkIdType nextPt = pointsOfline->InsertNextPoint(ridgept);
             linesridge->InsertCellPoint(nextPt);
         }
 
-        std::cout <<"old size " << cellpoints.size() << std::endl;
 
-        for (int l = 0; l < storeid.size(); l++)
+
+        vtkSmartPointer<vtkLine> line = vtkSmartPointer<vtkLine>::New();
+        for (int pt = 0; pt < linepts->GetNumberOfPoints(); pt++ )
+        {
+            double ridgept[3] = {0.};
+            vtkIdType ptId = vtkIdType(pt);
+            linepts->GetPoint(ptId, ridgept);
+
+            line->GetPointIds()->SetId(pt, pt);
+        }*/
+
+            for (int l = 0; l < storeid.size(); l++)
         {
             int indexvalue = storeid.at(l);
             std::vector<vector<double>>::iterator indexIt = cellpoints.begin() + indexvalue - l;
             cellpoints.erase(indexIt);
         }
 
-        std::cout <<"new size 1 " << cellpoints.size() << std::endl;
-
         cellpoints.erase( cellpoints.begin(), cellpoints.begin() + 2 );
-        std::cout <<"new size 2 " << cellpoints.size() << std::endl;
-
         storeid.erase(storeid.begin(), storeid.end());
 
     }
-    //}
 
-    std::cout<< "reaches here1 "<<std::endl;
 
+
+
+    for (int len  = 0; len < ridgeLinelength.size(); len++)
+    {
+        std::cout <<"length of ridge " << len << " " << ridgeLinelength.at(len) <<std::endl;
+    }
+
+
+    /*
     vtkSmartPointer<vtkPolyData> linesPolyData = vtkSmartPointer<vtkPolyData>::New();
 
     linesPolyData->SetPoints(pointsOfline);
     linesPolyData->SetLines(linesridge);
 
-    std::cout<< "reaches here2 "<<std::endl;
+    //std::cout<< "reaches here2 "<<std::endl;
 
     //// Copying in the output array
     output->ShallowCopy(linesPolyData);
-
-    std::cout<< "reaches here3 "<<std::endl;
-
-    /*
-
-    vtkSmartPointer<vtkPolyData> ridgelines = vtkSmartPointer<vtkPolyData>::New();
-    ridgelines->ShallowCopy(linesPolyData);
-
-    for ( int i = 0; i < ridgelines->GetNumberOfPoints(); i+= 2 )
-    {
-        vtkSmartPointer<vtkPoints> linepoints = vtkSmartPointer<vtkPoints>::New();
-        double nextpoint[3] = {0.};
-        vtkIdType id = vtkIdType(i+1);
-        ridgelines->GetPoint(i+1, nextpoint);
-
-        for (int j = i + 2; j < ridgelines->GetNumberofPoints() ; j++)
-        {
-            double nextcellpoint[3] = {0.};
-            vtkIdType id2 = vtkIdType(j);
-            ridgelines->GetPoint(j, nextcellpoint);
-
-            if ( (nextpoint[0] - nextcellpoint[0]) < LIMIT_DOUBLE && (nextpoint[1] - nextcellpoint[1]) < LIMIT_DOUBLE && (nextpoint[2] - nextcellpoint[2]) < LIMIT_DOUBLE )
-            {
-                double nextcellSecondPoint[3] = {0.};
-                vtkIdType id3 = vtkIdType(j+1);
-                ridgelines->GetPoint(j+1, nextcellSecondPoint);
-
-                linepoints->InsertNextPoint(nextpoint);
-                linepoints->InsertNextPoint(nextcellpoint);
-                linepoints->InsertNextPoint(nextcellSecondPoint);
-
-                ridgelines->GetPoint(j+1, nextpoint);
-
-            }
-
-
-        }
-    }
 */
-    /*
-    std::cout<< "cells no" << output->GetNumberOfCells() << std::endl;
-
-    vtkCellArray *cellArray;
-
-    for(vtkIdType i = 0; i < output->GetNumberOfCells(); i++) {
-
-        vtkIdType nextcell = output->GetCell(i);
-        cellArray->InsertNextCell(nextcell);
-    }
-
-
-
-
-
-    for(vtkIdType j = 0; j < cellArray->GetNumberOfCells(); j++)
-    {
-        vtkCell* edge = cellArray->GetEdge(j);
-
-        vtkIdList* pointIdList = edge->GetPointIds();
-
-        std::cout << "Edge " << j << " has " << pointIdList->GetNumberOfIds()
-                  << " points."  << std::endl;
-
-        for(vtkIdType p = 0; p < pointIdList->GetNumberOfIds(); p++)
-        {
-            std::cout << "Edge " << i << " uses point " << pointIdList->GetId(p)
-                      << std::endl;
-        }
-
-    }*/
 
 
     return 1;
@@ -539,6 +480,15 @@ double backwardDiff(double fx, double fy, double dist)
 double DotProd(double x[2], double y[2])
 {
     return x[0]*y[0] + x[1]*y[1];
+}
+
+double distance(std::vector<double> x, std::vector<double> y)
+{
+    double xdirec = (y[0] - x[0]) * (y[0] - x[0]);
+    double ydirec = (y[1] - x[1]) * (y[1] - x[1]);
+    double zdirec = (y[2] - x[2]) * (y[2] - x[2]);
+
+    return std::sqrt( xdirec + ydirec + zdirec );
 }
 
 /*
