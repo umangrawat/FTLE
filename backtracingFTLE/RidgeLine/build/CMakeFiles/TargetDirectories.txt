@@ -1,0 +1,3 @@
+/export/home/urawat/Desktop/RidgeLine/build/CMakeFiles/edit_cache.dir
+/export/home/urawat/Desktop/RidgeLine/build/CMakeFiles/rebuild_cache.dir
+/export/home/urawat/Desktop/RidgeLine/build/CMakeFiles/RidgeLine.dir
