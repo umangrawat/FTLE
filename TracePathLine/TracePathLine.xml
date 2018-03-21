@@ -1,0 +1,59 @@
+<ServerManagerConfiguration>
+    <ProxyGroup name="filters">
+        <SourceProxy
+            name="TracePathLine"
+            class="vtkTracePathLine"
+            label="Trace PathLine">	<!-- name as it will appear in ParaView under "Filters" menu -->
+
+            <Documentation
+                long_help="Traces the pathline end points to cells"
+                short_help="Traces the pathline end points to cells">
+                Locates pathline end points to cells.
+            </Documentation>
+
+            <InputProperty
+                    name="Input"
+                    command="AddInputConnection"
+                    clean_command="RemoveAllInputs">
+                <ProxyGroupDomain name="groups">
+                        <Group name="sources"/> <!-- the input might come either from a reader-->
+                        <Group name="filters"/> <!-- ... or from another filter -->
+                </ProxyGroupDomain>
+                <DataTypeDomain name="input_type">
+                     <DataType value="vtkImageData"/> <!-- We require that the data has type vtkDataSet; might as well be more specific (e.g., vtkRectilinearGrid) -->
+                </DataTypeDomain>
+            </InputProperty>
+
+            <DoubleVectorProperty
+                    name="Seed grid origin, relative to input"
+                    command="Setorigin"
+                    number_of_elements="3"
+                    default_values="0 0 0">
+                <Documentation>
+                    Origin of seeding grid.
+                </Documentation>
+            </DoubleVectorProperty>
+
+            <DoubleVectorProperty
+                    name="Seed grid physical extent"
+                    command="Setbounds"
+                    number_of_elements="3"
+                    default_values="2.0 1.0 0.0">
+                <Documentation>
+                    Size of seeding grid.
+                </Documentation>
+            </DoubleVectorProperty>
+
+            <IntVectorProperty
+                    name="Seed grid resolution"
+                    command="Setdimension"
+                    number_of_elements="3"
+                    default_values="20 10 2">
+                <Documentation>
+                    Resolution of seeding grid.
+                </Documentation>
+            </IntVectorProperty>
+
+        </SourceProxy>
+    </ProxyGroup>
+</ServerManagerConfiguration>

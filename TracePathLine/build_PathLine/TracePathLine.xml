@@ -1,0 +1,62 @@
+<xml>
+    <proxy>
+        <group>filters</group>
+        <name>TracePathLine</name>
+        <label>Trace PathLine</label>
+        <documentation>
+            <brief>Traces the pathline end points to cells</brief>
+            <long>
+                Locates pathline end points to cells.
+            </long>
+        </documentation>
+        <property>
+            <name>Input</name>
+            <label>Input</label>
+            <defaults/>
+            <domains>
+                <domain>
+                    <text>Accepts input of following types:</text>
+                    <list>
+                        <item>vtkImageData</item>
+                    </list>
+                </domain>
+            </domains>
+        </property>
+        <property>
+            <name>Seed grid origin, relative to input</name>
+            <label>Seed grid origin, relative to input</label>
+            <documentation>
+                <brief/>
+                <long>
+                    Origin of seeding grid.
+                </long>
+            </documentation>
+            <defaults>0 0 0</defaults>
+            <domains/>
+        </property>
+        <property>
+            <name>Seed grid physical extent</name>
+            <label>Seed grid physical extent</label>
+            <documentation>
+                <brief/>
+                <long>
+                    Size of seeding grid.
+                </long>
+            </documentation>
+            <defaults>2.0 1.0 0.0</defaults>
+            <domains/>
+        </property>
+        <property>
+            <name>Seed grid resolution</name>
+            <label>Seed grid resolution</label>
+            <documentation>
+                <brief/>
+                <long>
+                    Resolution of seeding grid.
+                </long>
+            </documentation>
+            <defaults>20 10 2</defaults>
+            <domains/>
+        </property>
+    </proxy>
+</xml>
