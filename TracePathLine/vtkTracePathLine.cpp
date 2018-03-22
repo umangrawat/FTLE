@@ -28,6 +28,7 @@
 #include <vtkFieldData.h>
 
 #include <vtkAssignAttribute.h>
+#include <vtkCellData.h>
 
 #include <random>
 #include <vector>
@@ -36,10 +37,10 @@
 
 using namespace std;
 
-int cellLocator( double Location[2], double spacing[3], int dimension[3] );
-int getIndex(int x,int y, int* dataDims)
+//int cellLocator( double Location[2], double spacing[3], int* resolution );
+int getIndex(int x, int y, int* resolution)
 {
-    return ( y * dataDims[0] + x );
+    return ( y  * resolution[1]   + x );
 }
 
 vtkStandardNewMacro(vtkTracePathLine);
@@ -92,11 +93,11 @@ int vtkTracePathLine::RequestUpdateExtent(vtkInformation*,vtkInformationVector**
 
     int resolution[6];
     resolution[0] = 0;
-    resolution[1] = static_cast<int>(this->dimension[0]) - 1;
+    resolution[1] = static_cast<int>(this->cellsNumber[0]);
     resolution[2] = 0;
-    resolution[3] = static_cast<int>(this->dimension[1]) - 1;
+    resolution[3] = static_cast<int>(this->cellsNumber[1]);
     resolution[4] = 0;
-    resolution[5] = static_cast<int>(this->dimension[2]) - 1;
+    resolution[5] = static_cast<int>(this->cellsNumber[2]);
 
     // Request numInTimes many time steps, starting from inTimes. inTimes is a pointer to the first time step (inTimes+3) would be a pointer to the fourth time step.
 
@@ -117,11 +118,11 @@ int vtkTracePathLine::RequestInformation(vtkInformation *vtkNotUsed(request), vt
 
     int resolution[6];
     resolution[0] = 0;
-    resolution[1] = static_cast<int>(this->dimension[0])-1;
+    resolution[1] = static_cast<int>(this->cellsNumber[0]);
     resolution[2] = 0;
-    resolution[3] = static_cast<int>(this->dimension[1])-1;
+    resolution[3] = static_cast<int>(this->cellsNumber[1]);
     resolution[4] = 0;
-    resolution[5] = static_cast<int>(this->dimension[2])-1;
+    resolution[5] = static_cast<int>(this->cellsNumber[2]);
 
 
     this->spacing[0] = this->bounds[0] / static_cast<double>(resolution[1]);
@@ -149,27 +150,29 @@ int vtkTracePathLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInform
     vtkInformation *outInfo = outputVector->GetInformationObject(0);
     vtkImageData* output = vtkImageData::SafeDownCast(outInfo->Get(vtkDataObject::DATA_OBJECT()));
 
-    int *dims = input->GetDimensions();
-
     this->seedGrid = vtkSmartPointer<vtkImageData>::New();
 
     int resolution[6];
     resolution[0] = 0;
-    resolution[1] = static_cast<int>(this->dimension[0]) - 1;
+    resolution[1] = static_cast<int>(this->cellsNumber[0]);
     resolution[2] = 0;
-    resolution[3] = static_cast<int>(this->dimension[1]) - 1;
+    resolution[3] = static_cast<int>(this->cellsNumber[1]);
     resolution[4] = 0;
-    resolution[5] = static_cast<int>(this->dimension[2]) - 1;
+    resolution[5] = static_cast<int>(this->cellsNumber[2]);
+
+    int dimension[3] = { resolution[1] + 1, resolution[3] + 1, resolution[5] + 1  };
 
     ///Set Size and extent of the seedng grid
-    this->seedGrid->SetDimensions(this->dimension);
+    this->seedGrid->SetDimensions(dimension);
     this->seedGrid->SetOrigin(this->origin);
 
     ///Calculate and set spacing of the seeding grid
-    this->spacing[0] = this->bounds[0] / (static_cast<double>(resolution[1])) ;
+    this->spacing[0] = this->bounds[0] / (static_cast<double>(resolution[1]));
     this->spacing[1] = this->bounds[1] / (static_cast<double>(resolution[3]));
     this->spacing[2] = this->bounds[2] / (static_cast<double>(resolution[5]));
     this->seedGrid->SetSpacing(this->spacing);
+
+    std::cout << "spacing "<< spacing[0] << " " <<spacing[1] << " " << spacing[2] << std::endl;
 
     vtkSmartPointer<vtkDoubleArray> startPoints = vtkDoubleArray::SafeDownCast(input->GetPointData()->GetAbstractArray("StartPoints"));
     startPoints->SetNumberOfComponents(2);
@@ -188,10 +191,8 @@ int vtkTracePathLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInform
         startPoints->GetTuple(i, startLocation);
         endPoints->GetTuple(i, endLocation);
 
-        int indexStart = cellLocator( startLocation, this->spacing, this->dimension );
-        int indexEnd = cellLocator( endLocation, this->spacing, this->dimension );
-
-        //std::cout<< " start " << indexStart << " end " << indexEnd << std::endl;
+        int indexStart = cellLocator( startLocation, this->spacing, resolution );
+        int indexEnd = cellLocator( endLocation, this->spacing, resolution );
 
         LocationIndex->InsertTuple2(id, indexStart, indexEnd);
 
@@ -199,12 +200,21 @@ int vtkTracePathLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInform
 
     ////Need to sort the arrays, remove duplicates in order to calculate the number of cells pathlines ended at
 
+    ////stores the respective cell number
     std::vector<vector<int>> TraceCells;
-    std::vector<int> numberofCellsPathLinesEnd;
 
-    for (int k = 0; k < this->dimension[0] * this->dimension[1]; k++)      ////number of cells
+
+    ///store the number of cells pathlines end from particular cell
+    vtkSmartPointer<vtkDoubleArray> numberofCellsPathLinesEnd = vtkSmartPointer<vtkDoubleArray>::New();
+    numberofCellsPathLinesEnd->SetNumberOfComponents(1);
+    numberofCellsPathLinesEnd->SetNumberOfTuples( resolution[1] * resolution[3]);
+    numberofCellsPathLinesEnd->SetName("Number Of Cells");
+
+
+    for (int k = 0; k < resolution[1] * resolution[3]; k++)      ////number of cells
     {
         std::vector<int> indexCells;
+        vtkIdType idEnd = vtkIdType(k);
 
         for ( int j = 0; j < LocationIndex->GetNumberOfTuples(); j++ )
         {
@@ -212,7 +222,7 @@ int vtkTracePathLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInform
             double indices[2] = {0.};
             LocationIndex->GetTuple(idLoc, indices);
 
-            if ( indices[0] == k )
+            if ( k == indices[0] )
             {
                 indexCells.push_back( indices[1] );
             }
@@ -233,12 +243,11 @@ int vtkTracePathLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInform
 
         std::cout << "________________________________________________________________________" << std::endl;
 
-        numberofCellsPathLinesEnd.push_back( indexCells.size() );
+        numberofCellsPathLinesEnd->InsertTuple1(idEnd, indexCells.size());
         TraceCells.push_back( indexCells );
-
     }
 
-    this->seedGrid->GetPointData()->AddArray(LocationIndex);
+    this->seedGrid->GetCellData()->AddArray(numberofCellsPathLinesEnd);
 
     output->ShallowCopy(this->seedGrid);
 
@@ -249,15 +258,35 @@ void vtkTracePathLine::PrintSelf(ostream &os, vtkIndent indent)
 {
 }
 
-int cellLocator( double Location[2], double spacing[3], int dimension[3] )
+int vtkTracePathLine:: cellLocator( double Location[2], double spacing[3], int* resolution )
 {
 
-    int xIndex, yIndex= 0;
+    int xIndex, yIndex = 0;
 
-    xIndex = static_cast<int>( Location[0] / spacing[0] );
-    yIndex = static_cast<int>( Location[1] / spacing[1] );
+    if ( Location[0] >= this->bounds[0] && Location[1] != this->bounds[1] )
+    {
+        xIndex = static_cast<int>( Location[0] / spacing[0] ) - 1;
+        yIndex = static_cast<int>( Location[1] / spacing[1] );
+    }
 
-    int index = getIndex(xIndex, yIndex, dimension );
+    else if ( Location[0] != this->bounds[0] && Location[1] >= this->bounds[1] )
+    {
+        xIndex = static_cast<int>( Location[0] / spacing[0] );
+        yIndex = static_cast<int>( Location[0] / spacing[0] ) - 1;
+    }
+
+    else if ( Location[0] >= this->bounds[0] && Location[1] >= this->bounds[1] )
+    {
+        xIndex = static_cast<int>( Location[0] / spacing[0] ) - 1;
+        yIndex = static_cast<int>( Location[0] / spacing[0] ) - 1;
+    }
+
+    else {
+        xIndex = static_cast<int>( Location[0] / spacing[0] );
+        yIndex = static_cast<int>( Location[1] / spacing[1] );
+    }
+
+    int index = getIndex(xIndex, yIndex, resolution );
 
     return index;
 }

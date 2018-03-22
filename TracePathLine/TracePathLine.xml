@@ -45,12 +45,12 @@
             </DoubleVectorProperty>
 
             <IntVectorProperty
-                    name="Seed grid resolution"
-                    command="Setdimension"
+                    name="Number of cells"
+                    command="SetcellsNumber"
                     number_of_elements="3"
-                    default_values="20 10 2">
+                    default_values="5 5 1">
                 <Documentation>
-                    Resolution of seeding grid.
+                    Number of cells in each direction.
                 </Documentation>
             </IntVectorProperty>
 

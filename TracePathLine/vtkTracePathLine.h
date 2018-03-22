@@ -31,8 +31,8 @@ public:
     vtkSetVector3Macro(bounds, double);
     vtkGetVector3Macro(bounds, double);
 
-    vtkSetVector3Macro(dimension, int);
-    vtkGetVector3Macro(dimension, int);
+    vtkSetVector3Macro(cellsNumber, int);
+    vtkGetVector3Macro(cellsNumber, int);
 
     vtkSmartPointer<vtkImageData> inputGrid;
     vtkSmartPointer<vtkImageData> seedGrid;
@@ -52,11 +52,13 @@ protected:
     virtual int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *); //the function that makes this class work with the vtk pipeline
     virtual int RequestUpdateExtent(vtkInformation*,vtkInformationVector** inputVector,vtkInformationVector* outputVector);
     virtual int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *);
+    int cellLocator( double Location[2], double spacing[3], int* resolution );
+
     // Generate output
 
     double origin[3];
     double bounds[3];
-    int dimension[3];
+    int cellsNumber[3];
     double spacing[3];
 
 private:

@@ -146,7 +146,7 @@ int VTK_EXPORT vtkTracePathLineCommand(vtkClientServerInterpreter *arlu, vtkObje
       return 1;
       }
     }
-  if (!strcmp("Setdimension",method) && msg.GetNumberOfArguments(0) == 5)
+  if (!strcmp("SetcellsNumber",method) && msg.GetNumberOfArguments(0) == 5)
     {
     int      temp0;
     int      temp1;
@@ -155,24 +155,24 @@ int VTK_EXPORT vtkTracePathLineCommand(vtkClientServerInterpreter *arlu, vtkObje
       msg.GetArgument(0, 3, &temp1) &&
       msg.GetArgument(0, 4, &temp2))
       {
-      op->Setdimension(temp0,temp1,temp2);
+      op->SetcellsNumber(temp0,temp1,temp2);
       return 1;
       }
     }
-  if (!strcmp("Setdimension",method) && msg.GetNumberOfArguments(0) == 3)
+  if (!strcmp("SetcellsNumber",method) && msg.GetNumberOfArguments(0) == 3)
     {
     int    temp0[3];
     if(msg.GetArgument(0, 2, temp0, 3))
       {
-      op->Setdimension(temp0);
+      op->SetcellsNumber(temp0);
       return 1;
       }
     }
-  if (!strcmp("Getdimension",method) && msg.GetNumberOfArguments(0) == 2)
+  if (!strcmp("GetcellsNumber",method) && msg.GetNumberOfArguments(0) == 2)
     {
     int     *temp20;
       {
-      temp20 = (op)->Getdimension();
+      temp20 = (op)->GetcellsNumber();
       resultStream.Reset();
       resultStream << vtkClientServerStream::Reply << vtkClientServerStream::InsertArray(temp20,3) << vtkClientServerStream::End;
       return 1;

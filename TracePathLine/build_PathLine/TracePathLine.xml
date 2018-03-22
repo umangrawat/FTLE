@@ -47,15 +47,15 @@
             <domains/>
         </property>
         <property>
-            <name>Seed grid resolution</name>
-            <label>Seed grid resolution</label>
+            <name>Number of cells</name>
+            <label>Number of cells</label>
             <documentation>
                 <brief/>
                 <long>
-                    Resolution of seeding grid.
+                    Number of cells in each direction.
                 </long>
             </documentation>
-            <defaults>20 10 2</defaults>
+            <defaults>5 5 1</defaults>
             <domains/>
         </property>
     </proxy>

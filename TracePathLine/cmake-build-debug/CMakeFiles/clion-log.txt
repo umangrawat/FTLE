@@ -1,30 +1,20 @@
 /usr/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /export/home/urawat/Desktop/TracePathLine
--- The C compiler identification is GNU 5.4.0
--- The CXX compiler identification is GNU 5.4.0
--- Check for working C compiler: /usr/bin/cc
--- Check for working C compiler: /usr/bin/cc -- works
--- Detecting C compiler ABI info
--- Detecting C compiler ABI info - done
--- Detecting C compile features
--- Detecting C compile features - done
--- Check for working CXX compiler: /usr/bin/c++
--- Check for working CXX compiler: /usr/bin/c++ -- works
--- Detecting CXX compiler ABI info
--- Detecting CXX compiler ABI info - done
--- Detecting CXX compile features
--- Detecting CXX compile features - done
--- Configuring done
-CMake Error at CMakeLists.txt:7 (add_executable):
-  Cannot find source file:
+CMake Error at CMakeLists.txt:13 (find_package):
+  By not providing "FindParaView.cmake" in CMAKE_MODULE_PATH this project has
+  asked CMake to find a package configuration file provided by "ParaView",
+  but CMake did not find one.
 
-    main.cpp
+  Could not find a package configuration file provided by "ParaView" with any
+  of the following names:
 
-  Tried extensions .c .C .c++ .cc .cpp .cxx .m .M .mm .h .hh .h++ .hm .hpp
-  .hxx .in .txx
+    ParaViewConfig.cmake
+    paraview-config.cmake
+
+  Add the installation prefix of "ParaView" to CMAKE_PREFIX_PATH or set
+  "ParaView_DIR" to a directory containing one of the above files.  If
+  "ParaView" provides a separate development package or SDK, be sure it has
+  been installed.
 
 
-CMake Error: CMake can not determine linker language for target: Backtrace
-CMake Error: Cannot determine link language for target "Backtrace".
--- Generating done
--- Build files have been written to: /export/home/urawat/Desktop/TracePathLine/cmake-build-debug
-Unable to determine product file path for target Backtrace (Debug). Running and debugging will be unavailable.
+-- Configuring incomplete, errors occurred!
+See also "/export/home/urawat/Desktop/TracePathLine/cmake-build-debug/CMakeFiles/CMakeOutput.log".

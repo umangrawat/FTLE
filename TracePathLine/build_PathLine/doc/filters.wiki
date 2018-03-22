@@ -42,13 +42,13 @@ Size of seeding grid.
 |
 
 |-
-|'''Seed grid resolution''' (Seed grid resolution)
+|'''Number of cells''' (Number of cells)
 |
 
-Resolution of seeding grid.
+Number of cells in each direction.
 
 |
-20 10 2
+5 5 1
 |
 
 
