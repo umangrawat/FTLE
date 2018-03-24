@@ -172,80 +172,112 @@ int vtkTracePathLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInform
     this->spacing[2] = this->bounds[2] / (static_cast<double>(resolution[5]));
     this->seedGrid->SetSpacing(this->spacing);
 
-    std::cout << "spacing "<< spacing[0] << " " <<spacing[1] << " " << spacing[2] << std::endl;
-
+    ////Getting the point values from input data
     vtkSmartPointer<vtkDoubleArray> startPoints = vtkDoubleArray::SafeDownCast(input->GetPointData()->GetAbstractArray("StartPoints"));
     startPoints->SetNumberOfComponents(2);
     vtkSmartPointer<vtkDoubleArray> endPoints = vtkDoubleArray::SafeDownCast(input->GetPointData()->GetAbstractArray("EndPoints"));
     endPoints->SetNumberOfComponents(2);
 
+    double pointsPerCell = startPoints->GetNumberOfTuples() / ( resolution[1] * resolution[3] * 2 );
+
+    std::cout<< " Number of Points per cell " << pointsPerCell << std::endl;
+
     ////Save the cell indices of both start and end locations
     vtkSmartPointer<vtkIntArray> LocationIndex = vtkSmartPointer<vtkIntArray>::New();
     LocationIndex->SetNumberOfComponents(2);
 
-    for (int i = 0; i < startPoints->GetNumberOfTuples(); i++)              ////need to adjust for 2D
+
+    //// allocate indices to all the startpoint and endpoint based on their local celllocation
+
+    for (int i = 0; i < startPoints->GetNumberOfTuples() / 2; i++)              ////need to adjust for 2D. divided by 2
     {
         double startLocation[2], endLocation[2] = {0.};
 
         vtkIdType id = vtkIdType(i);
-        startPoints->GetTuple(i, startLocation);
-        endPoints->GetTuple(i, endLocation);
+        startPoints->GetTuple( i, startLocation );
+        endPoints->GetTuple( i, endLocation );
 
         int indexStart = cellLocator( startLocation, this->spacing, resolution );
         int indexEnd = cellLocator( endLocation, this->spacing, resolution );
 
-        LocationIndex->InsertTuple2(id, indexStart, indexEnd);
+        LocationIndex->InsertTuple2( id, indexStart, indexEnd );
+
 
     }
+
+    std::cout<< "Location array size " << LocationIndex->GetNumberOfTuples() << std::endl;
 
     ////Need to sort the arrays, remove duplicates in order to calculate the number of cells pathlines ended at
 
     ////stores the respective cell number
     std::vector<vector<int>> TraceCells;
-
+    //std::vector<int> pathlinevec;
+    int numberOfPoints = 0;
 
     ///store the number of cells pathlines end from particular cell
     vtkSmartPointer<vtkDoubleArray> numberofCellsPathLinesEnd = vtkSmartPointer<vtkDoubleArray>::New();
     numberofCellsPathLinesEnd->SetNumberOfComponents(1);
-    numberofCellsPathLinesEnd->SetNumberOfTuples( resolution[1] * resolution[3]);
+    numberofCellsPathLinesEnd->SetNumberOfTuples( resolution[1] * resolution[3] );
     numberofCellsPathLinesEnd->SetName("Number Of Cells");
 
 
     for (int k = 0; k < resolution[1] * resolution[3]; k++)      ////number of cells
     {
+        ////stores the cell's number pathlines traverse to
         std::vector<int> indexCells;
         vtkIdType idEnd = vtkIdType(k);
 
-        for ( int j = 0; j < LocationIndex->GetNumberOfTuples(); j++ )
-        {
+        for (int j = 0; j < LocationIndex->GetNumberOfTuples(); j++) {
             vtkIdType idLoc = vtkIdType(j);
             double indices[2] = {0.};
             LocationIndex->GetTuple(idLoc, indices);
 
-            if ( k == indices[0] )
-            {
-                indexCells.push_back( indices[1] );
+            if (k == indices[0]) {
+                indexCells.push_back(indices[1]);
             }
         }
+
+        numberOfPoints += indexCells.size();
 
         std::sort(indexCells.begin(), indexCells.end());
 
         vector<int>::iterator ip;
         ip = std::unique(indexCells.begin(), indexCells.end());
-        indexCells.resize(std::distance( indexCells.begin(), ip ));
+        indexCells.resize(std::distance(indexCells.begin(), ip));
 
-        std::cout <<"From cell " << k << std::endl;
-        std::cout <<"Pathlines end up in cells "<<std::endl;
-        for ( int l = 0; l < indexCells.size(); l++)
-        {
-            std::cout <<"  " << indexCells.at(l) <<std::endl;
+        /*
+        if (indexCells.size() > pointsPerCell) {
+            std::cout << "From cell " << k << std::endl;
+            std::cout << "Pathlines end up in cells " << std::endl;
+            for (int l = 0; l < indexCells.size(); l++) {
+                std::cout << "  " << indexCells.at(l) << std::endl;
+            }
         }
-
         std::cout << "________________________________________________________________________" << std::endl;
+        */
 
         numberofCellsPathLinesEnd->InsertTuple1(idEnd, indexCells.size());
+        //pathlinevec.push_back(indexCells.size());
         TraceCells.push_back( indexCells );
     }
+
+    std::cout<< " Total number of points afterwards " << numberOfPoints << std::endl;
+
+    /*
+    auto old_count = pathlinevec.size();
+    pathlinevec.resize(2 * old_count);
+    std::copy_n(pathlinevec.begin(), old_count, pathlinevec.begin() + old_count);
+
+    for (int pt = 0; pt < pathlinevec.size(); pt++)
+    {
+        vtkIdType idPt = vtkIdType(pt);
+        int size = pathlinevec.at(pt);
+        std::cout << pt <<" " << size << std::endl;
+        numberofCellsPathLinesEnd->InsertTuple1( idPt, size );
+    }
+*/
+
+    //std::cout <<"Number Of Tuples " << numberofCellsPathLinesEnd->GetNumberOfTuples()<<std::endl;
 
     this->seedGrid->GetCellData()->AddArray(numberofCellsPathLinesEnd);
 
@@ -253,6 +285,10 @@ int vtkTracePathLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInform
 
     return 1;
 }
+
+
+
+/////check for the more points
 
 void vtkTracePathLine::PrintSelf(ostream &os, vtkIndent indent)
 {
@@ -263,24 +299,29 @@ int vtkTracePathLine:: cellLocator( double Location[2], double spacing[3], int* 
 
     int xIndex, yIndex = 0;
 
-    if ( Location[0] >= this->bounds[0] && Location[1] != this->bounds[1] )
+
+    ///points which are on or more than x-boundary
+    if ( Location[0] >= this->bounds[0] && Location[1] < this->bounds[1] )
     {
         xIndex = static_cast<int>( Location[0] / spacing[0] ) - 1;
         yIndex = static_cast<int>( Location[1] / spacing[1] );
     }
 
-    else if ( Location[0] != this->bounds[0] && Location[1] >= this->bounds[1] )
+    ///points which are on or more than y-boundary
+    else if ( Location[0] < this->bounds[0] && Location[1] >= this->bounds[1] )
     {
         xIndex = static_cast<int>( Location[0] / spacing[0] );
-        yIndex = static_cast<int>( Location[0] / spacing[0] ) - 1;
+        yIndex = static_cast<int>( Location[1] / spacing[1] ) - 1;
     }
 
+    ////both x and y boundaries
     else if ( Location[0] >= this->bounds[0] && Location[1] >= this->bounds[1] )
     {
         xIndex = static_cast<int>( Location[0] / spacing[0] ) - 1;
-        yIndex = static_cast<int>( Location[0] / spacing[0] ) - 1;
+        yIndex = static_cast<int>( Location[1] / spacing[1] ) - 1;
     }
 
+    ////rest of the points
     else {
         xIndex = static_cast<int>( Location[0] / spacing[0] );
         yIndex = static_cast<int>( Location[1] / spacing[1] );
