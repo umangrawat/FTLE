@@ -1,0 +1,36 @@
+<xml>
+    <proxy>
+        <group>filters</group>
+        <name>ColorMap</name>
+        <label>ColorMap</label>
+        <documentation>
+            <brief>Maps the pathlines to respective cells</brief>
+            <long>
+                Maps the points back to cells of origin.
+            </long>
+        </documentation>
+        <property>
+            <name>Input</name>
+            <label>Input</label>
+            <defaults/>
+            <domains>
+                <domain>
+                    <text>Accepts input of following types:</text>
+                    <list>
+                        <item>vtkImageData</item>
+                    </list>
+                </domain>
+            </domains>
+        </property>
+        <property>
+            <name>Set Cell Id</name>
+            <label>Set Cell Id</label>
+            <documentation>
+                <brief/>
+                <long>Set the CellId for evaluation.</long>
+            </documentation>
+            <defaults>0.0</defaults>
+            <domains/>
+        </property>
+    </proxy>
+</xml>

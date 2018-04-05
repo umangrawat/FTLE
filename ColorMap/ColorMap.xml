@@ -1,0 +1,41 @@
+<ServerManagerConfiguration>
+    <ProxyGroup name="filters">
+        <SourceProxy
+                name="ColorMap"
+                class="vtkColorMap"
+                label="ColorMap">	<!-- name as it will appear in ParaView under "Filters" menu -->
+
+            <Documentation
+                    long_help="Maps the pathlines to respective cells"
+                    short_help="Maps the points">
+                Maps the points back to cells of origin.
+            </Documentation>
+
+            <InputProperty
+                    name="Input"
+                    command="AddInputConnection"
+                    clean_command="RemoveAllInputs">
+                <ProxyGroupDomain name="groups">
+                    <Group name="sources"/> <!-- the input might come either from a reader-->
+                    <Group name="filters"/> <!-- ... or from another filter -->
+                </ProxyGroupDomain>
+                <DataTypeDomain name="input_type">
+                    <DataType value="vtkImageData"/> <!-- We require that the data has type vtkDataSet; might as well be more specific (e.g., vtkRectilinearGrid) -->
+                </DataTypeDomain>
+            </InputProperty>
+
+
+            <DoubleVectorProperty
+                    name="Set Cell Id"
+                    command="SetcellId"
+                    number_of_elements="1"
+                    default_values="0.0">
+                <Documentation>Set the CellId for evaluation.</Documentation>
+            </DoubleVectorProperty>
+
+            <OutputPort name="Points" index="0" id="port0"/>
+            <OutputPort name="Cells" index="1" id="port1"/>
+
+        </SourceProxy>
+    </ProxyGroup>
+</ServerManagerConfiguration>

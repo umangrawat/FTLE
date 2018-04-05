@@ -49,7 +49,7 @@ vtkStandardNewMacro(vtkTracePathLine);
 vtkTracePathLine::vtkTracePathLine()
 {
     this->SetNumberOfInputPorts(1);
-    this->SetNumberOfOutputPorts(1);
+    this->SetNumberOfOutputPorts(1);                                                    //// changed from 1 to 2
     this->SetInputArrayToProcess(0,0,0,vtkDataObject::FIELD_ASSOCIATION_POINTS,
                                  vtkDataSetAttributes::SCALARS);
 }
@@ -89,6 +89,7 @@ int vtkTracePathLine::RequestUpdateExtent(vtkInformation*,vtkInformationVector**
 {
 
     vtkSmartPointer<vtkInformation> outInfo = outputVector->GetInformationObject(0);
+    //vtkSmartPointer<vtkInformation> outInfo1 = outputVector->GetInformationObject(1);
     vtkSmartPointer<vtkInformation> inInfo = inputVector[0]->GetInformationObject(0);
 
     int resolution[6];
@@ -112,6 +113,7 @@ int vtkTracePathLine::RequestUpdateExtent(vtkInformation*,vtkInformationVector**
 int vtkTracePathLine::RequestInformation(vtkInformation *vtkNotUsed(request), vtkInformationVector **inputVector, vtkInformationVector *outputVector)
 {
     vtkInformation *outInfo = outputVector->GetInformationObject(0);
+    //vtkInformation *outInfo1 = outputVector->GetInformationObject(1);
     vtkInformation *inInfo = inputVector[0]->GetInformationObject(0);
 
 
@@ -148,7 +150,10 @@ int vtkTracePathLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInform
     vtkImageData* input = vtkImageData::SafeDownCast(inInfo->Get(vtkDataObject::DATA_OBJECT()));
 
     vtkInformation *outInfo = outputVector->GetInformationObject(0);
+    //vtkInformation *outInfo1 = outputVector->GetInformationObject(1);
+
     vtkImageData* output = vtkImageData::SafeDownCast(outInfo->Get(vtkDataObject::DATA_OBJECT()));
+    //vtkPolyData *output1 = vtkPolyData::SafeDownCast(outInfo1->Get(vtkDataObject::DATA_OBJECT()));
 
     this->seedGrid = vtkSmartPointer<vtkImageData>::New();
 
@@ -170,7 +175,7 @@ int vtkTracePathLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInform
     this->spacing[0] = this->bounds[0] / (static_cast<double>(resolution[1]));
     this->spacing[1] = this->bounds[1] / (static_cast<double>(resolution[3]));
     this->spacing[2] = this->bounds[2] / (static_cast<double>(resolution[5]));
-    this->seedGrid->SetSpacing(this->spacing);
+
 
     ////Getting the point values from input data
     vtkSmartPointer<vtkDoubleArray> startPoints = vtkDoubleArray::SafeDownCast(input->GetPointData()->GetAbstractArray("StartPoints"));
@@ -183,8 +188,8 @@ int vtkTracePathLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInform
     std::cout<< " Number of Points per cell " << pointsPerCell << std::endl;
 
     ////Save the cell indices of both start and end locations
-    vtkSmartPointer<vtkIntArray> LocationIndex = vtkSmartPointer<vtkIntArray>::New();
-    LocationIndex->SetNumberOfComponents(2);
+    vtkSmartPointer<vtkDoubleArray> LocationIndexValues = vtkSmartPointer<vtkDoubleArray>::New();
+    LocationIndexValues->SetNumberOfComponents(6);
 
 
     //// allocate indices to all the startpoint and endpoint based on their local celllocation
@@ -200,86 +205,107 @@ int vtkTracePathLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInform
         int indexStart = cellLocator( startLocation, this->spacing, resolution );
         int indexEnd = cellLocator( endLocation, this->spacing, resolution );
 
-        LocationIndex->InsertTuple2( id, indexStart, indexEnd );
-
-
+        LocationIndexValues->InsertTuple6( id, indexStart, indexEnd, startLocation[0], startLocation[1], endLocation[0], endLocation[1] );
     }
 
-    std::cout<< "Location array size " << LocationIndex->GetNumberOfTuples() << std::endl;
+
 
     ////Need to sort the arrays, remove duplicates in order to calculate the number of cells pathlines ended at
 
     ////stores the respective cell number
     std::vector<vector<int>> TraceCells;
-    //std::vector<int> pathlinevec;
     int numberOfPoints = 0;
 
     ///store the number of cells pathlines end from particular cell
     vtkSmartPointer<vtkDoubleArray> numberofCellsPathLinesEnd = vtkSmartPointer<vtkDoubleArray>::New();
     numberofCellsPathLinesEnd->SetNumberOfComponents(1);
     numberofCellsPathLinesEnd->SetNumberOfTuples( resolution[1] * resolution[3] );
-    numberofCellsPathLinesEnd->SetName("Number Of Cells");
+    numberofCellsPathLinesEnd->SetName("Unique Numbers");
 
+    vtkSmartPointer<vtkDoubleArray> indexCellsArray = vtkSmartPointer<vtkDoubleArray>::New();
+    indexCellsArray->SetNumberOfComponents(pointsPerCell);
+    indexCellsArray->SetNumberOfTuples(resolution[1] * resolution[3]);
+    indexCellsArray->SetName("Indices");
+
+    vtkSmartPointer<vtkDoubleArray> StartCellPointsArray = vtkSmartPointer<vtkDoubleArray>::New();
+    StartCellPointsArray->SetNumberOfComponents(pointsPerCell*2);                                    /// x and y component of all points per cell
+    StartCellPointsArray->SetName("Start Points");
+
+    vtkSmartPointer<vtkDoubleArray> EndCellPointsArray = vtkSmartPointer<vtkDoubleArray>::New();
+    EndCellPointsArray->SetNumberOfComponents(pointsPerCell*2);                                    /// x and y component of all points per cell
+    EndCellPointsArray->SetName("End Points");
 
     for (int k = 0; k < resolution[1] * resolution[3]; k++)      ////number of cells
     {
         ////stores the cell's number pathlines traverse to
         std::vector<int> indexCells;
+        std::vector<vector<double>> startcellPoints;
+        std::vector<vector<double>> endcellPoints;
         vtkIdType idEnd = vtkIdType(k);
 
-        for (int j = 0; j < LocationIndex->GetNumberOfTuples(); j++) {
+        for (int j = 0; j < LocationIndexValues->GetNumberOfTuples(); j++) {
             vtkIdType idLoc = vtkIdType(j);
-            double indices[2] = {0.};
-            LocationIndex->GetTuple(idLoc, indices);
+            double indLocValues[6] = {0.};
+            LocationIndexValues->GetTuple(idLoc, indLocValues);
 
-            if (k == indices[0]) {
-                indexCells.push_back(indices[1]);
+            if (k == indLocValues[0]) {
+                indexCells.push_back(indLocValues[1]);
+                std::vector<double> start = { indLocValues[2], indLocValues[3] };
+                startcellPoints.push_back( start );
+                std::vector<double> end = { indLocValues[4], indLocValues[5] };
+                endcellPoints.push_back( end );
             }
         }
 
+        double cellIndexArray[static_cast<int>(indexCells.size())] = {0.};
+        for (int it = 0; it < indexCells.size(); ++it )
+        {
+            cellIndexArray[it] = indexCells.at(it);
+        }
+
+        int cellIterator = 0;
+        double startarray[static_cast<int>( startcellPoints.size()) * 2] = {0.};
+        double endarray[static_cast<int>( endcellPoints.size()) * 2] = {0.};
+        for ( int itCell = 0; itCell < indexCells.size(); itCell++ )
+        {
+            std::vector<double> startpts;
+            startpts = startcellPoints.at(itCell);
+            startarray[cellIterator] = startpts[0];
+            startarray[cellIterator + 1] = startpts[1];
+
+            std::vector<double> endpts;
+            endpts = endcellPoints.at(itCell);
+            endarray[cellIterator] = endpts[0];
+            endarray[cellIterator + 1] = endpts[1];
+
+            cellIterator += 2;
+        }
+
+
+        indexCellsArray->InsertTuple(idEnd, cellIndexArray);
+        StartCellPointsArray->InsertTuple(idEnd, startarray);
+        EndCellPointsArray->InsertTuple(idEnd, endarray);
+
         numberOfPoints += indexCells.size();
 
+        /// arranging in ascending order
         std::sort(indexCells.begin(), indexCells.end());
 
+        ////Removing duplicates
         vector<int>::iterator ip;
         ip = std::unique(indexCells.begin(), indexCells.end());
         indexCells.resize(std::distance(indexCells.begin(), ip));
 
-        /*
-        if (indexCells.size() > pointsPerCell) {
-            std::cout << "From cell " << k << std::endl;
-            std::cout << "Pathlines end up in cells " << std::endl;
-            for (int l = 0; l < indexCells.size(); l++) {
-                std::cout << "  " << indexCells.at(l) << std::endl;
-            }
-        }
-        std::cout << "________________________________________________________________________" << std::endl;
-        */
-
         numberofCellsPathLinesEnd->InsertTuple1(idEnd, indexCells.size());
-        //pathlinevec.push_back(indexCells.size());
         TraceCells.push_back( indexCells );
+
     }
 
-    std::cout<< " Total number of points afterwards " << numberOfPoints << std::endl;
-
-    /*
-    auto old_count = pathlinevec.size();
-    pathlinevec.resize(2 * old_count);
-    std::copy_n(pathlinevec.begin(), old_count, pathlinevec.begin() + old_count);
-
-    for (int pt = 0; pt < pathlinevec.size(); pt++)
-    {
-        vtkIdType idPt = vtkIdType(pt);
-        int size = pathlinevec.at(pt);
-        std::cout << pt <<" " << size << std::endl;
-        numberofCellsPathLinesEnd->InsertTuple1( idPt, size );
-    }
-*/
-
-    //std::cout <<"Number Of Tuples " << numberofCellsPathLinesEnd->GetNumberOfTuples()<<std::endl;
 
     this->seedGrid->GetCellData()->AddArray(numberofCellsPathLinesEnd);
+    this->seedGrid->GetCellData()->AddArray(indexCellsArray);
+    this->seedGrid->GetCellData()->AddArray(StartCellPointsArray);
+    this->seedGrid->GetCellData()->AddArray(EndCellPointsArray);
 
     output->ShallowCopy(this->seedGrid);
 

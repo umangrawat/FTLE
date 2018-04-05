@@ -1,0 +1,34 @@
+
+==ColorMap==
+
+Maps the pathlines to respective cells
+Maps the points back to cells of origin.
+
+
+{| class="PropertiesTable" border="1" cellpadding="5"
+|-
+| '''Property'''
+| '''Description'''
+| '''Default Value(s)'''
+| '''Restrictions'''
+
+|-
+|'''Input''' (Input)
+|
+
+|
+
+|
+Accepts input of following types:
+* vtkImageData
+|-
+|'''Set Cell Id''' (Set Cell Id)
+|
+Set the CellId for evaluation.
+|
+0.0
+|
+
+
+|}
+

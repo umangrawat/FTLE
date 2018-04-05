@@ -1,0 +1,3 @@
+/export/home/urawat/Desktop/ColorMap/build_ColorMap/CMakeFiles/rebuild_cache.dir
+/export/home/urawat/Desktop/ColorMap/build_ColorMap/CMakeFiles/edit_cache.dir
+/export/home/urawat/Desktop/ColorMap/build_ColorMap/CMakeFiles/ColorMap.dir
