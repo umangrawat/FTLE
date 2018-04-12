@@ -120,7 +120,7 @@ int vtkColorMap::RequestData(vtkInformation *vtkNotUsed(request), vtkInformation
 
     vtkIdType CellId = vtkIdType(this->cellId);
 
-    //// GEt the required input arrays
+    //// Get the required input arrays
     vtkSmartPointer<vtkDoubleArray> cellIndexArray = vtkSmartPointer<vtkDoubleArray>::New();
     cellIndexArray = vtkDoubleArray::SafeDownCast(input->GetCellData()->GetAbstractArray("Indices"));
 
@@ -134,7 +134,6 @@ int vtkColorMap::RequestData(vtkInformation *vtkNotUsed(request), vtkInformation
     double cellIndex[static_cast<int>(cellIndexArray->GetNumberOfComponents())] = {0.};
     cellIndexArray->GetTuple(CellId, cellIndex);
 
-
     ////Get the starting points for the particular cell
     double StartcellPoints[static_cast<int>(StartcellPointsArray->GetNumberOfComponents())] = {0.};
     StartcellPointsArray->GetTuple(CellId, StartcellPoints);
@@ -142,14 +141,19 @@ int vtkColorMap::RequestData(vtkInformation *vtkNotUsed(request), vtkInformation
     vtkSmartPointer<vtkDoubleArray> cellPoints = vtkSmartPointer<vtkDoubleArray>::New();
     cellPoints->SetNumberOfComponents(3);
 
-    for (int c = 0; c < StartcellPointsArray->GetNumberOfComponents(); c++)
+
+    ////put the starting point in a vtkarray as tuple
+    for (int c = 0; c < StartcellPointsArray->GetNumberOfComponents()/2; c++)
     {
         double cellpt[2] = {StartcellPoints[c*2], StartcellPoints[c*2+1]};
         vtkIdType idc = vtkIdType(c);
         cellPoints->InsertTuple3(idc, cellpt[0],cellpt[1],0.);
+
+        //std::cout<< cellpt[0] << " " << cellpt[1]<<std::endl;
     }
 
 
+    /*
     vtkSmartPointer<vtkPoints> cell = vtkSmartPointer<vtkPoints>::New();
 
     vtkIdType idPoint;
@@ -176,8 +180,7 @@ int vtkColorMap::RequestData(vtkInformation *vtkNotUsed(request), vtkInformation
     lines->InsertCellPoint(nextPoint3);
     vtkIdType nextPoint4 = cell->InsertNextPoint(cellLeftTop);
     lines->InsertCellPoint(nextPoint4);
-
-
+*/
 
     ////Pairing and sorting
 
@@ -203,7 +206,7 @@ int vtkColorMap::RequestData(vtkInformation *vtkNotUsed(request), vtkInformation
 
     for (int p=0; p<n; p++)
     {
-        //std::cout << vect[p].first << " " << vect[p].second << std::endl;
+        std::cout <<"Sorting " << vect[p].first << " " << vect[p].second << std::endl;
     }
 
 
@@ -229,7 +232,6 @@ int vtkColorMap::RequestData(vtkInformation *vtkNotUsed(request), vtkInformation
 
     vtkSmartPointer<vtkCellArray> cellArray = vtkSmartPointer<vtkCellArray>::New();
 
-
     int idvec = 0;
 
     while ( vect.size() > 0 )
@@ -238,12 +240,13 @@ int vtkColorMap::RequestData(vtkInformation *vtkNotUsed(request), vtkInformation
 
         int x, y = 0;
 
+        idvec = vect[0].second;
+
         double point[3]={0.};
         cellPoints->GetTuple(idvec, point);
-        //std::cout<<"index " << index1<< " " << point[0] << " "<< point[1]<<std::endl;
         outputPoints1->InsertNextPoint(point);
 
-        idvec+= 1;
+        //idvec+= 1;
         int delIter = 0;
 
         unsigned char tempColor[4] = {(int)std::rand()%255,(int)std::rand()%255 ,(int)std::rand()%255, 255};
@@ -251,7 +254,8 @@ int vtkColorMap::RequestData(vtkInformation *vtkNotUsed(request), vtkInformation
         cellArray->InsertNextCell(4);
         cellLocator(index1,dims,x,y);
 
-        double cellpoint1[3] = {static_cast<double>(x) * spacing[0],static_cast<double>(y)*spacing[1], 0.};
+        /*
+        double cellpoint1[3] = {static_cast<double>(x) * spacing[0],static_cast<double>(y) * spacing[1], 0.};
         double cellpoint2[3] = {static_cast<double>(x) * spacing[0] + spacing[0], static_cast<double>(y) * spacing[1], 0};
         double cellpoint3[3] = {static_cast<double>(x) * spacing[0], static_cast<double>(y) * spacing[1] + spacing[1], 0};
         double cellpoint4[3] = {static_cast<double>(x) * spacing[0] + spacing[0], static_cast<double>(y) * spacing[1] + spacing[1], 0};
@@ -264,9 +268,9 @@ int vtkColorMap::RequestData(vtkInformation *vtkNotUsed(request), vtkInformation
         cellArray->InsertCellPoint(pt3);
         vtkIdType pt4 = outputCells->InsertNextPoint(cellpoint4);
         cellArray->InsertCellPoint(pt4);
+*/
 
         colorsPts->InsertNextTypedTuple(tempColor);
-        //colorsCells->InsertNextTypedTuple(tempColor);
         colorsCells->SetTypedTuple(index1,tempColor);
 
         for ( int k = 1; k < vect.size(); k++)
@@ -275,13 +279,14 @@ int vtkColorMap::RequestData(vtkInformation *vtkNotUsed(request), vtkInformation
 
             if ( index1 == index2 )
             {
+                idvec = vect[k].second;
                 double point1[3] = { 0. };
                 cellPoints->GetTuple(idvec, point1);
                 //std::cout<<"index " << index2<< " "<< point1[0] << " "<< point1[1]<<std::endl;
                 outputPoints1->InsertNextPoint(point1);
                 colorsPts->InsertNextTypedTuple(tempColor);
                 delIter += 1;
-                idvec += 1;
+                //idvec += 1;
             }
         }
 
@@ -292,17 +297,11 @@ int vtkColorMap::RequestData(vtkInformation *vtkNotUsed(request), vtkInformation
 
     std::cout<<"output points size " << outputPoints1->GetNumberOfPoints() <<std::endl;
 
+    this->seedGrid->GetCellData()->AddArray(colorsCells);
+
     output->SetPoints(outputPoints1);
     output->GetPointData()->SetScalars(colorsPts);
-
-    //output1->SetPoints(outputCells);
-
-    this->seedGrid->GetCellData()->AddArray(colorsCells);
     output1->ShallowCopy(this->seedGrid);
-
-    //output->SetPoints(cell);
-    //output->SetLines(lines);
-
 
     return 1;
 }
