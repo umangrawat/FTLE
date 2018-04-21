@@ -1,0 +1,57 @@
+\BOOKMARK [0][-]{chapter.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.1.1}{Fundamentals}{chapter.1}% 2
+\BOOKMARK [2][-]{subsection.1.1.1}{Scalar Field vs Vector Field}{section.1.1}% 3
+\BOOKMARK [2][-]{subsection.1.1.2}{Vector fields on subsets of Euclidean space}{section.1.1}% 4
+\BOOKMARK [2][-]{subsection.1.1.3}{Vector fields on manifolds}{section.1.1}% 5
+\BOOKMARK [1][-]{section.1.2}{Basic Objects}{chapter.1}% 6
+\BOOKMARK [2][-]{subsection.1.2.1}{Interpolation}{section.1.2}% 7
+\BOOKMARK [2][-]{subsection.1.2.2}{Differentiation of a vector}{section.1.2}% 8
+\BOOKMARK [2][-]{subsection.1.2.3}{Integration of a vector}{section.1.2}% 9
+\BOOKMARK [2][-]{subsection.1.2.4}{Line integrals through fields}{section.1.2}% 10
+\BOOKMARK [2][-]{subsection.1.2.5}{Surface Integrals}{section.1.2}% 11
+\BOOKMARK [2][-]{subsection.1.2.6}{Volume Integrals}{section.1.2}% 12
+\BOOKMARK [1][-]{section.1.3}{Differential Operators}{chapter.1}% 13
+\BOOKMARK [2][-]{subsection.1.3.1}{Gradient}{section.1.3}% 14
+\BOOKMARK [2][-]{subsection.1.3.2}{Divergence}{section.1.3}% 15
+\BOOKMARK [2][-]{subsection.1.3.3}{Curl}{section.1.3}% 16
+\BOOKMARK [2][-]{subsection.1.3.4}{Laplacian}{section.1.3}% 17
+\BOOKMARK [2][-]{subsection.1.3.5}{Vector Laplacian}{section.1.3}% 18
+\BOOKMARK [1][-]{section.1.4}{Integral Theorems}{chapter.1}% 19
+\BOOKMARK [2][-]{subsection.1.4.1}{Gradient theorem}{section.1.4}% 20
+\BOOKMARK [2][-]{subsection.1.4.2}{Divergence theorem}{section.1.4}% 21
+\BOOKMARK [2][-]{subsection.1.4.3}{Curl theorem}{section.1.4}% 22
+\BOOKMARK [1][-]{section.1.5}{Fluid Flows}{chapter.1}% 23
+\BOOKMARK [2][-]{subsection.1.5.1}{Material Derivative}{section.1.5}% 24
+\BOOKMARK [2][-]{subsection.1.5.2}{Field Lines}{section.1.5}% 25
+\BOOKMARK [0][-]{chapter.2}{Dynamical Systems}{}% 26
+\BOOKMARK [1][-]{section.2.1}{Introduction}{chapter.2}% 27
+\BOOKMARK [1][-]{section.2.2}{Physical Point Mass}{chapter.2}% 28
+\BOOKMARK [1][-]{section.2.3}{General Aspects of Dynamical System}{chapter.2}% 29
+\BOOKMARK [2][-]{subsection.2.3.1}{State Space}{section.2.3}% 30
+\BOOKMARK [2][-]{subsection.2.3.2}{Time}{section.2.3}% 31
+\BOOKMARK [2][-]{subsection.2.3.3}{Development}{section.2.3}% 32
+\BOOKMARK [1][-]{section.2.4}{One-Dimensional Continuous System}{chapter.2}% 33
+\BOOKMARK [2][-]{subsection.2.4.1}{Fixpoints and Stability}{section.2.4}% 34
+\BOOKMARK [1][-]{section.2.5}{Multi-Dimensional Continuous Systems}{chapter.2}% 35
+\BOOKMARK [2][-]{subsection.2.5.1}{Flows and Trajectories}{section.2.5}% 36
+\BOOKMARK [2][-]{subsection.2.5.2}{Fixpoints and Nullclines}{section.2.5}% 37
+\BOOKMARK [2][-]{subsection.2.5.3}{Local Stability}{section.2.5}% 38
+\BOOKMARK [1][-]{section.2.6}{Invariant Sets and Manifolds}{chapter.2}% 39
+\BOOKMARK [2][-]{subsection.2.6.1}{Invariants manifolds in non-autonomous dynamical systems}{section.2.6}% 40
+\BOOKMARK [0][-]{chapter.3}{Lagrangian Coherent Structures}{}% 41
+\BOOKMARK [1][-]{section.3.1}{Introduction}{chapter.3}% 42
+\BOOKMARK [1][-]{section.3.2}{General Definitions}{chapter.3}% 43
+\BOOKMARK [2][-]{subsection.3.2.1}{Material Surfaces}{section.3.2}% 44
+\BOOKMARK [2][-]{subsection.3.2.2}{Exceptional Material Surfaces}{section.3.2}% 45
+\BOOKMARK [2][-]{subsection.3.2.3}{Hyperbolic LCSs}{section.3.2}% 46
+\BOOKMARK [1][-]{section.3.3}{The Finite-Time Lyapunov Exponent}{chapter.3}% 47
+\BOOKMARK [2][-]{subsection.3.3.1}{FLow Map}{section.3.3}% 48
+\BOOKMARK [2][-]{subsection.3.3.2}{Strain Tensors}{section.3.3}% 49
+\BOOKMARK [2][-]{subsection.3.3.3}{Computing the Deformation Gradient}{section.3.3}% 50
+\BOOKMARK [2][-]{subsection.3.3.4}{Deriving FTLE}{section.3.3}% 51
+\BOOKMARK [1][-]{section.3.4}{LCS as FTLE Ridges}{chapter.3}% 52
+\BOOKMARK [2][-]{subsection.3.4.1}{What is a Ridge?}{section.3.4}% 53
+\BOOKMARK [2][-]{subsection.3.4.2}{Ridge in N dimensions}{section.3.4}% 54
+\BOOKMARK [2][-]{subsection.3.4.3}{Pseudo code for 2D Ridge Extraction}{section.3.4}% 55
+\BOOKMARK [2][-]{subsection.3.4.4}{FTLE Ridges}{section.3.4}% 56
+\BOOKMARK [2][-]{subsection.3.4.5}{Pseudo code for Time-Dependent FTLE}{section.3.4}% 57

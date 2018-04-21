@@ -22,11 +22,11 @@ Extracts ridge lines on uniform grids.
 Accepts input of following types:
 * vtkImageData
 |-
-|'''LimitEigenValue''' (LimitEigenValue)
+|'''SetEigenvalueLimit''' (SetEigenvalueLimit)
 |
 Set the minimum limit of eigenvalue of the data.
 |
-0
+0.0
 |
 
 

@@ -1,0 +1,236 @@
+\chapter{Lagrangian Coherent Structures}
+
+\section{Introduction}
+Material coherence can be observed in the fluid flows all around the globe. Such a coherence emerges as a distinct signature as shown in fig(). \textit{Lagrangian Coherent Strucutres} aim to explain the main cause of such special behaviour observed in fluid flows. LCS acronym was termed by Haller \& Yuan(2000) to describe the skeletons of Lagrangian particle dynamics which form the most attracting, repelling and shearing material surfaces. LCS are distinguished separatices in dynamical systems, similar to stable and unstable manifolds of time-independent systems. These invariant manifolds divide dynamically distinct regions in the flow and enforce a major influence on nearby trajectories over time. The kind of this influence may vary, but it invariably creates a coherent surface for which the underlying LCS serves as a skeleton.
+
+Attracting LCS are the separatices which attracts the nearby trajectories over the time $ [t_{0}, t] $ with the maximum intensity for the times $ \tau \in [t_{0}, t] $. Therefore, the attracting LCS are responsible for making the centrepiece where the nearby trajectories compile for the forward-evolving trajectory patterns over the time interval $ [t_{0}, t] $.  Per se, in unsteady flows these LCS make the theoretical centrepieces of tracer filaments. 
+
+Accordingly, repelling LCS are the separatices which repel the nearby trajectories over the $ [t_{0}, t] $ with the maximum intensity for times $ \tau \in [t_{0}, t] $. Such strong repulsive elements cause the nearby trajectories to diverge and propagate to different areas in domain. In particular, repelling LCSs serve as the theoretical centrepieces of major local stretching regions as seen in the unsteady flows. In backward time, repelling LCSs become attracting LCSs and vice versa.
+
+LCS examples seen in real world includes oil spills, floating debris, chlorophyll patterns in the ocean, spores in the atmosphere. 
+
+\section{General Definitions}
+\subsection{Material Surfaces}
+Consider a non-autonomous dynamical system defined by a development operator or flow map $ f_{t_{0}}^{t}: \textbf{u}_{0}\mapsto \textbf{u}(t;t_{0},\textbf{u}_{0}) $ on a phase space $ \mathfrak{P} $ and over a time interval $\mathfrak{I} = [t_{0},t_{1}]$. The development operator maps any initial condition $\textbf{u}_{0} \in \mathfrak{P}$ for any time $ t \in \mathfrak{I} $ to a final condition $ \textbf{u}( t,t_{0}, \textbf{u}_{0} ) \in \mathfrak{P} $. If the function $ f_{t_{0}}^{t} $ is diffeomorphic i.e. the function and it's inverse are smooth, then the set
+\begin{equation}
+\mathfrak{M} = {(\textbf{u},t) \in \mathfrak{P}\times\mathfrak{I}:[f_{t_{0}}^{t}]^{-1}(\textbf{u})\in \mathfrak{M}(t_{0})} 
+\end{equation}
+is an \textit{invariant manifold} in the extended phase space $ \mathfrak{P}\times\mathfrak{I} $, where $ \mathfrak{M}(t_{0}) $ is any smooth set  of initial conditions in $ \mathfrak{P} $. Such an evolving time slice $ \mathfrak{M}(t)=f_{t_{0}}^{t}(\mathfrak{M}(t_{0})) $ is known as \textit{material surfaces} in fluid dynamics. 
+
+\subsection{Exceptional Material Surfaces}
+Any material surface $ \mathfrak{M}(t) $ should employ a stable and consistent action on nearby trajectories to form a coherent pattern over time interval $ \mathfrak{I} $. Depending on the kind of property such actions exert, they can be classified into attraction, repulsion or shear. We have already discussed in section \ref{fixpoints} about these properties for classical dynamical systems and the inequalities associated with them. Henceforth, from there we can conclude that for any material surface $ \mathfrak{M}(t) $, if in a flow a small initial perturbation to $ \mathfrak{M}(t_{0}) $ results into even smaller perturbations $ \mathfrak{M}(t_{1}) $, then such a surface is attracting, where if in a flow a small initial perturbation to $ \mathfrak{M}(t_{0}) $ results into bigger perturbations $ \mathfrak{M}(t_{1}) $, then such a surface is repelling. 
+
+Now, let's focus on a more complex case and consider a dynamical system over a finite time interval $ \mathfrak{I} $. Such strict inequalities that we have seen before don't necessarily define locally unique material surface. The reason for this is the continuity of the development operator $ f_{t_{0}}^{t} $ over $ \mathfrak{I} $, which makes any surface close to attracting material surface $ \mathfrak{M}(t) $ is also attracting the nearby trajectories. This results in stacking of the different attracting, repelling and shearing material surfaces on each other. The surface amongst these family of surfaces which exhibits the strongest coherence property is the main idea behind coining LCSs. Such extremas serve as the centerpiece in the trajectory patterns, as shown in
+
+\subsection{Hyperbolic LCSs}
+The above definitions thus makes it possible to define the \textit{attracting LCSs} and \textit{repelling LCSs} in the extended phase space $ \mathfrak{P}\times\mathfrak{I} $. Together, the attracting and repelling LCSs are called \textit{hyperbolic LCSs}.
+
+Let's consider a hyperbolic point which has an attracting and a repelling manifold as shown in fig(). If we consider two points on either side of an attracting manifold and develop them in time, we will find that they diverge from each other. Similarly, if we start these points from either side of repelling manifold and develop backward in time, the points will converge. That's why such surfaces are called \textit{separatices} because they separate the region with different qualitative dynamics. The stretching between the trajectories in these regions can in turn help us to define such separatices or LCSs. We measure the stretching forward in time when considering separatices similar to attracting manifolds and backward in time for separatices similar to repelling manifolds. To physically measure the stretching, we use \textit{Finite-Time Lyapunov Exponent}.
+
+\section{The Finite-Time Lyapunov Exponent} \label{FTLE}
+The finite-time Lyapunov exponent (FTLE), represented by $ \sigma_{t}^{T}(\textbf{u}) $, is a scalar value which characterises the amount of stretching of point $ \textbf{u}\in\mathfrak{M} $ about the trajectory over the time interval $ [t, t+T] $. FTLE is a function of both time and space. The FTLE represents an average, integrated effect between trajectories, and shouldn't be confused as an instantaneous separation measure. 
+
+\subsection{FLow Map}
+Let's now formulate an FTLE expression and consider stretching between two neighboring particles in a flow. Let's consider a point $ \textbf{u}\in\mathfrak{M} $ at time $ t_{0} $ and a development operator or flow map $ f_{t_{0}}^{t_{0}+T} $ which maps any point to a future state at time $t_{0}+T$ such that:
+\begin{equation}
+\textbf{u}\mapsto f_{t_{0}}^{t_{0}+T}(\textbf{u})
+\end{equation}
+The neighbouring point of \textbf{u} at $t_{0}$ will behave similarly to \textbf{u} locally, as the flow is continually dependent on the initial conditions. As time progresses, the distance between the two points will most certainly change. Let's represent the neighbouring particle as $ \textbf{v} = \textbf{u} + \delta \textbf{u}(t_{0}) $, where $ \delta \textbf{u}(t_{0}) $ is the infinitesimal distance between these particles. On doing a Taylor expansion around \textbf{u}, the perturbation evolves with advection time \textit{T} as following:
+\begin{equation} \label{flowmaptaylor}
+\delta\textbf{u}(t_{0} + T) = f_{t_{0}}^{t_{0}+T}(\textbf{v}) - f_{t_{0}}^{t_{0}+T}(\textbf{u}) = \frac{\diff f_{t_{0}}^{t_{0}+T}(\textbf{u})}{\diff\textbf{u}}\delta(\textbf{u}(t_{0})) + \mathcal{O}(\parallel\delta\textbf{u}(t_{0})\parallel)^{2}
+\end{equation}
+ 
+\subsection{Strain Tensors}
+In order to understand Lagrangian coherence, we need to explore material surfaces $ \mathfrak{M}(t) $ which have an exceptional impact on the deformation of nearby material elements.The development of infinitesimal perturbations $ \delta \textbf{u}(t_{0}) $ to the trajectory is a reflection of local deformation in the trajectories. In (\ref{flowmaptaylor}) it's safe to ignore $ \mathcal{O}(\parallel\delta\textbf{u}(t_{0})\parallel)^{2} $ since $\delta(\textbf{u}(t_{0})$ is assumed to be infinitesimal. The magnitude of perturbation can be found by taking the $ \normalfont L_{2} $ norm of (\ref{flowmaptaylor}),  
+\begin{equation}
+	\begin{split}
+		\parallel\delta(\textbf{u}(t_{0}))\parallel = \sqrt{\bigg\langle\frac{\diff f_{t_{0}}^{t_{0}+T}(\textbf{u})}{\diff\textbf{u}}\delta(\textbf{u}(t_{0})), \frac{\diff f_{t_{0}}^{t_{0}+T}(\textbf{u})}{\diff\textbf{u}}\delta(\textbf{u}(t_{0})) \bigg \rangle} \\
+		= \sqrt{\bigg\langle\delta(\textbf{u}(t_{0})), \frac{{\diff f_{t_{0}}^{t_{0}+T}(\textbf{u})}^{T}}{\diff\textbf{u}} \frac{\diff f_{t_{0}}^{t_{0}+T}(\textbf{u})}{\diff\textbf{u}}\delta(\textbf{u}(t_{0})) \bigg \rangle}
+	\end{split}
+\end{equation}
+where the notation $ M^{T} $ denotes the transpose matrix of \textit{M}. The symmetric matrix
+\begin{equation}
+\Delta = \frac{{\diff f_{t_{0}}^{t_{0}+T}(\textbf{u})}^{T}}{\diff\textbf{u}} \frac{\diff f_{t_{0}}^{t_{0}+T}(\textbf{u})}{\diff\textbf{u}}
+\end{equation}
+is a finite-time version of Cauchy-Green strain tensor. The symmetric tensor is positive definite as $ \nabla f_{t_{0}}^{t_{0}+T} $ is invertible. Thus, the eigenvalues $ \lambda_{i}(\textbf{u}_{0}) $ and eigenvectors $ \xi_{i} (\textbf{u}_{0}) $ of matrix $ \Delta $ satisfy
+\begin{equation}
+	\begin{split}
+		\Delta \xi_{i} = \lambda_{i}(\textbf{u}_{0}), \quad \vert\xi_{i}\vert = 1, \quad i = 1, \ldots , n; \\
+		\text{s.t.} \quad 0 < \lambda_{1} \leq \cdots \leq \lambda_{n}, \quad \xi_{i} \perp \xi_{j},\quad i \neq j,
+	\end{split}
+\end{equation}
+where $\textit{n} = 2$ for two-dimensional flows and $\textit{n} = 3$ for three-dimensional flows.
+
+\subsection{Computing the Deformation Gradient}
+The flow map and it's gradient aren't objective functions. Solving (\ref{flowmaptaylor}) will give noisy results for $ \nabla f_{t_{0}}^{t_{0}+T}(\textbf{u}_{0}) $ as a function of $ \textbf{u}_{0} $. Instead, for Lagrangian coherence calculations, Haller suggested the following finite-difference approximation for a two-dimensional flow
+\begin{equation}
+		\nabla f_{t_{0}}^{t_{0}+T} \approx
+		\begin{pmatrix}
+			\frac{\textbf{u}^{1}(t; t_{0}, \textbf{u}_{0}+\delta_{1}) - \textbf{u}^{1}(t; t_{0}, \textbf{u}_{0}-\delta_{1})}{\vert 2\delta_{1} \vert} & \frac{\textbf{u}^{1}(t; t_{0}, \textbf{u}_{0}+\delta_{2}) - \textbf{u}^{1}(t; t_{0}, \textbf{u}_{0}-\delta_{2})}{\vert 2\delta_{2} \vert}  \\
+			\frac{\textbf{u}^{2}(t; t_{0}, \textbf{u}_{0}+\delta_{1}) - \textbf{u}^{2}(t; t_{0}, \textbf{u}_{0}-\delta_{1})}{\vert 2\delta_{1} \vert} & \frac{\textbf{u}^{2}(t; t_{0}, \textbf{u}_{0}+\delta_{2}) - \textbf{u}^{2}(t; t_{0}, \textbf{u}_{0}-\delta_{2})}{\vert 2\delta_{2} \vert} 
+		\end{pmatrix} 
+\end{equation}
+with a small vector $ \delta_{i} $ pointing in the $\textbf{u}^{i}$ coordinate direction. Often, higher dimensions are subjected to two-dimensional approximations to save computational costs.
+
+\subsection{Deriving FTLE}
+Following our earlier derivations, let's again focus on the two neighbouring particles \textbf{u} and \textbf{v}. We wish to calculate the maximum stretching that occurs between these two points and naturally, this will happen when $ \delta \textbf{u}(t_{0}) $ is chosen such that it aligns with the eigenvector associated with the maximum eigenvalue of $\Delta$. Therefore, if we assume the maximum eigenvalue of $\Delta$ to be $\lambda_{\max}(\Delta)$, we get 
+\begin{equation}
+	\begin{split}\label{maxeigen}
+		 \max_{\delta\textbf{u}(t_{0})}\parallel\delta\textbf{u}(t_{0} + T)\parallel = \sqrt{\big\langle \overline{\delta \textbf{u}}(t_{0}), \lambda_{\max}(\Delta) \overline{\delta \textbf{u}}(t_{0}) \big\rangle }\\ 
+		 = \sqrt{\lambda_{\max}(\Delta)}\parallel\overline{\delta\textbf{u}}(t_{0})\parallel,
+	 \end{split}
+\end{equation}
+where $ \overline{\delta\textbf{u}}(t_{0}) $ is aligned with the eigenvector associated with $\lambda_{\max}(\Delta)$. Now, if we define the finite-time Lyapunov Exponent as:
+\begin{equation}
+\sigma_{t_{0}}^{T} (\textbf{u}) = \frac{1}{\vert T \vert} \ln \sqrt{\lambda_{\max}(\Delta)},
+\end{equation} 
+then, the average exponent of growth can be determined from (\ref{maxeigen}):
+\begin{equation} \label{eqFTLE}
+	\max_{\delta\textbf{u}(t_{0})}\parallel\delta\textbf{u}(t_{0} + T)\parallel = \me ^{\sigma_{t_{0}}^{T} (\textbf{u})\vert T \vert}\parallel\overline{\delta\textbf{u}}(t_{0})\parallel
+\end{equation}
+The Eq.($\ref{eqFTLE}$) gives us the finite-time Lyapunov exponent at point $\textbf{u}\in \mathfrak{M}$ at time $t_{0}$ with integration time \textit{T}.
+
+\section{LCS as FTLE Ridges}
+
+\subsection{What is a Ridge?}
+Before jumping straight to LCS detection, let's first define a \textit{ridge}. Physically, a ridge or a mountain ridge is a geological feature that is formed for some distance by a chain of mountains or hills as a continuous elevated crest. The line formed by connecting the highest points along the crest, with terrain dropping on either side is called a \textit{ridgeline}.
+
+Mathematically for a smooth function with two variables, the ridges are a set of curves whose points are a local maxima of the function in atleast one dimension. Extending this definition for a function with \textit{N} variables, the ridges are a set of curves whose points are local maxima in \textit{N - 1} dimensions. Au contraire, if we consider the set of curves with local minima, analogously we get \textit{valleys}. The union of ridge sets and valley sets, along with a related set of point s known as \textit{connector set} collectively form a connected set of curves that meet, partition or intersect at the critical points of the function. Such a union is known as function's \textit{relative critical set}.
+
+\subsection{Ridge in N dimensions}
+\paragraph{General Defintion:}Consider a function $\textit{f}: \mathbb{R}^{n} \rightarrow \mathbb{R}$, where a point $\textbf{u}_{0}$ exists in the domain such that for any point \textbf{u} in the neighbourhood of $\textbf{u}_{0}$, the condition $f(u) < f(u_{0})$ holds, then $ \textbf{u}_{0} $ is a \textit{local maxima} of the function. When this condition holds for the entire domain, then $\textbf{u}_{0}$ is the \textit{global maxima}.
+
+If we slightly relax the condition $f(u) < f(u_{0})$ for \textbf{u} in the entire neighbourhood of $\textbf{u}_{0}$ such that it holds on an \textit{n-1} dimensional subset, it allows the set of maximal points to have a single degree of freedom. This will lead to the sets of points forming a $1-D$ locus, or a ridge curve. 
+
+\paragraph{Eberly's Definition:} Another more sophisticated definition of rigdes was coined by Eberly. Let $ \mathfrak{S} \subset \mathbb{R}^{n} $ be an open set, and $ f: \mathfrak{S} \rightarrow \mathbb{R} $ be smooth. Let $ \textbf{u}_{0} \in \mathfrak{S}$, and $ \nabla_{\textbf{u}_{0}} f $ be the gradient at $\textbf{u}_{0}$, and $ H_{\textbf{u}_{0}}(f) $ be the $n\times n $ Hessian matrix of \textit{f} at $ \textbf{u}_{0} $. Let $ \lambda_{1} \leq \lambda_{2} \leq \cdots \leq \lambda_{n} $ be the \textit{n} ordered eigenvalues of $ H_{\textbf{u}_{0}} $, and let $ \textbf{e}_{i}$ be a unit eigenvector in the eigenspace for $ \lambda_{i}$, then the point $ \textbf{u}_{0} $ is on the $1-D$ ridge if the following conditions hold true:
+\begin{enumerate}
+	\item $\lambda_{n-1} < 0$, and
+	\item $ \nabla_{\textbf{u}_{0}} f \cdot \textbf{e}_{i} = 0 \ \text{for} \ i = 1,2,\ldots,n-1 $
+\end{enumerate}
+
+Extending this definition for a \textit{k}-dimensional ridge, if following conditions hold:
+\begin{enumerate}
+	\item $\lambda_{n-k} < 0$, and
+	\item $ \nabla_{\textbf{u}_{0}} f \cdot \textbf{e}_{i} = 0 \ \text{for} \ i = 1,2,\ldots,n-k $
+\end{enumerate}
+then, $\textbf{u}_{0}$ is a point on \textit{k}-dimensional ridge of \textit{f}.
+
+\subsection{Pseudo code for 2D Ridge Extraction}
+For this thesis, we developed a 2-dimensional ridge extraction software. Here is a short pseudo code of the method used:
+\\
+\begin{algorithm}[H]
+\caption{Ridgeline Extraction}
+\SetAlgoLined
+\KwData{Node based Scalar Data}
+\KwResult{RidgeLine Extraction}
+ \textbf{begin;}\\
+ \While{ $\textbf{u}= (x,y)\in \mathfrak{M}  $, at each node:  }
+ {
+  \begin{itemize}
+  \item Gradient $ \nabla_{\textbf{u}} $ calculation
+  \item Hessian $ H_{\textbf{u}} $ calculation
+  \item Eigenvalues $ \sigma_{i} $ and eigenvectors $ \lambda_{i} $ calculation
+	  \begin{itemize}[itemsep=0.1mm]
+	  	\item get: Min eigenvalue $ \sigma_{i_{\min}} $ and corresponding eigenvector $ \lambda_{i_{\min}}$
+	  \end{itemize}
+	\end{itemize} 
+ }
+  \While{ $\textbf{u}= (x,y)\in \mathfrak{M}  $, at each cell: }
+  {
+  	\begin{itemize}
+	  \item Principal Component Analysis.
+		  \begin{itemize}
+		  	\item get: Max eigenvector $ \lambda_{p_{\max}}$
+		  \end{itemize}
+	  \item Dot product between $ \lambda_{i_{\min}} $ and $\lambda_{p_{\max}} $
+		  \begin{itemize}
+				\item \If{Dot Product < 0 }{
+				  	\hspace{15mm}  flip the direction of $\lambda_{i_{\min}} $
+				  }
+		  \end{itemize}
+	  \item Mark every node as + or - by isolines, depending on the isoline conditions $ f_{i}\geq c, f_{i} < c$, where $ f = \nabla_{\textbf{u}_{i}}\cdot\lambda_{i_{\min}}$
+	  \item Use look up table to identify respective cases of marked nodes
+	  \item Find exact position of intersection on edge using linear interpolation
+      \item Interpolate hessian $ H_{\textbf{u}_{0}} $ to the intersection point for all points
+			\begin{itemize}
+			  		\item Calculate eigenvalues $ \sigma_{j} $
+				  		\begin{itemize}
+				  			\item \eIf{$ \vee$ any i, $\sigma_{i}$  < user input limit }
+				  			{\hspace{30mm} Store the point}
+				  			{\hspace{30mm} Discard}
+				  		\end{itemize}		  		 
+			\end{itemize}
+	\end{itemize}
+}
+\end{algorithm}
+
+
+\subsection{FTLE Ridges}
+Locating LCSs usually involves a wide study of stability of material surfaces in flow domain. One approach could be to search for the material surfaces along which the infinitesimal deformation is largest or smallest. Haller () proposed that at time $t_{0}$, an attracting LCS over $ [t_{0}, t_{0}+T] $ is a a maximizing curve, or ridge of the backward-time FTLE field, whereas on the other hand a repelling LCS over $ [t_{0}, t_{0}+T] $ should be the ridge of forward time FTLE. Let's look at an example to better understand how FTLE is used to detect LCS:
+\begin{exmp}
+	\textbf{Time-Independent Double Gyre}
+	
+	Let's consider a simple example of stream function given by following equation:
+	\begin{equation}
+		\psi (x,y) = \sin (\pi x) \sin(\pi y)
+	\end{equation}
+	over the region $ \mathfrak{M} = [0,2]\times[0,1] $. By definition, the velocity field is:
+	\begin{equation}
+		\begin{split}				
+			\dot{x} = -\frac{\diff \psi}{\diff y} = - \pi \sin(\pi x) \cos(\pi y) \\
+			\dot{y} = \frac{\diff \psi}{\diff x} = \pi \cos(\pi x) \sin(\pi y)
+		\end{split}	
+	\end{equation} 
+\end{exmp}
+
+The velocity field and streamlines for the above set of equations look like following:
+
+%Insert Image here
+
+If we look closely at the image, we find various \textit{heteroclinic trajectories}. Heteroclinic trajectories separate distinct regions of the flow, that's why can also be considered as separatices. One such separatix which is most apparently visible is between the fixed points at $ (1,0) \text{and} (1,1)$. Also, the trajectories at the boundaries are also separatices. Let's consider three points near the separatrix as shown in the image below and notice how the streamline evolves with time. We notice that the points $ A \text{and} B$ remain closer, but the the point $ C$ diverges from the other particles with time. Thus, intuitively with the definitions so far, we can assume that the FTLE values should be large around this separatrix. 
+
+%Insert Image here
+
+If we compute the FTLE, we find out infact a relatively higher value of FTLE at all the separatices as can be seen in the images below. Such ridges of high FTLE are infact known as LCSs.
+
+\subsection{Pseudo code for Time-Dependent FTLE}
+
+\begin{algorithm}[H]
+\caption{Time-dependent FTLE}
+\SetAlgoLined
+\KwData{Node based time-dependent velocity data}
+\KwIn{Start time $t_{0}$, Advection time $ \tau$}
+\KwResult{FTLE, Pathlines}
+ \textbf{begin;}\\
+ \textbf{Store:} All time stamps as Multiblock data set \\
+ \eIf{$\tau > 0$}{Forward FTLE}
+ {
+ 	Backward FTLE: Reverse the velocity fields
+ }
+ \textbf{Pathline:}\\
+  \For{$i\gets t_{0}$ \KwTo $t_{0}+\tau$ \KwBy $ i = $ next time step}
+	{
+	\begin{itemize}
+		\item Get two consecutive time stamps of velocity fields 
+		\item \For{$\textbf{u}= (x,y)\in \mathfrak{M}  $}
+				{
+					\begin{itemize}
+						\item Interpolate velocity between two velocity fields as time progresses. 
+						\item Integrate till it reaches the next time stamp
+						\item Store the endpoint of pathline
+					\end{itemize}
+				}
+		\item Use the end points from last iteration as start points for next iteration.
+	\end{itemize}
+	}
+\textbf{FTLE:} \\
+	\textbf{Get:} Endpoints of the pathline after final iteration \\
+	\For{every $\textbf{u}_{end}= (x_{end},y_{end})\in \mathfrak{M}  $}
+		{
+			\begin{itemize}
+				\item Jacobian $\textbf{J} $, $\textbf{J}^{T} $ and multiply both matrices
+				\item Calculate eigenvalues and find the maximum eigenvalue $ \lambda_{\max} $
+				\item Calculate $ \frac{1}{\tau} \ln \sqrt{\lambda_{\max}} $ to get FTLE
+			\end{itemize}
+		}
+\end{algorithm}

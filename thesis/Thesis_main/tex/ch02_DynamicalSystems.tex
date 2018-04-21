@@ -1,0 +1,326 @@
+\chapter{Dynamical Systems}
+
+\section{Introduction}
+
+Dynamical system is a mathematical model to represent a function that develops in time. It is defined as a set of $\lbrace\mathfrak{M},\textit{T},\mathfrak{D}\rbrace$\ where $\mathfrak{M}$\ is the manifold, \textit{T} is the one-dimensional directed space, and $\mathfrak{D}$\ is an operator that maps $\mathfrak{M}$\ onto itself. In simpler words, dynamical system at any particular time has a given state represented by a set of real numbers that can be characterised by a point in a phase space. Physically, it can be inferred that a dynamical system is an ensemble of particles whose state variables follow differential equations and vary with time as these equations involve time derivatives. Thus, for a particular time interval from a current state, only one future state is obtained, making the future deterministic. 
+
+The manifold $\mathfrak{M}$\ is defined as the state space, the directed space \textit{T} is time, and $\mathfrak{D}$\ is the development equation or operator, defining how the state $\textbf{u}\in\mathfrak{M}$ traverse through time. A state \textbf{u(t)} consisting of state variables describes the state of the system at time \textit{t} which is obtained by applying the operator $\mathfrak{D}$\ on the current state. Therefore, we only look at Markovian systems. Over time on applying the operator $\mathfrak{D}$\, several successive states \textbf{u(t)} with $\textit{t}\in\textit{T}$\ are obtained which form the trajectories in $\mathfrak{M}$\. Such solutions of the differential equations help us to understand various phenomenon in a more comprehensive manner by shifting the scale from microscopic level to a macroscopic level.
+
+Typical examples of a dynamical system include oscillating pendulum, Lorenz 63.
+
+\section{Physical Point Mass}
+A simple dynamical system is a point mass that propagates through a physical space. Let \textbf{x} represents the position in some domain $\Omega$ and let \textbf{v}(\textbf{x},t) represents the velocity,
+\begin{equation}
+\dot{\mathbf{x}} = \textbf{v}(\textbf{x},t)
+\end{equation}
+The point mass follows the trajectory, given as:
+\begin{equation}
+\textbf{x}\left( \textit{t}\right) = \textbf{x}_{0} + \int_{0}^{t} \textbf{v}\left( \textbf{x}(\tau),\tau\right)d\tau ,
+\end{equation}
+where $\textbf{x}_{0}=\textbf{x}(0)$. Above equation is an example of development operator as it helps to obtain a future state $\textbf{x}(t)$ from current state $\textbf{x}_{0}$. In a sophisticated way, this can be represented as $\textbf{x}(t)=\mathfrak{D}_{t}\textbf{x}(0).$
+
+A trajectory can be understood as two different interpretations:\renewcommand{\labelenumii}{\Roman{enumii}} \begin{enumerate}
+\item the path through which a point particle traverses from the start point defined by set of initial conditions, or 
+\item the set of points or states which can be reached from a particular point for $\textit{t} > 0$ or set of particles from which the initial state can be achieved when going backwards in time i.e. $\textit{t} < 0$. 
+\end{enumerate}
+
+Usually, considering the complexity that can arise with higher derivatives, only first order derivatives are considered. It has a twofold effect, firstly intuitively the interpretation is easier and secondly, in continuous cases the development equation always has a form such as (2.1). In case, equations with higher derivatives are defining the state space, effort is made to reduce the $\textit{n}^{th}$ order differential equation in a set of \textit{n} first-order differential equation. For eg, if the dynamics of a mass point is defined as:
+\begin{equation}
+\ddot{\mathbf{x}} = \textbf{a}(\textbf{x},t)
+\end{equation}
+where, \textbf{x} denotes the position and \textbf{a} denotes the acceleration, the order of differential equation is reduced by increasing the number of equations, which is shown as follows:
+\begin{equation}
+	\begin{split}
+	\dot{\mathbf{x}} = \textbf{v}(\textbf{x},t) \\
+	\dot{\mathbf{v}} = \textbf{a}(\textbf{x},t)
+	\end{split}
+\end{equation}
+Thus, above method of reducing the order of differential equations by increasing the number of equations, emphasizes on the equivalence between order and dimension.
+
+\section{General Aspects of Dynamical System}
+Here, we proceed to define the different elements of dynamical system, namely state space or manifold $\mathfrak{M}$, time \textit{T} and development operator $\mathfrak{D}$.
+
+\subsection{State Space}
+State space consists of a minimum set of variables which mathematically completely define the dynamical system at a time. These set of variables $\left\lbrace \textit{u}_{1},\ldots,\textit{u}_{n}\right\rbrace$ are called state variables. The values of such a set of variables is known as the state of the system. And the set of all possible states is defined as the state space.
+We can group dynamical systems in different categories based on their structure of state space. The system can be low dimensional such as undamped pendulum with two state variable $\left\lbrace\theta,\dot{\theta}\right\rbrace$, the angle and it’s derivative or of high dimensions such as \textit{n} dimensional Lotka-Voltera equations. 
+The system can be discrete, continuous, or hybrid. If the state takes values from a finite-set $\left\lbrace \textit{u}_{1},\ldots,\textit{u}_{n}\right\rbrace$, then it’s a discrete system. For eg. a light switch makes a discrete dynamical with two values, $\textbf{u}\in\lbrace\textit{ON,OFF}\rbrace$. A continuous system is defined when the state takes values from a Euclidean space $\mathbb{R}^n$ for some $\textit{n}\geq1$, as in the motion of a pendulum. A hybrid system has a part of the state taking value from finite set, while the other part is taking values from a $\mathbb{R}^n$ space. Using a computer to control the motion of a pendulum is one such example of a hybrid system.
+
+\subsection{Time}
+The order of states in a dynamical system is given by the orderly sequence of the time space. The future states of the system must be completely determined by the state variables at a given time.  The evolution of states under time variable can be discrete or continuous. If the time is discrete, then the evolution of system takes place in discrete time steps, which are usually takes as integer values $\textit{t}=0,1,\ldots$. The state of the system is thus defined at time \textit{t} as $\textbf{u}_{t}$. Many a times, a dynamical system is defined such that it takes as a state at time \textit{t} and gives the output state at next time. Therefore, in cases where we start at state $\textbf{u}_0=\textbf{u}(0)$, and feed the initial conditions to development operator, we obtain $\textbf{u}_1= \mathfrak{D}_0(\textbf{u}_0)$ and subsequently obtain the sequence of states $ \textbf{u}_{1},\textbf{u}_{2},\ldots $ . Such a system where the states at all times are obtained by the development operator $ \mathfrak{D} $ and initial condition $\textbf{u}_0$ defines a dynamical system. On other hand, when the state evolves continuously through time, it’s called as a continuous dynamical system. As time \textit{t} evolves, the state of system evolves simultaneously through state space. The development operator thus defines how the state would evolve through time.
+
+\subsection{Development}
+Development of a system in most cases, is dependent on the current state of the system. In such models, sequence of states is achieved which are dependent only on the previous state. Such models follow, what is known as \textit{Markov Processes}. Though in some cases, the following state might be also dependent on history of the system which blows up the dimensionality of the system, thus making it difficult to comprehend. Examples of such systems can be, when a rat stops falling in the trap after several iterations because it learned from historic events. For the sake of simplicity, in this thesis we only consider systems that are Markovian in nature.
+
+\paragraph{Autonomous and Non-Autonomous Systems} An \textit{autonomous system} is a system which does not depend explicitly on the independent variable. In dynamical systems, an autonomous system is one where the development equation does not depend explicitly on time i.e. all system parameters are constant. Such a system is also known as \textit{time-invariant systems}. On the other hand, a \textit{non-autonomous system} itself changes with time, which is given by some time-dependent parameters and varying equations or rules.
+
+A good example of an autonomous system is a simple undamped pendulum, where the underlying fundamental physics do not change with time. Another example could be the population of rabbits through centuries. Such a system can be represented with some differential equations consisting of several parameters. Now consider, that there is another parameter such as another invasive species which affect their population, and such a system becomes non-autonomous. if we also involve this parameter into the system, the system will change into autonomous again from non-autonomous system. Mathematically, this can be achieved by including the time as an additional state variable, such that state vector $\textbf{u} = { u_{1}, \dots, u_{n}}$ becomes $\textbf{u} = { u_{1}, \dots, u_{n+1}}$ where $ u_{n+1} = t, \dot{u_{n+1}} = 1$, which increases the dimension of the system by 1. 
+
+\paragraph{Development Equation:} Development equation defines the evolution of any dynamical system. On a broader classification, depending on the time, the system can be discrete or continuous.
+
+\textbf{\textit{Continuous systems:}} A continuous system is one where the state can be defined as any real number in a specific interval. In other words, it’s a system where the state changes continuously over time. Typically, a continuous system is represented as:
+\begin{equation}
+\dot{\mathbf{u}} = \textit{f}{\left( \textbf{u}\right) }
+\end{equation}
+
+with $\textit{f}(\mathfrak{M})\subset\mathfrak{M}$. Above equation, is a typical example of a \textit{first-order ordinary differential equation (ODE)}. Such ODEs can be solved by several numerical methods such as Euler Method, Runge-Kutta Method etc. For a fluid flow, often $\dot{\mathbf{u}}$ represents the velocity field in the phase space. An example of such a system is amount of liquid in a water tank.
+
+\textbf{\textit{Discrete Systems:}} Discrete system is one where the state takes a specific value from a subset of real numbers and often the states in between two states might not be defined. In other words, it’s a system whose state is discrete and remains in a state for some time and then changes only at a time point. Such a system can be written as:
+\begin{equation}
+\mathbf{u}_{i+1} = \textit{f}{\left( \textbf{u}_{i}\right) }
+\end{equation}
+
+where the index \textit{i} is the discrete time step and \textit{f} maps $ \mathfrak{M} $ onto itself. Such system is also referred to as a map. An example of such a system is number of patients in a hospital on any particular day.
+
+In discrete systems, since the time step is fixed, the development of a system based on numerical solution of ODE or PDE is usually different from the continuous system. For example, if we consider the population of rabbits in a limited environment, then during the mating season their population would increase, so from $ \textit{t}_i $ to $ \textit{t}_{i+1} $ the population would change from $\textbf{u}_{i}$ to $\textbf{u}_{i+1}$. Now, consider that at $\textit{t}_{i+1}$, there’s a flood and the population decreases because of scarcity of food. Such a system with sudden changes is difficult to formalise as a continuous system with a set of ODEs or PDEs, and can only be easily understood as a discrete system.
+
+
+\textbf{\textit{State Variables vs Parameters:}} A development equation of a dynamical system consists of three parts- \textbf{u}, \textbf{p} and \textbf{f}, each focusing on several different aspects of the development of the system.
+\begin{itemize}
+	\item A state variable \textbf{u} is one of the set of variables which are used to express the mathematical state of a dynamical system. The state of a system is describes the minimum essential factors needed to determine the future behaviour of the dynamical system when no external forces are acting on the system. The state variable represent the system's surficial appearance and typically varies rapidly. For example, concentration of some transported quantity or the density of a population.
+	\item The parameters \textbf{p} tell the aspects of the system that are considered as the part of its setup or structure. They usually change on the time scales much bigger than the one of \textbf{u}. One main reason to keep \textbf{p} different than \textbf{u} and \textbf{f} is that it helps the understand the impact of a changing environment on the dynamical system's development. Examples of parameters include the rates for the growth and interaction of populations.
+	\item Finally, the function \textbf{f} represents the most persistent structures of a system, basically it's crux. Changing the function usually reflects the most on the development of the dynamical system.
+\end{itemize}
+
+\section{One-Dimensional Continuous System}
+Here, we focus on a system whose state $ \textbf{u}\in\Omega\in\mathbb{R} $ is continuous in space and time and development is continuous in time. Hence, \textit{T} is time, $\Omega$ represents the manifold $ \mathfrak{M} $, and the development equation is given by:
+\begin{equation}
+\dot{\mathbf{u}} = \textit{f}{\left( \textbf{u}\right) }
+\end{equation}
+Above equations can be solved using numerical solvers, such that a particular state is known and the states through which the system flows is obtained. We define an \textit{initial value problem (IVP)}, if an initial state or condition of the system such as $ \textbf{u}_{0}=\textbf{u}(0) $ is given and the later stages of development can be thus construed. On the other end, if we know the end conditions, then such a system is popularly called a \textit{control problem}. Our focus will be on initial value problems.
+
+\subsection{Fixpoints and Stability} \label{fixpoints}
+A fix point of a function, mathematically is defined as the element of the function’s space which maps the function to itself. In simpler words, it means that if $\textit{f}(\textit{u})=\textit{u}$, then \textit{u} is the fix point of the system. Similarly, for the initial state if $\textit{f}(\textit{u})=0$, then $ \textbf{\textit{u}}_{0}=\textbf{\textit{u}}(0) $ make the fix point of the system. A set of such fix points is called fixed set. For example, $\textit{f}(\textit{u})= \textit{u}^{2}-3\textit{u}+4 $ has a fixpoint at $\textbf{u}=2$, as $\textit{f}(2)=2 $.
+One key aspect which is often talked about is the stability of the fix points, i.e. how does the system develop when we look at $\textbf{\textit{u}}_{0}\pm \varepsilon $, where $\varepsilon$ is infinitesimal.  The question of interest is, whether the fixpoint $ \textbf{\textit{u}}_{0} $ attracts or repels the nearby trajectories. Thus, now we define the conditions for a fixpoint to be termed as attractor or repellor.
+
+\paragraph{Attractors:} An attractor or attractive fix $ \textbf{\textit{u}}_{0} $ of a development operator $\textit{f}(\textit{u})$ is such that for any value of $\textit{u}$ in the state space close to $\textbf{\textit{u}}_{0} $, the iterated development sequence $ \textit{u},\textit{f}(u),\textit{f}(\textit{f}(u)),\textit{f}(\textit{f}(\textit{f}(u))),\ldots $ state converges to $\textbf{\textit{u}}_{0}$. When there’s a small perturbation from $\textbf{\textit{u}}_{0}$ i.e.$\textbf{\textit{u}}_{0}+\varepsilon $, then the sign of new state $ \textit{f}\left(\textbf{\textit{u}}_{0} \right)+\varepsilon $ is opposite to the sign of  $ \varepsilon $ such that the state is pushed back to $\textbf{\textit{u}}_{0} $. Let’s put the value of $\textbf{\textit{u}}= \textbf{\textit{u}}_{0} +\varepsilon $ in the equation     and do a Taylor expansion around $\textbf{\textit{u}}_{0}$, such that:
+\begin{equation}
+\dot{\varepsilon} = \textit{a}\varepsilon + \mathcal{O}{\left(\varepsilon^{2}\right) }, \textit{a} = \dfrac{d\textit{f}}{d\textit{u}}\vert_{\textit{u}=\textit{u}_{0}}
+\end{equation}
+
+On neglecting the higher order terms and integrating, we obtain:
+\begin{equation}
+\varepsilon(\textit{t})=\varepsilon_{0} \exp (\sigma\textit{t})
+\end{equation}
+where $ \varepsilon_{0} $ is the initial perturbation, which leads to $ \sigma=\textit{a} $. Hence, fixpoint $\textit{u}_{0}$ is stable if $\textit{a}= d_{\textit{u}}\textit{f}(\textit{u})\vert_{\textit{u}=\textit{u}_{0}} < 0$.
+
+\paragraph{Repellers:} Repellers are the unstable fix points at which the value of $\textit{a}>0$ such that the sign of $\varepsilon$ and $\textit{f}(\textit{u}_{0}+\varepsilon)$ is same. Thereby, the trajectories around this point rapidly diverge to more stable areas because $ \dot{\textit{u}} $ pushes the states away from $\textit{u}_{0}$.
+If we reverse the time, then attractor and repeller change their role and start behaving oppositely in retrospect.
+
+\paragraph{Neutral Points:} We have an attractor or a repeller as long as the first non-vanishing order of $\textit{f}(\textit{u}_{0})$ is odd, but when the first non-vanishing order is even, we have a different scenario. In such cases, fixpoint has an attractive nature on one side and repulsive on other. Such points are called neutral points.
+
+\section{Multi-Dimensional Continuous Systems}
+Extending the beforementioned concepts, we can now consider a dynamical system with state variable $(\textit{u}_{1},\textit{u}_{2})\in\Omega$, manifold $ \Omega\in\mathbb{R}^{2} $ and development equation:
+\begin{equation}
+\dot{\mathit{u}_{1}} = \textit{f}_{1}{\left( \mathit{u}_{1},\mathit{u}_{2}\right) }
+\end{equation}
+\begin{equation}
+\dot{\mathit{u}_{2}} = \textit{f}_{2}{\left( \mathit{u}_{1},\mathit{u}_{2}\right) }
+\end{equation}
+where $\textit{f}_{1}$ and $\textit{f}_{2}$ are nonlinear functions. In a concise form with boundary conditions, it can be represented as:
+\begin{equation}
+\dot{\textit{u}} = \textit{f}{\left( \textit{u}\right) }
+\end{equation}
+
+\subsection{Flows and Trajectories}
+\textit{Flow} is a motion of particles in a medium. Mathematically, it can be defined as the temporal rate of change of the state of the system, in our case $ \dot{\textit{u}} $ which represents the system’s velocity. The flow field is an affine function of position in the state space, defined as:
+\begin{equation}
+\dot{\mathit{u}} = \mathit{f}{\left( \mathit{u}\right) }=\mathit{Au + b}
+\end{equation}
+where, , \textit{A} is a matrix, \textit{b} a vector of numbers and \textit{u} the position vector.
+
+The \textit{trajectory} traces the motion of a single particle. Thus, a trajectory represents the development of the state of system with time from some initial state $\textit{u}_{0}$
+\begin{equation}
+\mathit{u(t)}=\mathit{u}_{0}+\int_{0}^{t}\dot{\mathit{u}}(\mathit{u}(\tau))d\tau
+\end{equation}
+Usually, it’s not easier to solve such equations analytically, therefore, we have to use more sophisticated tools to solve such equations like Euler method, Runge-Kutta etc. For $\textit{t}>0$, we get trajectories forward in time, i.e. trajectories for future states, and for $\textit{t}<0$, we get trajectories backward in time, i.e. trajectories for past states.
+
+\subsection{Fixpoints and Nullclines}
+Earlier, for one-dimensional systems, we described fixpoint as the state $ \textit{u}_{0} $, where the state satisfies the condition $ \textit{f}(\textit{u}_{0})=0 $. Extending this concept to multi-dimensions, we achieve what is known as nullclines in addition to the fixpoints. The nullcline of component \textit{i} is defined as:
+\begin{equation}
+\mathbf{u}:\dot{\textit{u}_{i}}=\textit{f}_{i}(\mathbf{u})=0,
+\end{equation}
+
+Nullclines are also known as zero-growth isoclines, where the set of points in the phase plane have zero first-order derivative. Therefore, the field through these points is either straight up or straight down. Nullclines thus separate the state space into different regions which exhibit varied characteristics. The fixpoints of a multi-dimension system exists where all the nullclines intersect, such that $ \dot{\textit{u}_{i}}=\textit{f}_{i}(\mathbf{u})=0 $. In a two-dimensional linear system, the nullclines are represented by two lines on a two-dimensional plot as shown:
+
+\subsection{Local Stability}
+Using the same concepts as of one-dimensional case, we again look at the neighbourhood of $ \textbf{u}_{0} $ with a small perturbation $ \varepsilon $, such that $ \textbf{u}=\textbf{u}^{0}+\varepsilon $. On doing a Taylor’s expansion on \textit{f}, we obtain:
+\begin{equation}
+\dot{\mathbf{u}}=d_{u}(\mathbf{u}_{0}+\varepsilon)=\mathit{f}(\mathbf{u}_{0}+\varepsilon)
+\end{equation}
+\begin{equation}
+\dot{\varepsilon}= \normalfont \textbf{a}\varepsilon, \normalfont \textbf{a} = \bigl(\begin{smallmatrix} \textit{a}_{11}&\cdots &\textit{a}_{11} \\ \vdots&\ddots &\vdots \\ \textit{a}_{n1}&\cdots &\textit{a}_{nn} \end{smallmatrix}\bigr), \textit{a}_{ij}=\dfrac{\partial\textit{f}_{i}}{\partial\textit{u}_{j}}\vert_{\mathit{u}=\mathit{u}_{0}}
+\end{equation}
+where $\normalfont \textbf{a}$ is the Jacobian matrix. In the above formulation, $ \varepsilon $ is a vector and $\normalfont \textbf{a}$ is a matrix. 
+There are various methods like singular value decomposition to do an eigen decomposition of any square matrix such as $\normalfont \textbf{a}$. The matrix $\normalfont \textbf{a}$  can be decomposed into three matrices, $\normalfont \textbf{a}=\textit{PD}\textit{P}^{-1}$, where \textit{P} consists of eigenvectors of $\normalfont \textbf{a}$ and \textit{D} is a diagonal matrix which contains the eigenvalues. From linear algebra, we know that an eigenvector or characteristic vector of a linear transformation is a non-zero vector that only changes by a scalar value when the linear transformation is applied to it. If the state space is finite-dimensional, then such linear transformation can be defined by square matrix. Thus, mathematically, we can write this as:
+\begin{equation}\label{eq:19}
+\normalfont \textbf{av}= \sigma\normalfont \textbf{v}\Longrightarrow\vert\normalfont \textbf{a} - \sigma\mathbb{I}\vert\normalfont \textbf{v}=0,
+\end{equation}
+where $ \mathbb{I} $ is an identity matrix, and $\normalfont\textbf{v}$ is an eigenvector with $\sigma$ as its eigenvalue. Solving, $ \det\vert\normalfont \textbf{a} - \sigma\mathbb{I}\vert $ yields an $ \textit{n}_{th} $ order polynomial solving which gives us \textit{n} eigenvalues $ {\sigma_{1}, \dots , \sigma_{n}} $. On transforming (1) with the eigenbasis $ {\normalfont \textbf{v}_{1}, \dots, \normalfont \textbf{v}_{n}} $ of $\normalfont \textbf{a}$, gives us \textit{n} independent linear differential equations:
+\begin{equation}
+\dot{\varepsilon}_{i}(t)= \sigma_{i}\varepsilon{i},
+\end{equation}
+where $ \varepsilon_{i} $ is the projection of $ \varepsilon $ onto the eigenvector . On integrating this, we come across the earlier result,
+\begin{equation}
+\sigma_{i}(t) = \varepsilon_{i_{0}}\exp(\sigma_{i}t)
+\end{equation}
+where $ \varepsilon_{i_{0}} $ is the initial perturbation towards the direction of eigenvector \textit{i}. Thus, as per prior discussion, it can be understood that fixpoint $\textbf{u}_{0}$ is stable if for all $ i, \Re(\sigma_{i}) < 0 $   and unstable if $ i, \Re(\sigma_{i}) > 0 $. Now, we can define what’s known as hyperbolic point, which is when the $ i, \Re(\sigma_{i}) \neq 0,\forall i $. If atleast one sign is positive and one negative, we get a \textit{hyperbolic saddle point}. If $ \Re(\sigma_{i}) = 0 $, we have to consider the higher order terms to say anything about such points. Thus, such points are called critical points.
+
+\subsubsection*{Lyapunov Exponents and Deterministic Time Horizon}
+The eigensystem of $\normalfont \textbf{a}$ i.e. the set of eigenvectors is also useful to understand the stability in the direction of each eigenvector $ \normalfont \textbf{v}_{i} $ in addition to overall stability of $\textbf{u}_{0}$. Such a system characterises the rate of separation or fluctuation in any direction. Thus, it can be thought that the eigenvalue $ \sigma_{i} $ is the \textit{Lyapunov exponent} in direction \textit{i}. Mathematically, the \textit{Lyapunov exponent} is defined as the rate of separation of infinitesimally close trajectories. Decomposing the $ \varepsilon $ into a sum of eigenvectors as $ \varepsilon(t) = \sum\nolimits_{i} \varepsilon_{i}\normalfont \textbf{v}_{i} $ and  be the initial perturbation. Then, linear approximation gives:
+\begin{equation}
+\varepsilon(t) = \sum\nolimits_{i} \varepsilon_{i_{0}}\exp(\sigma_{i}t)\normalfont \textbf{v}_{i}
+\end{equation}
+To calculate the development of small separation $ \Delta\varepsilon\ $ between two states $\textbf{u}_{A}$ and $\textbf{u}_{B}$ as in $ \Delta\varepsilon\coloneqq \textbf{u}_{A} -\textbf{u}_{B} $, we introduce the  operator in above equation which gives:
+
+\begin{equation}
+\Delta\varepsilon(t) = \sum\nolimits_{i} \Delta\varepsilon_{i_{0}}\exp(\sigma_{i}t)\normalfont \textbf{v}_{i}
+\end{equation}
+However, many dynamical systems are either time-dependent or only known over a finite interval of time, which often limits the usability of classical Lyapunov exponent. As a result, we have to resort to advanced concepts like finite-time Lyapunov exponent which we have discussed in section (\ref{FTLE})
+
+Another way to demonstrate the instability of the system with positive Lyapunov exponents is the \textit{deterministic time horizon} which gives us the duration after which the initial disturbance in direction  has grown by the factor $\varepsilon$. Mathematically this is represented as,
+\begin{equation}
+\tau_{d_{i}} = \frac{1}{\sigma_{i}},\sigma_{i} >0
+\end{equation}
+
+\subsubsection*{Two-Dimensional System}
+For higher order polynomials, we can write coefficients of the characteristic polynomials in terms of matrix determinants with entries $ \tr \normalfont\textbf{a}^{k} $ For two-dimensional systems $\dim(a)=2$, we can write (\ref{eq:19}) as:
+\begin{equation}
+\det[\normalfont\textbf{a} - \sigma\mathbb{I}] = \sigma^{2} - [\tr\normalfont\textbf{a}]\sigma + \det\normalfont\textbf{a} = 0
+\end{equation}
+where the trace and determinant are, respectively
+\begin{equation}
+\tr\normalfont\textbf{a} = a_{11} + a_{22}
+\end{equation}
+
+\begin{equation}
+\det\normalfont\textbf{a} = a_{11} a_{22}-a_{12} a_{21}
+\end{equation}
+Solving the system gives us the eigenvalues as:
+\begin{equation}
+\sigma^{\pm}=\frac{1}{2}\tr \normalfont\textbf{a} \pm \sqrt{[\tr \normalfont\textbf{a}^{2}] - 4\det\normalfont\textbf{a}}
+\end{equation}
+Hence, we can define the stability of the fixpoint based on following conditions:
+\begin{enumerate}
+\item When $ \tr \normalfont\textbf{a}<0 $ and $ \det \normalfont\textbf{a} : \Re(\sigma) < 0 $, the fixpoint is stable. When $ 4\det \normalfont\textbf{a} < [\tr \normalfont\textbf{a}^{2}] $, we have two real solutions, therefore perturbations die monotonically. When $ 4\det \normalfont\textbf{a} > [\tr \normalfont\textbf{a}^{2}],\Im(\sigma)\neq0, $the evolution of the state has an oscillating part. Since , the perturbed state would slowly spiral into fix point.
+\item When $ \tr \normalfont\textbf{a}>0 $ and $ \det \normalfont\textbf{a} : \Re(\sigma) < 0 $, the fixpoint is unstable. Any perturbation would have an exponential growth either in a spiral out or monotonic manner, which would depend on the size of $ 4\det\normalfont\textbf{a} $ and $ [\tr \normalfont\textbf{a}^{2}] $.
+\item When $ \det \normalfont\textbf{a}<0: \sigma^{+}$ and $ \sigma^{-} $, we get a saddle point as fixpoint, which decays monotonically along $\varepsilon^{-}$, and grows monotonically along $\varepsilon^{+}$, the eigenvector with $\sigma^{+}$.
+\end{enumerate}
+
+To classify any system into any of the above categories, we need to follow three-steps of calculations. First, we set $ \dot{\textbf{u}} = 0 $ and calculate the fixpoint $ \textbf{u}_{0} $ of the development equation. After this, we calculate the Jacobian matrix $ \frac{\delta f_{i}}{\delta u_{j}} $ and evaluate it at the fixpoint $ \textbf{u}_{0} $ to obtain $ \normalfont\textbf{a} $. And in the last step, we examine $ \tr \normalfont\textbf{a}$ and $ \det\normalfont\textbf{a}$, and check their sign $ \lessgtr 0 $ to assign them into aforementioned categories of stability. To have a better understanding, let’s look at an example:
+
+\paragraph{Example: Lotka-Voltera Equation for Predator-Prey Systems}: This is one of the most famous models in dynamical systems. Let \textit{x} denote the population of preys such as rabbits and \textit{y} denote the population of predators such as foxes. Thus, Lotka-Voltera model explains the population dynamics as:
+\begin{equation}
+\frac{dx}{dt}=ax-bxy
+\end{equation}
+\begin{equation}
+\frac{dy}{dt}=-cy+dxy
+\end{equation}
+
+Here, \textit{a} is the net growth rate of preys in the absence of predators, \textit{b} is the rate of predation which affects the prey population, \textit{c} is the death of predators in the absence of prey, and \textit{d} is the growth rate of predators which is proportionate to food intake.
+
+\begin{enumerate}
+\item To calculate the fixpoints of the above model, we set $ \dot{\textbf{u}} = f(\textbf{u}) $ where $ \textbf{u} =(x,y) $ This leads to the following:
+	\begin{equation}
+		\begin{cases}
+			\begin{aligned}
+				ax -bxy = 0 \\
+				-cy + dxy = 0
+			\end{aligned}
+		\end{cases}
+				\Longrightarrow 
+				u_{1} =
+				\begin{pmatrix}
+				0 \\
+				0
+				\end{pmatrix}
+				\text{and } u_{2} =
+				\begin{pmatrix}
+				\frac{c}{d} \\
+				\frac{a}{b}
+				\end{pmatrix}
+	\end{equation}
+
+\item Now, we need to calculate the Jacobian matrix
+	\begin{equation}
+		\normalfont\textbf{a} =
+			\begin{bmatrix}
+				a - by & -bx \\
+				dy & -c+dx
+			\end{bmatrix}
+	\end{equation}
+
+ We can now calculate trace and determinant at the fixpoints for the above matrix
+\begin{equation}
+	\begin{split}		 
+	 	\normalfont\textbf{a}\vert_{u = u_{1}}=
+	 	\begin{bmatrix}
+	 	a & 0 \\
+	 	0 & -c
+	 	\end{bmatrix}
+	 	\Longrightarrow (a - \sigma)(c + \sigma) = 0 \Longrightarrow 
+	 	\begin{cases}
+		 	\begin{aligned}
+			 \sigma_{1} = a \\
+			 \sigma_{2} =-c
+		 	\end{aligned}
+	 	\end{cases}
+	 \\
+		 \normalfont\textbf{a}\vert_{u = u_{2}}=
+		 \begin{bmatrix}
+			 a & -\frac{bc}{d} \\
+			 \frac{ad}{b} & 0
+		 \end{bmatrix}
+		 \Longrightarrow \sigma^{2} + ac = 0 \Longrightarrow 
+		\begin{cases}
+			 \begin{aligned}
+				 \sigma_{1} = -\iota\sqrt{ac} \\
+				 \sigma_{2} =\iota\sqrt{ac}
+			 \end{aligned}
+		 \end{cases}
+	\end{split}
+\end{equation}
+
+\item Thus, $ \tr \textbf{a}\vert_{u = u_{1}} = a - c $ and $ \det \textbf{a}\vert_{u = u_{1}} = -ac <0, \sigma_{1} > 0, \sigma_{2} <0 $, thus $\textit{u}_{1}$ is a saddle point. On the other hand, $ \tr \textbf{a}\vert_{u = u_{2}} = 0 $ and $ \det \textbf{a}\vert_{u = u_{1}} = ac>0, \Im(\sigma)\neq0$, thus $\textit{u}_{2}$ is oscillatory.
+
+\end{enumerate}
+
+\section{Invariant Sets and Manifolds}
+Invariant sets as the name suggests, is a set of points which is invariant under the development of a dynamical system. The set of fixpoints $\textbf{u}_{0}$, where $ \textit{f}(\textbf{u}_{0}) $ is one of the simplest examples of such sets.
+We define the \textit{propagator} $ \textbf{F}_{t} $ as an operator which maps any state $\textbf{u}_{0}$ along the trajectory after time \textit{t}. Propagator here macroscopically can be identified as the development operator $ \mathfrak{D} $. Mathematically, it’s represented as:
+\begin{equation}
+	\textbf{F}_{t}(\textbf{u}(0))\coloneqq \textbf{u}(0) + \int_{0}^{t}\textbf{f}(\textbf{u}(\tau)) \diff \tau = \textbf{u}(t)
+\end{equation}
+
+A set $ \mathfrak{S}\subset\mathbb{R}^{n} $ is an invariant set when for each $ \textbf{u}\in\mathfrak{S} $, the solution $ t\mapsto \textbf{F}_{t}(\textbf{u}) $ has its image in $ \mathfrak{S} $, defined on its maximal interval of existence. If \textbf{f} is Lipschitz-continuous, and the set is continuous and locally Euclidean, then the manifold is called an \textit{invariant manifold}. A manifold, in general is a topological space that locally resembles Euclidean space near each point. 
+
+The manifold can be broadly classified as the \textit{stable, unstable or center manifolds}. Here, we focus on the manifold associated with some fixpoint $\textbf{u}_{0}$ and classify the manifolds according to the properties of the fixpoint. We first look at the Jacobian matrix $ \textbf{a}\vert_{u_{0}} $ in its eigensystem – with eigenvectors $ {\textbf{v}_{i}} $ and the respective eigenvalues $ \sigma_{i} $, which characterises into three linear subspaces: 
+		\begin{enumerate*}[label=(\roman*)]
+			\item \textit{stable subspace} with negative eigenvalues $ \sigma <0 $,  
+			\item \textit{unstable subspace} with $ \sigma >0 $, and  
+			\item \textit{center subspace} with $ \sigma =0 $. 
+		\end{enumerate*}
+The tangents to the above subspaces provides us with respective manifolds in each category.
+
+\paragraph{Stable and Unstable Manifolds:} In a stable manifold, trajectories approach a fixpoint  $\textbf{u}_{0}$ exponentially. All the eigenvalues are negative at this point. On the other hand, in an unstable manifold, trajectories get exponentially repelled at the fixpoint. And at such a point, all the eigenvalues are positive here. When there’s a mix of both positive and negative eigenvalues at the fixpoint, we get a \textit{hyperbolic saddle point}. Let’s look at an example to have a better understanding of such saddle points. Consider a system of differential equations with variables  $\textit{u}_{1}$ and  $\textit{u}_{2}$, such that:
+\begin{equation}
+	\begin{split}
+	\dot{u_{1}} = u_{1} - \alpha u_{2} \\
+	\dot{u_{2}} = \alpha u_{1} - u_{2}
+	\end{split}
+\end{equation}
+
+Such equations have a single fixpoint at $ (0,0) $ with eigenvectors $ \textbf{v} = \Big(\frac{1}{\alpha}[1 \pm \mu], 1 \Big)^{T} $ where $ \mu = \sqrt{1 - \alpha^{2}} $, and corresponding eigenvalues $ \pm \mu $.
+
+\paragraph{Center Manifold:} When at least one of the eigenvalues of $ \textbf{a}\vert_{\textbf{u}_{0}} $ vanishes, we get a center manifold, whose character is hard to judge from just linear analysis and the dynamics is much slower than exponential.
+
+\subsection{Invariants manifolds in non-autonomous dynamical systems}
+A differential equation
+\begin{equation}
+\dot{\textbf{u}} = f(\textbf{u})
+\end{equation}
+where $ \textbf{u}\in\mathbb{R}_{n}, t \in \mathbb{R}  $ represents a non-autonomous dynamical system, whose solutions are of the form $ \textbf{u}(t;t_{0}, \textbf{u}_{0}) = f_{t_{0}}^{t}(\textbf{u}_{0})$ with $ \textbf{u}(t_{0};t_{0}, \textbf{u}_{0}) = \textbf{u}_{0} $ represents a non-autonomous dynamical system. In the extended phase space $ \mathbb{R}^{n}\times\mathbb{R} $ of such a system, an invariant manifold is generated by any initial surface $ \mathfrak{M}_{0}\subset\mathbb{R}^{n} $
+\begin{equation}
+\mathfrak{M} = \bigcup_{t\in\mathbb{R}} f_{t_{0}}^{t} (\mathfrak{M}_{0})
+\end{equation}
+One really important question is left to be answered, that how can we find such manifolds out of these large families of manifolds, which exert the maximum influence on the overall system dynamics. Such manifolds in the extended phase space for a non-autonomous dynamical systems are known as \textit{Lagrangian Coherent Structures (LCS)}.
+

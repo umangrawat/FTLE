@@ -28,8 +28,6 @@ public:
     vtkGetMacro(LimitEigenValue, double);
     double LimitEigenValue;
 
-
-
 protected:
   vtkRidgeLine();
   ~vtkRidgeLine();
@@ -41,6 +39,7 @@ protected:
    virtual int RequestInformation(vtkInformation *, vtkInformationVector **, vtkInformationVector *); //the function that makes this class work with the vtk pipeline
 
    virtual int RequestData(vtkInformation *, vtkInformationVector **, vtkInformationVector *);
+   //bool RidgeEigenValue (double IntHessian[4]);
     // Generate output
 
 

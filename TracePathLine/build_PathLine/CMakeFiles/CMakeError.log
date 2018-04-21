@@ -1,20 +1,20 @@
 Determining if the Q_WS_WIN exist failed with the following output:
 Change Dir: /export/home/urawat/Desktop/TracePathLine/build_PathLine/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_df6f4/fast"
-/usr/bin/make -f CMakeFiles/cmTC_df6f4.dir/build.make CMakeFiles/cmTC_df6f4.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_2b523/fast"
+/usr/bin/make -f CMakeFiles/cmTC_2b523.dir/build.make CMakeFiles/cmTC_2b523.dir/build
 make[1]: Entering directory '/export/home/urawat/Desktop/TracePathLine/build_PathLine/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_df6f4.dir/CheckSymbolExists.cxx.o
-/usr/bin/c++    -I/usr/include/qt4   -o CMakeFiles/cmTC_df6f4.dir/CheckSymbolExists.cxx.o -c /export/home/urawat/Desktop/TracePathLine/build_PathLine/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
+Building CXX object CMakeFiles/cmTC_2b523.dir/CheckSymbolExists.cxx.o
+/usr/bin/c++    -I/usr/include/qt4   -o CMakeFiles/cmTC_2b523.dir/CheckSymbolExists.cxx.o -c /export/home/urawat/Desktop/TracePathLine/build_PathLine/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
 /export/home/urawat/Desktop/TracePathLine/build_PathLine/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx: In function ‘int main(int, char**)’:
 /export/home/urawat/Desktop/TracePathLine/build_PathLine/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:8:19: error: ‘Q_WS_WIN’ was not declared in this scope
    return ((int*)(&Q_WS_WIN))[argc];
                    ^
-CMakeFiles/cmTC_df6f4.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_df6f4.dir/CheckSymbolExists.cxx.o' failed
-make[1]: *** [CMakeFiles/cmTC_df6f4.dir/CheckSymbolExists.cxx.o] Error 1
+CMakeFiles/cmTC_2b523.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_2b523.dir/CheckSymbolExists.cxx.o' failed
+make[1]: *** [CMakeFiles/cmTC_2b523.dir/CheckSymbolExists.cxx.o] Error 1
 make[1]: Leaving directory '/export/home/urawat/Desktop/TracePathLine/build_PathLine/CMakeFiles/CMakeTmp'
-Makefile:126: recipe for target 'cmTC_df6f4/fast' failed
-make: *** [cmTC_df6f4/fast] Error 2
+Makefile:126: recipe for target 'cmTC_2b523/fast' failed
+make: *** [cmTC_2b523/fast] Error 2
 
 File /export/home/urawat/Desktop/TracePathLine/build_PathLine/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
 /* */
@@ -34,20 +34,20 @@ int main(int argc, char** argv)
 Determining if the Q_WS_QWS exist failed with the following output:
 Change Dir: /export/home/urawat/Desktop/TracePathLine/build_PathLine/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_c0226/fast"
-/usr/bin/make -f CMakeFiles/cmTC_c0226.dir/build.make CMakeFiles/cmTC_c0226.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_65713/fast"
+/usr/bin/make -f CMakeFiles/cmTC_65713.dir/build.make CMakeFiles/cmTC_65713.dir/build
 make[1]: Entering directory '/export/home/urawat/Desktop/TracePathLine/build_PathLine/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_c0226.dir/CheckSymbolExists.cxx.o
-/usr/bin/c++    -I/usr/include/qt4   -o CMakeFiles/cmTC_c0226.dir/CheckSymbolExists.cxx.o -c /export/home/urawat/Desktop/TracePathLine/build_PathLine/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
+Building CXX object CMakeFiles/cmTC_65713.dir/CheckSymbolExists.cxx.o
+/usr/bin/c++    -I/usr/include/qt4   -o CMakeFiles/cmTC_65713.dir/CheckSymbolExists.cxx.o -c /export/home/urawat/Desktop/TracePathLine/build_PathLine/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
 /export/home/urawat/Desktop/TracePathLine/build_PathLine/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx: In function ‘int main(int, char**)’:
 /export/home/urawat/Desktop/TracePathLine/build_PathLine/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:8:19: error: ‘Q_WS_QWS’ was not declared in this scope
    return ((int*)(&Q_WS_QWS))[argc];
                    ^
-CMakeFiles/cmTC_c0226.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_c0226.dir/CheckSymbolExists.cxx.o' failed
-make[1]: *** [CMakeFiles/cmTC_c0226.dir/CheckSymbolExists.cxx.o] Error 1
+CMakeFiles/cmTC_65713.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_65713.dir/CheckSymbolExists.cxx.o' failed
+make[1]: *** [CMakeFiles/cmTC_65713.dir/CheckSymbolExists.cxx.o] Error 1
 make[1]: Leaving directory '/export/home/urawat/Desktop/TracePathLine/build_PathLine/CMakeFiles/CMakeTmp'
-Makefile:126: recipe for target 'cmTC_c0226/fast' failed
-make: *** [cmTC_c0226/fast] Error 2
+Makefile:126: recipe for target 'cmTC_65713/fast' failed
+make: *** [cmTC_65713/fast] Error 2
 
 File /export/home/urawat/Desktop/TracePathLine/build_PathLine/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
 /* */
@@ -67,20 +67,20 @@ int main(int argc, char** argv)
 Determining if the Q_WS_MAC exist failed with the following output:
 Change Dir: /export/home/urawat/Desktop/TracePathLine/build_PathLine/CMakeFiles/CMakeTmp
 
-Run Build Command:"/usr/bin/make" "cmTC_f6f1a/fast"
-/usr/bin/make -f CMakeFiles/cmTC_f6f1a.dir/build.make CMakeFiles/cmTC_f6f1a.dir/build
+Run Build Command:"/usr/bin/make" "cmTC_66e38/fast"
+/usr/bin/make -f CMakeFiles/cmTC_66e38.dir/build.make CMakeFiles/cmTC_66e38.dir/build
 make[1]: Entering directory '/export/home/urawat/Desktop/TracePathLine/build_PathLine/CMakeFiles/CMakeTmp'
-Building CXX object CMakeFiles/cmTC_f6f1a.dir/CheckSymbolExists.cxx.o
-/usr/bin/c++    -I/usr/include/qt4   -o CMakeFiles/cmTC_f6f1a.dir/CheckSymbolExists.cxx.o -c /export/home/urawat/Desktop/TracePathLine/build_PathLine/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
+Building CXX object CMakeFiles/cmTC_66e38.dir/CheckSymbolExists.cxx.o
+/usr/bin/c++    -I/usr/include/qt4   -o CMakeFiles/cmTC_66e38.dir/CheckSymbolExists.cxx.o -c /export/home/urawat/Desktop/TracePathLine/build_PathLine/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx
 /export/home/urawat/Desktop/TracePathLine/build_PathLine/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx: In function ‘int main(int, char**)’:
 /export/home/urawat/Desktop/TracePathLine/build_PathLine/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:8:19: error: ‘Q_WS_MAC’ was not declared in this scope
    return ((int*)(&Q_WS_MAC))[argc];
                    ^
-CMakeFiles/cmTC_f6f1a.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_f6f1a.dir/CheckSymbolExists.cxx.o' failed
-make[1]: *** [CMakeFiles/cmTC_f6f1a.dir/CheckSymbolExists.cxx.o] Error 1
+CMakeFiles/cmTC_66e38.dir/build.make:65: recipe for target 'CMakeFiles/cmTC_66e38.dir/CheckSymbolExists.cxx.o' failed
+make[1]: *** [CMakeFiles/cmTC_66e38.dir/CheckSymbolExists.cxx.o] Error 1
 make[1]: Leaving directory '/export/home/urawat/Desktop/TracePathLine/build_PathLine/CMakeFiles/CMakeTmp'
-Makefile:126: recipe for target 'cmTC_f6f1a/fast' failed
-make: *** [cmTC_f6f1a/fast] Error 2
+Makefile:126: recipe for target 'cmTC_66e38/fast' failed
+make: *** [cmTC_66e38/fast] Error 2
 
 File /export/home/urawat/Desktop/TracePathLine/build_PathLine/CMakeFiles/CMakeTmp/CheckSymbolExists.cxx:
 /* */

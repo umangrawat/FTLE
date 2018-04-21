@@ -19,7 +19,7 @@ CMAKE_AR:FILEPATH=/usr/bin/ar
 
 //Choose the type of build, options are: None(CMAKE_CXX_FLAGS or
 // CMAKE_C_FLAGS used) Debug Release RelWithDebInfo MinSizeRel.
-CMAKE_BUILD_TYPE:STRING=
+CMAKE_BUILD_TYPE:STRING=Debug
 
 //Enable/Disable color output during build.
 CMAKE_COLOR_MAKEFILE:BOOL=ON
@@ -733,6 +733,8 @@ TracePathLine_SOURCE_DIR:STATIC=/export/home/urawat/Desktop/TracePathLine
 
 //ADVANCED property for variable: CMAKE_AR
 CMAKE_AR-ADVANCED:INTERNAL=1
+//MODIFIED property for variable: CMAKE_BUILD_TYPE
+CMAKE_BUILD_TYPE-MODIFIED:INTERNAL=ON
 //This is the directory where this CMakeCache.txt was created
 CMAKE_CACHEFILE_DIR:INTERNAL=/export/home/urawat/Desktop/TracePathLine/build_PathLine
 //Major version of cmake used to create the current loaded cache

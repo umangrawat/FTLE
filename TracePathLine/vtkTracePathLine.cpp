@@ -176,6 +176,7 @@ int vtkTracePathLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInform
     this->spacing[1] = this->bounds[1] / (static_cast<double>(resolution[3]));
     this->spacing[2] = this->bounds[2] / (static_cast<double>(resolution[5]));
 
+    this->seedGrid->SetSpacing(this->spacing);
 
     ////Getting the point values from input data
     vtkSmartPointer<vtkDoubleArray> startPoints = vtkDoubleArray::SafeDownCast(input->GetPointData()->GetAbstractArray("StartPoints"));
@@ -183,7 +184,12 @@ int vtkTracePathLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInform
     vtkSmartPointer<vtkDoubleArray> endPoints = vtkDoubleArray::SafeDownCast(input->GetPointData()->GetAbstractArray("EndPoints"));
     endPoints->SetNumberOfComponents(2);
 
-    double pointsPerCell = startPoints->GetNumberOfTuples() / ( resolution[1] * resolution[3] * 2 );
+    double pointsPerCell = double (startPoints->GetNumberOfTuples() / ( resolution[1] * resolution[3] * 2 ));
+
+    if (floor(pointsPerCell) != pointsPerCell )
+    {
+        std::cerr <<"Enter resolution such that every cell has a whole number of points"<<std::endl;
+    }
 
     std::cout<< " Number of Points per cell " << pointsPerCell << std::endl;
 
@@ -205,9 +211,9 @@ int vtkTracePathLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInform
         int indexStart = cellLocator( startLocation, this->spacing, resolution );
         int indexEnd = cellLocator( endLocation, this->spacing, resolution );
 
-        LocationIndexValues->InsertTuple6( id, indexStart, indexEnd, startLocation[0], startLocation[1], endLocation[0], endLocation[1] );
+        LocationIndexValues->InsertTuple6( id, indexStart, indexEnd,
+                                           startLocation[0], startLocation[1], endLocation[0], endLocation[1] );
     }
-
 
 
     ////Need to sort the arrays, remove duplicates in order to calculate the number of cells pathlines ended at
@@ -232,7 +238,7 @@ int vtkTracePathLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInform
     StartCellPointsArray->SetName("Start Points");
 
     vtkSmartPointer<vtkDoubleArray> EndCellPointsArray = vtkSmartPointer<vtkDoubleArray>::New();
-    EndCellPointsArray->SetNumberOfComponents(pointsPerCell*2);                                    /// x and y component of all points per cell
+    EndCellPointsArray->SetNumberOfComponents(pointsPerCell*2);                                      /// x and y component of all points per cell
     EndCellPointsArray->SetName("End Points");
 
     for (int k = 0; k < resolution[1] * resolution[3]; k++)      ////number of cells
@@ -296,10 +302,28 @@ int vtkTracePathLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInform
         ip = std::unique(indexCells.begin(), indexCells.end());
         indexCells.resize(std::distance(indexCells.begin(), ip));
 
+        /*
+        if(indexCells.size() > pointsPerCell)
+        {
+            std::cout<< "cell number "<<k<<std::endl;
+            for (int ind = 0; ind < indexCells.size(); ind++)
+            {
+                std::cout<< indexCells.at(ind) <<" ";
+            }
+            std::cout<<std::endl;
+            for (int stt = 0; stt < startcellPoints.size()*2; stt+=2)
+            {
+                std::cout << "start points " << startarray[stt] << " " <<startarray[stt+1] <<std::endl;
+                std::cout << "end points "<<endarray[stt]<<" "<<endarray[stt]<<std::endl;
+            }
+        }*/
+
         numberofCellsPathLinesEnd->InsertTuple1(idEnd, indexCells.size());
         TraceCells.push_back( indexCells );
 
     }
+
+    std::cout<<"number of points "<< numberOfPoints <<std::endl;
 
 
     this->seedGrid->GetCellData()->AddArray(numberofCellsPathLinesEnd);

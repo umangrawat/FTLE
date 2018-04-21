@@ -1,0 +1,402 @@
+\chapter{Introduction}
+
+%talk about state variables and parameters, linear vs non linear system, lagrange vs euler, streamlines, streaklines, pathlines
+
+\section{Fundamentals}
+%Defs used from wikipedia
+
+
+\subsection{Scalar Field vs Vector Field}
+A \textit{scalar field} is a zero tensor field which associates a scalar value to every point in a space-possibly physical space. The scalar may be any dimensionless mathematical number or a physical quantity. Mathematically, a scalar field on a region $\mathfrak{U}$ is a real or complex-valued function or distribution on $\mathfrak{U}$. The region $\mathfrak{U}$ may be a set in some Euclidean space, Minkowski space or more generally a subset of a manifold. The scalar field can be \textit{continuous} or \textit{discontinuous} depending on the kind of restrictions applied to it. Examples of a scalar field includes temperature, pressure or humidity field in a room. 
+
+A \textit{vector field} is a first order tensor field which assigns a vector to each point in a subset of space. A vector is a geometric object that has a magnitude and a direction attached to a point, and is represented by arrows. Vector fields are often used to model, for example the speed and direction of a moving fluid through space or the strength and direction of a magnetic force as it changes from one point to another.
+
+\subsection{Vector fields on subsets of Euclidean space}
+Let's assume a vector field is represented by a vector-valued function $ V: S\rightarrow \mathbb{R}^{n}$ in standard Cartesian coordinates $(x_{1},\ldots, x_{n})$, in a subset $\mathfrak{S} \; \text{in} \; \mathbb{R}^{n}$. \textit{V} is a continuous vector field if each component of \textit{V} is continuous, and \textit{V} is a $C^{k} $ vector field if each component of \textit{V} is \textit{k} times continuously differentiable. A vector field can be visualised as attaching a vector to individual points within an \textit{n}-dimensional space.
+
+Consider a real valued $C^{k} $-function \textit{f} defined on $\mathfrak{S} $ and two $C^{k} $-vector fields \textit{V, W} also defined on $\mathfrak{S} $, then the two operations scalar multiplication and vector addition
+\begin{equation}
+\begin{split}
+	(fV)(p) \coloneqq f(p)V(p) \\
+	(V+W)(p) \coloneqq V(p) + W(p)
+\end{split}
+\end{equation}
+define the module of $C^{k} $-vector fields over the ring of $C^{k} $-functions where the multiplication of function is defined pointwise.
+
+\subsection{Vector fields on manifolds}
+A vector field on a manifold $ \mathfrak{M} $ assigns a vector in tangent space $ T_{p}( \mathfrak{M})  $ for every $ p \in \mathfrak{M} $. Elaborating more, a vector field \textit{F} is a mapping from $ \mathfrak{M} $ into the tangent bundle $ T_{p}( \mathfrak{M})  $ so that $ p \cdot F $ is the identity mapping where \textit{p} denotes the projection from $T_{p}( \mathfrak{M}) $ to $\mathfrak{M}$ 
+
+Another definition of a vector field is: Consider a smooth vector field \textit{X} on a manifold $ \mathfrak{M} $ which is a linear map $ X: C^{\infty}(\mathfrak{M}) \rightarrow C^{\infty}(\mathfrak{M})  $ such that:
+\begin{equation}
+	X(fg) = fX(g) + X(f)g  \qquad \forall \; f, g\in C^{\infty}(\mathfrak{M})
+\end{equation}
+
+\section{Basic Objects}
+
+\subsection{Interpolation}
+Interpolation is a method of constructing new data points within the range of known discrete set of data points. Various interpolation methods are often used to represent any function at more data points than already available. There are many interpolation methods available but we will mainly focus on the multivariate interpolation methods. Multivariate interpolation refers to the interpolation on functions of more than one variable. 
+
+\subsubsection{Linear Interpolation} Linear inteprolation is a method of curve fitting using linear polynomials to construct new data points within the range of a discrete set of known data points.
+If we know the data points, for instance $ (x_{0}, f_{0}),\ldots,(x_{n}, f_{n})  $ then the value at any point $(x,f)$, such that $ x_{i} \leq x \leq x_{i+1} $ can be found as:
+\begin{equation}
+	x = x_{i} + \alpha (x_{i+1} - x_{i}) 
+\end{equation}
+where, $ \alpha = \frac{x - x_{i}}{x_{i+1}-x_{i}}, \; \alpha \in [0,1]$, then
+\begin{equation}
+	f(x) = (1 - \alpha) f_{i} + \alpha f_{i+1}
+\end{equation}
+%insert image
+
+\subsubsection{Bilinear Interpolation}
+Extending the above concept, bilinear interpolation is useful when we want to interpolate a function of two variables on a rectilinear grid. As the name suggests, the key idea is to perform two linear interpolations, first in one direction, followed by other in another direction.
+
+Consider a set of data points in a cell with points $ (x_{i},y_{i},f(x_{i},y_{i})),$ $(x_{i+1},y_{i},f(x_{i+1},y_{i})),$ $ (x_{i},y_{i+1},f(x_{i},y_{i+1})),$ and $ (x_{i+1},y_{i+1},f(x_{i+1},y_{i+1})) $ as shown below. 
+%insert image here
+
+Therefore, to calculate the value at position $ f(x,y) $
+\begin{equation}
+\begin{split}
+	f(x,y) & = (1 - \beta)[(1-\alpha) f_{i,j} + \alpha f_{i+1,j}] + \beta [(1 - \alpha)f_{i,j+1} + \alpha f_{i+1, j+1}] \\
+	& = (1 - \beta)f_{j} + \beta f_{j+1}
+\end{split}
+\end{equation}
+with
+\begin{equation}
+\begin{split}
+f_{j} = ( 1 - \alpha)f_{i,j} + \alpha f_{i+1,j} \\
+f_{j+1} = (1 - \alpha) f_{i, j+1} + \alpha f_{i+1, j+1}
+\end{split}
+\end{equation}
+with local coordinates
+\begin{equation}
+	\alpha = \frac{x-x{i}}{x_{i+1} - x_{i}}, \qquad \beta = \frac{y - y_{i}}{y_{i+1} - y_{i}}, \qquad \alpha, \beta \in [0,1]
+\end{equation}
+Thus, solving further we get
+\begin{equation}
+	f(x,y) = (1 -\alpha)(1-\beta)f_{i,j} + \alpha(1 - \beta)f_{i+1,j} + (1 -\alpha)\beta f_{i,j+1} + \alpha \beta f_{i+1,j+1}
+\end{equation}
+
+\subsubsection{Trilinear Interpolation}
+Analogous to above definition, trilieanr interpolations are used when there are three variables. It's similar to making linear interpolations with respect to each variable once. We will directly look at the formula as the derivation is same as above:
+\begin{equation}
+\begin{split}
+	x_{d} = \frac{x - x_{0}}{x_{1} - x_{0}} \\
+	y_{d} = \frac{y - y_{0}}{y_{1} - y_{0}} \\
+	z_{d} = \frac{z - z_{0}}{z_{1} -z_{0}}
+\end{split}
+\end{equation}
+Interpolating in the \textit{x}-direction first
+\begin{equation}
+\begin{split}
+	f_{00}= f_{000}(1 - x_{d}) + f_{100}x_{d} \\
+	f_{01}= f_{001}(1 - x_{d}) + f_{101}x_{d}\\
+	f_{10}= f_{010}(1 - x_{d}) + f_{110}x_{d}\\
+	f_{11}= f_{011}(1 - x_{d}) + f_{111}x_{d}
+\end{split}
+\end{equation}
+Now, in \textit{y}-direction
+\begin{equation}
+\begin{split}
+	f_{0}= f_{00}(1 - y_{d}) + f_{10}y_{d} \\
+	f_{1}= f_{01}(1 - y_{d}) + f_{11}y_{d}\\
+\end{split}
+\end{equation}
+and now finally in \textit{z}-direction
+\begin{equation}
+	f = f_{0} ( 1 - z_{d}) + f_{1}z_{d}
+\end{equation}
+
+\subsection{Differentiation of a vector}
+The derivative of a vector function $ \textbf{a}(p) $ of a single parameter \textit{p} is
+\begin{equation}
+	\dot {\textbf{f}} (x) = \lim_{\delta x \rightarrow 0} \frac{\textbf{f}(x + \delta x) - \textbf{f}(x)}{\delta x}
+\end{equation}
+If we write \textbf{a} in terms of components relative to a fixed coordinate system as $ \textbf{f} = ( f_{1}, f_{2}, f_{3} ) $, then 
+\begin{equation}
+	\dot{\textbf{f}}(x) = \bigg(\frac{\diff f_{1}}{\diff x}, \frac{\diff f_{2}}{\diff x}, \frac{\diff f_{3}}{\diff x} \bigg )
+\end{equation}
+
+\subsubsection{Finite Difference Method}
+Finite-Difference Methods are numerical methods used to obtain the derivatives in order to solve differential equations. The finite differences, i.e. $ f(x+b) - f(x+a) $ is approximated to the derivatives by dividing it by $ b - a $. Mathematically, it's written as:
+
+\begin{equation}
+	\Delta f(x)=\dot{f}(x) = \frac{f(x+b) - f(x+a)}{b-a}
+\end{equation}
+
+There are three types of finite differences methods:
+
+\begin{enumerate}
+	\item \textbf{Forward Differences}: This method uses the values of $ f(x+h) $ and $f(x)$ to calculate the derivatives. It gives the error accuracy of order $\mathcal{O}(h) $. Mathematically, it is expressed as:
+	\begin{equation}
+		\Delta f(x) = \lim_{h\rightarrow 0}\frac{f(x + h) - f(x)}{h}
+	\end{equation}
+	\item \textbf{Backward Differences}: As the name signifies, this method uses the values of $ f(x) $ and $f(x - h)$ to calculate the derivatives. It also gives the error accuracy of order $\mathcal{O}(h) $. Mathematically, it is expressed as:
+	\begin{equation}
+	\Delta f(x) = \lim_{h\rightarrow 0}\frac{f(x) - f(x-h)}{h}
+	\end{equation}
+	\item \textbf{Central Difference}: This method uses the values of $ f(x+ \dfrac{1}{2}h) $ and $f(x - \dfrac{1}{2}h)$ to calculate the derivatives. It's a rather more reliable method as it provides the error accuracy of order $\mathcal{O}(h^{2}) $. Mathematically, it is expressed as:
+	\begin{equation}
+	\Delta f(x) = \lim_{h\rightarrow 0}\frac{f(x + \dfrac{1}{2}h) - f(x - \dfrac{1}{2}h)}{h}
+	\end{equation}
+	
+\end{enumerate}
+
+\subsection{Integration of a vector}
+The integration of a vector function of a single scalar variable can be considered as the opoosite of differentiation. It's expressed as:
+\begin{equation}
+	f(x) = \int \dot{f}(x) \diff x
+\end{equation}
+
+\subsection{Line integrals through fields}
+Line integrals are the integrated development of a field as it moves through a defined path. We know that the definition of an integral for a scalar function \textit{f(x)} of a single scalar variable \textit{x} is defined as:
+\begin{equation}
+	\int f(x)dx = \lim_{\substack{n \rightarrow \infty \\ \delta x_{i} \rightarrow 0} } \sum_{i=1}^{n} f_{i} \delta x_{i}
+\end{equation}
+
+A \textit{vector line integral} is the integration of the vector field along a curve, i.e. to determine it's line integral. The line integral is constructed similar to Riemann Integral and it exists if the vector field is continuous and the curve has finite length. There are three types of integrals, depending on the nature of product:
+
+\begin{enumerate}
+	\item Integrand $ U(\textbf{r}) $ is a vector field, hence the integral is a vector. 
+	\begin{equation}
+		\textbf{I} = \int_{L} U(\textbf{r}) \diff\textbf{r}
+	\end{equation}
+	\item Integrand $\textbf{a}(\textbf{r})$ is a vector field with a dot product with $\diff \textbf{r}$ hence the integral is a scalar
+	\begin{equation}
+		I = \int_{L} \textbf{a}(\textbf{r})\cdot \diff\textbf{r}
+	\end{equation}
+	\item Integrand $\textbf{a}(\textbf{r})$ is a vector field with a cross product with $\diff \textbf{r}$ hence the integral is a vector
+	\begin{equation}
+		\textbf{I} = \int_{L} \textbf{a}(\textbf{r})\times \diff\textbf{r}
+	\end{equation}
+	
+\end{enumerate}
+
+\subsection{Surface Integrals}
+Analogous to line integrals, the surface integral is calculated by dividing the surface \textit{S} into infinitesimal vector elements of area $ \diff \textbf{S}$, where the direction of the vector $ \diff \textbf{S} $ represents the direction of the surface normal and its magnitude representing the area of the element. It's just the generalisation of the multiple integration to integration over surfaces. 
+
+For a surface $\textbf{S} = (x.y)$, surface integral is calculated as:
+\begin{equation}
+\iint_{S} f(x,y)\diff \textbf{S} = \iint_{S} f(x,y)\diff x \diff y
+\end{equation}
+
+Similar to above case of line integrals, there are three possibilities here as well:
+
+\begin{enumerate}
+	\item $ \int_{S} U \diff \textbf{S}-$ scalar field \textit{U}; vector integral.
+	\item $ \int_{S} \textbf{a} \cdot \diff \textbf{S}-$ vector field \textbf{a}; scalar integral.
+	\item $ \int_{S} \textbf{a} \times \diff \textbf{S}-$ vector field \textbf{a}; vector integral.
+\end{enumerate}
+
+\subsection{Volume Integrals}
+Volume integral refers to an integral over a 3-dimensional domain. Analogous to above cases, volume integral is taken as the limit of a sum of products as the size of the volume element tends to zero. Mathematically,
+\begin{equation}
+	\iiint_{V} f(x,y,z) \diff \textbf{V} = \iiint_{V} f(x,y,z) \diff x \diff y \diff z
+\end{equation}
+One obvious difference is that element of volume is a scalar. Similar possibilities here are:
+\begin{enumerate}
+	\item $ \int_{V} U(\textbf{r}) \diff V -$ scalar field; scalar integral.
+	\item $ \int_{V} \textbf{a} \diff V -$ vector field; vector integral.
+\end{enumerate}
+
+\section{Differential Operators}
+Vector calculus has three main differential operators namely \textit{gradient, divergence} and \textit{curl} which are defined on scalar or vector fields. These operators use the del operator ($\nabla$), also known as nabla. Let's look at these operators one by one.
+
+\subsection{Gradient}
+A gradient is a multi-variable generalisation of the derivative. It symbolises the direction of greatest ascent or descent for a function as it represents the slope of the tangent of a function. The magnitude of the gradient is equal to the slope of the tangent in the direction of greatest rate of increase of the function.
+
+Given a function $f(x_{1}, x_{2}, \ldots, x_{n}) $, the gradient of a scalar function is represented by $ \nabla f $ and for a vector function as $ \vec \nabla f$. It is often also denoted as grad \textit{f}. Thus mathematically, gradient of \textit{f} is defined as the unique vector field whose dot product with any unit vector \textbf{v} at each point \textit{x} is the directional derivative of \textit{f} along \textbf{v}, i.e.
+\begin{equation}
+	(\nabla f(x))\cdot \textbf{v} = D_{\textbf{v}} f(x)
+\end{equation}
+
+If $ f: \mathbb{R}^{n} \rightarrow \mathbb{R} $ at a point $ x $ in $\mathbb{R}^{n} $ is a linear map from $\mathbb{R}^{n} \rightarrow \mathbb{R} $, then for any \textit{v} in $\mathbb{R}^{n}$ the derivative or gradient of $ f$ at $ x$ can be written as:
+
+\begin{equation}
+	(\nabla f(x))_{x}\cdot \textbf{v} = df_{x}(v) = 
+	\begin{bmatrix}
+	\frac{\diff f}{\diff x_{1}} \\
+	\frac{\diff f}{\diff x_{2}} \\
+	\vdots\\
+	\frac{\diff f}{\diff x_{n}}
+	\end{bmatrix}^{T}
+\end{equation}
+
+\subsubsection{Jacobian Matrix} Let's also introduce the another very important concept, i.e. \textit{Jacobian Matrix.} Jacobian matrix is the matrix of all first-order partial derivatives of a vector-valued function. It generalises the derivative of a scalar-valued function of multiple variables. In other words, it's a gradient of a scalar-valued function of multiple variables. It can be considered of as expressing imposition of transformation which causes of stretching, rotation or transforming.
+
+Suppose $ f:\mathbb{R}^{n} \rightarrow \mathbb{R}^{m}$ is a function which gives the output as the vector $ \textbf{f}(x)\in \mathbb{R}^{m} $ from the input vector $ \textbf{x} \in \mathbb{R}^{n} $. Then, the Jacobian matrix \textbf{J} of \textbf{f} is an $ m \times n $ matrix defined as:
+\begin{equation}
+	\textbf{J} = \bigg[ \frac{\partial \textbf{f}}{\partial x_{1}} \quad \cdots \quad \frac{\partial \textbf{f}}{\partial x_{n}}  \bigg] = 
+	\begin{bmatrix}
+	\frac{\partial f_{1}}{\partial x_{1}} & \cdots & \frac{\partial f_{1}}{\diff x_{n}} \\
+	\vdots & \ddots &  \vdots \\
+	\frac{\partial f_{m}}{\partial x_{1}} & \cdots &  \frac{\partial f_{m}}{\partial x_{n}}
+	\end{bmatrix}
+\end{equation}
+ or, component-wise:
+\begin{equation}
+	\textbf{J}_{ij} = \frac{\partial f_{i}}{\partial x_{j}}
+\end{equation}
+The matrix is also denoted by D\textbf{f}, $\textbf{J}_{\textbf{f}} $ and $ \frac{\partial (f_{1}, \ldots, f_{m})}{\partial (x_{1}, \ldots, x_{n})} $.
+
+\subsection{Divergence}
+A divergence is a vector operator which gives the quantity of a vector field's source at each point, thus producing a scalar field. More elaboration, the divergence represents the volume density of the outward flux of a vector field from an infinitesimal volume around a point. 
+
+Let's consider an example to have a better intuition. Consider velocity of air at each point which is being heated or cooled. When the air is cooled, it contracts in all directions, and velocity field points inwards. Thus, the divergence of velocity has a negative value. On the other hand, when the air heated, it expands in all directions and the velocity field points outwards from the region. Thus, the divergence has a positive value.
+
+Thus, it can be concluded that the divergence of a vector field represents the flux generation per unit volume at each point of the field. Mathematically, divergence is defined by:
+\begin{equation}
+\text{div} \; \textbf{F} = \nabla \cdot \textbf{F} = \bigg( \frac{\partial}{\partial x}, \frac{\partial}{\partial y}, \frac{\partial}{\partial z} \bigg) \cdot (F_{1}, F_{2}, F_{3}) = \frac{\partial F_{1}}{\partial x} + \frac{\partial F_{2}}{\partial y} + \frac{\partial F_{3}}{\partial z}
+\end{equation} 
+
+\subsection{Curl}
+Curl is a vector operator which defines infinitesimal rotation of a vector field in 3-dimensional Euclidean space. It takes a vector field as input and produces another vector field. The attributes of this generated vector i.e. length and direction tell us about the rotation at that point. The axis of rotation defines the direction of the curl and the magnitude of rotation defines curl's magnitude. The curl of a irrotational vector field is zero. 
+
+In simpler terms, the circulation of any vector \textbf{F} around any closed curve \textit{C} is defined as $ \oint_C \textbf{F} \cdot \diff \textbf{r}  $ and the curl of the vector field \textbf{v} represents the vorticity, or circulation per unit area, of the field. Thus it measures the density of angular momentum of the vector flow at a point, i.e. the amount to which the flow circulates around a fixed axis.
+
+Curl of a vector field is represented as $ \nabla \times \textbf{F} $. If \textbf{F} is composed as $ [F_{x}, F_{y}, F_{z}] $, then mathematically
+\begin{equation}
+\begin{split}
+	\nabla \times \textbf{F} & = 
+	\begin{vmatrix}
+	\textbf{i} & \textbf{j} & \textbf{k} \\
+	\frac{\partial}{\partial x} & \frac{\partial}{\partial y} & \frac{\partial}{\partial z} \\
+	F_{x} & F_{y} & F_{z}
+	\end{vmatrix} \\
+	& =  \bigg( \frac{\partial F_{z}}{\partial y} - \frac{\partial F_{y}}{\partial z} \bigg) \textbf{i} +  \bigg( \frac{\partial F_{x}}{\partial z} - \frac{\partial F_{z}}{\partial x} \bigg) \textbf{j} +  \bigg( \frac{\partial F_{y}}{\partial x} - \frac{\partial F_{x}}{\partial y} \bigg) \textbf{k}
+\end{split}
+\end{equation}
+
+\subsection{Laplacian}
+Laplace operator or the Laplacian denoted by $ \nabla \cdot \nabla, \nabla^{2}, or \Delta $ is a differential operator which is given by the divergence or the gradient of a function on Euclidean space. The Laplacian $ \Delta f(x) $ of a function \textit{f} at point \textit{x} is the rate at which the average value of \textit{f} over spheres centered at \textit{x} deviates from \textit{f(x)} as the radius of the sphere grows. In a cartesian coordinate system, the Laplacian is given by the sum of second partial derivatives of the function with respect to each individual variable. 
+
+The Laplacian expresses the flux density of the gradient flow of a function. For instance, Laplacian of the chemical concentration at a point can be defined as the net rate at which a chemical dissolved in a fluid moves toward or away from that point. The Laplacian operator is also used for ridge detection which we will study later.
+
+As defined already that the Laplacian operator is the second order differential operator in the \textit{n}-dimensional Euclidean space, defined as the divergence ($ \nabla \cdot $) of the gradient ($\nabla f $). It maps $C^{k} $ functions to $C^{k-2} $ functions for $ k \geq 2$, i.e. $ \Delta: C^{k}(\mathbb{R}^{n}) \rightarrow C^{k-2}(\mathbb{R}^{n}) $. Thus, if \textit{f} is a twice-differentiable real-valued function, the Laplacian of \textit{f} is defined by:
+\begin{equation}
+	\Delta f = \nabla^{2} f = \nabla \cdot \nabla f
+\end{equation}
+where $\nabla = \big( \frac{\partial}{\partial x_{1}}, \ldots, \frac{\partial}{\partial x_{n}}  \big)  $. Therefore, the Laplacian of \textit{f} is the sum of all the unmixed second partial derivatives in the Cartesian coordinates $x_{i}$:
+\begin{equation}
+	\Delta f = \sum_{i=1}^{n} \frac{\partial^{2} f}{\partial x_{i}^{2}}
+\end{equation}
+
+\subsection{Vector Laplacian}
+The vector Laplacian operator, denoted by $ \nabla^{2} $ is analogous to the scalar Laplacian as seen above. It is a differential operator which is defined over a vector field. Scalar Laplacian when applied to a scalar field returns a scalar quantity, similarly vector Laplacian when applied to a vector field returns a vector quantity.\\
+The vector Laplacian of a vector field \textbf{F} is defined as:
+\begin{equation}
+	\nabla^{2} \textbf{F} = \nabla (\nabla \cdot \textbf{F}) - \nabla \times (\nabla \times \textbf{F})
+\end{equation}
+In Cartesian coordinates, it's reduced to an easier form as:
+\begin{equation}
+	\nabla^{2} \textbf{F} = (\nabla^{2} F_{x}, \nabla^{2} F_{y}, \nabla^{2} F_{z})
+\end{equation}
+
+\section{Integral Theorems}
+The three basic vector operators have corresponding theorems which generalises the fundamental theorem of calculus to higher dimensions:
+
+\subsection{Gradient theorem}
+The gradient theorem, also called the fundamental theorem of calculus for line integrals, explains that the line integral through a gradient field can be measured by evaluating the original scalar field at the endpoints of the curve.
+
+Mathematically, let's assume $ \phi: U \subseteq \mathbb{R}^{n} \rightarrow \mathbb{R} $ and $ \gamma $ is any curve from \textbf{x} to \textbf{y}. Then
+\begin{equation}
+	\phi(\textbf{y}) - \phi(\textbf{x}) = \int_{\gamma [\textbf{x}, \textbf{y}]} \nabla \phi(\textbf{r})\cdot \diff \textbf{r}
+\end{equation}
+The gradient theorem implies that the line integrals are path independent when evaluated through gradient fields. The inverse, i.e. any path-independent vector field can be expressed as the gradient of a scalar field, also holds true.
+
+\subsection{Divergence theorem}
+The divergence theorem, also known as Gauss's theorem relates the vector flux through a surface to the behaviour of the vector field inside the surface. A more sophisticated explaination is that the divergence theorem equates the volume integral of the divergence over the area inside the surface to the outward flux of a vector field through a closed surface. 
+
+As an example let's consider a fluid in some area with sources and sinks. Then the divergence theorem states that the sum of rate of fluid flow through all the sources and sinks is equal to the net flux out of a region. 
+
+Mathematically, if we assume a volume \textit{V} which is a subset of $ \mathbb{R}^{n} $ and it's smooth boundary \textit{S}, and \textbf{F} is a continuously differentiable vector field defined on the neighbourhood of \textit{V}, then the divergence theorem states:
+
+\begin{equation}
+	\iint_{V} (\nabla \cdot \textbf{F}) \diff V = \oiint_{S} \textbf{F} \cdot \textbf{n} \diff S
+\end{equation}
+where, \textbf{n} is the outward pointing unit normal field of the boundary $\partial V$. The left side of the integral is over the volume \textit{V} whereas the right side is over the boundary of \textit{V}.
+
+\subsection{Curl theorem}
+Curl theorem relates a line integral around a closed path to a surface integral over what is called a capping surface of the path. It is a theorem on $ \mathbb{R}^{3} $
+
+Let $ \gamma:[a,b] \rightarrow \mathbb{R}^{2} $ be a piecewise smooth non-intersecting continuous loop in the plane, such that $\gamma$ divides $\mathbb{R}^{2}$ into two components, a compact one and a non-compact. Let \textit{D} denote the compact part which is bounded by $ \gamma$ and $ \psi: D \rightarrow \mathbb{R}^{3} $ is smooth, with $ S \coloneqq \psi (D)$. If $\varGamma$ is the space curve defined by $ \varGamma = \psi (\gamma (t))$ and \textbf{F} is a smooth vector field on $ \mathbb{R}^{3}$, then:
+\begin{equation}
+	\oint_{\varGamma} \textbf{F} \cdot \diff \varGamma = \iint_{S} \nabla \times \textbf{F} \cdot \diff \textbf{S}
+\end{equation}
+
+\section{Fluid Flows}
+There are two ways to describe fluid flows:
+\begin{enumerate}[label=\Roman*]
+	\item \textbf{Lagragian approach}: Lagrangian approach is the way of observing the fluid motion where the observer follows an individual fluid parcel as it travels through space and time. In simpler terms, the individual particles are "marked" and their positions, velocities etc. are described as a function of time. The physical laws such as Newton's laws and conservation of mass and energy laws are directly applied to each individual particle. This can be thought of as sitting in a car and going along a road.
+	\item \textbf{Eulerian approach}: Eulerian approach is a way of looking at fluid motion which instead focuses on specific locations in the space through which the fluid flows with time evolution. Here, the individual particles are not identified, but instead a control volume is defined. Each property of the fluid is expressed as a field which is a function of space and time.
+	 
+	Thus, Eulerian view doesn't care about the location or velocity of any particular particle but rather the properties of whatever particle is present at a particular location at the time of interest. An example would be sitting on roadside and watching cars pass by from the fixed location. Since fluid flow is a continuum phenomenon, at least down to the molecular level, the Eulerian description is usually preferred in fluid mechanics.
+\end{enumerate}
+In the Eulerian specification of a field, it is represented as a function of a position \textbf{x} and time \textit{t}. For instance, the flow velocity is represented as a function
+$ \textbf{u}(\textbf{x},t) $
+On the other hand in Lagrangian field of view, the individual particles are tracked over time. The fluid parcels are labelled by some time-independent vector field $\textbf{x}_{0}$. The flow is described by a function $ \textbf{X}(\textbf{x}_{0},t) $ providing the position of parcel $\textbf{x}_{0}$ at time \textit{t}.
+\\
+Therefore, two specifications can be related as:
+\begin{equation}
+	\textbf{u}(\textbf{X}(\textbf{x}_{0},t),t) = \frac{\partial \textbf{X}}{\partial t}(\textbf{x}_{0},t)
+\end{equation}
+
+\subsection{Material Derivative}
+Material derivative relates the kinematics and dynamics of the Lagrangian and Eulerian specifications. Suppose we have a floe field \textbf{u}, and we know a generic field with Eulerian specification $\textbf{F}(\textbf{x},t)$. The total rate of change of \textbf{F} in a specific flow parcel is computed as:
+\begin{equation}
+	\frac{\text{D}\textbf{F}}{\text{D}t} = \frac{\partial \textbf{F}}{\partial t}+ \textbf{u} \cdot \nabla \textbf{F}
+\end{equation}
+where $ \nabla $ denotes the gradient with respect to \textbf{x} and operator $\textbf{u}\cdot \nabla$ is applied to each component of \textbf{F}. The above relation shows that the total rate of change of fucntion \textbf{F} as the fluid parcels travels through a flow field described by its Eulerian specification \textbf{u} is equal to the sum of the local rate of change and convective rate of change pf \textbf{F}.
+
+\subsection{Field Lines}
+A field line is a locus that is defined by a vector field and a starting location within the field. Field lines are important for visualizing the vector fields which are otherwise hard to imagine. A field line for a vector field is constructed by tracing a path through space that follows the direction of vector field.Technically, the path should be differentiable at all interior points and the tangent line to the path at each point should be parallel to the vector of the field at that point.
+\\
+In a fluid flow, there are four kind of feld lines namely streamlines, streaklines, pathlines and timelines. They differ from each other when the flow changes with time, i.e. an unteady flow. In a flow streamlines and streaklines never intersect but pathlines are allowed to intersect themselves. The reason will be clear as we look each line in more detail.
+
+\subsubsection{Streamlines}
+Streamlines represent a family of curves that are instantaneously tangent to the velocity vector of the flow. If we consider a massless fluid element, then streamlines show the direction in which they travel at any point in time.
+
+Streamlines are mathematically defined as:
+\begin{equation}
+	\frac{\diff \vec{x}_{S}}{\diff s} \times \vec{u}(\vec{x}_{S}) = 0
+\end{equation}
+where $\vec{x}_{S}(s)$ is the parametric representation of one streamline at one moment in time and $\vec{u}(\vec{x}_{S})$ is velocity at the point.
+If the components of the velocity are $ \vec{u} = (u,v,w)$ and those of the streamline as $ \vec{x}_{S} = (x_{s},y_{s},z_{s}) $, we deduce
+\begin{equation}
+	\frac{\diff x_{s}}{u} = \frac{\diff y_{s}}{v} = \frac{\diff z_{s}}{w}
+\end{equation}
+which thus depicts that the curves are infact parallel to velocity field. Thus, streamline is a solution of the initial value problem of an ordinary differential equation:
+\begin{equation}
+	\begin{cases}
+	 \frac{\diff \vec{x}_{S}}{\diff s} = \vec{u}(\vec{x}_{S}) \\
+	 \vec{x}(0) = \vec{x}_{0}
+	\end{cases}
+\end{equation}
+Streamlines are calculated instantaneously that means that they are calculated from an instantaneous flow velocity field at a particular instance of time. Since a particle a fluid particle cannot have two different velocities at the same point, that's why different streamlines at the same instant in a flow don't intersect. 
+
+\subsubsection{Pathlines}
+Pathlines are the trajectories that individual fluid particles follow. It can be thought of as following the path of a fluid element in the flow over a certain period. It can be thought of as the path taken by the particle which can be determined by a series of streamlines at different continuous moments in time. 
+
+Mathematically, pathlines are defined as:
+\begin{equation}
+	\begin{cases}
+		\frac{\diff \vec{x}_{P}}{\diff t}(t) = \vec{u}_{P}(\vec{x}_{P}(t),t) \\
+		\vec{x}_{P}(t_{0}) = \vec{x}_{P_{0}}
+	\end{cases}
+\end{equation}
+The suffix \textit{P} indicates that we follow the motion of a fluid particle. The velocity is calculated at the position $ \vec{x}_{P} $ of the particle at time \textit{t} and the curve is parallel to the flow velocity vector $\vec{u}$.
+
+\subsubsection{Streaklines}
+Streaklines are the loci of points of all the fluid particles that have passed continuously through a particular spatial point in the past. in simpler words, it connects the particles released at same position during time interval. An example of streakline is a trace of dye that is released into the floe at a fixed position.
+
+Streaklines can be represented as:
+\begin{equation}
+	\begin{cases}
+		\frac{\diff \vec{x}_{P}}{\diff t} = \vec{u}_{P}(\vec{x}_{P},t) \\
+		\vec{x}_{P}(t = \tau_{P}) = \vec{x}_{P_{0}}
+	\end{cases}
+\end{equation}
+where, at location $\vec{x}_{P}$ and time \textit{t}, the velocity of particle \textit{P} is $ \vec{u}_{P} $. The parameter $\tau_{P}$ parameterizes the streakline $ \vec{x}_{P} (t, \tau_{P}) $ and $ 0 \leq \tau_{P} \leq t_{0} $, where $ t_{0}$ is a time of concern.
+
+\subsubsection{Timelines}
+Timelines are formed by propagation of a line of massless elements in time. The idea is to connect particles that are released simultaneously along a curve. More precisely, these are the lines formed by a set of fluid particles that were marked at a previous instant in time, creating a line or a curve with the propagation of particles that is displaced in time.
+

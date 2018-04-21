@@ -23,14 +23,18 @@
             </domains>
         </property>
         <property>
-            <name>LimitEigenValue</name>
-            <label>LimitEigenValue</label>
+            <name>SetEigenvalueLimit</name>
+            <label>SetEigenvalueLimit</label>
             <documentation>
                 <brief/>
                 <long>Set the minimum limit of eigenvalue of the data.</long>
             </documentation>
-            <defaults>0</defaults>
-            <domains/>
+            <defaults>0.0</defaults>
+            <domains>
+  Value(s) must be in the range (
+    -10000.0,
+    10000.0).
+</domains>
         </property>
     </proxy>
 </xml>

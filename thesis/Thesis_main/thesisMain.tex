@@ -1,0 +1,85 @@
+\documentclass [11pt,a4paper]{report}
+
+\usepackage {thesisStyle}
+\usepackage {myMathStyle}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{amssymb}
+\usepackage[T1]{fontenc}
+\usepackage[inline]{enumitem}
+\usepackage[algo2e]{algorithm2e}
+\usepackage{algorithm}
+\usepackage{esint} 
+\SetKw{KwBy}{by}
+
+\newtheorem{exmp}{Example}[section]
+
+\onehalfspacing
+\chapternumberfont{\LARGE} 
+\chaptertitlefont{\huge}
+
+\usepackage[utf8]{inputenc}
+\DeclareMathOperator{\tr}{tr}
+\newcommand*\diff{\mathop{}\!\mathrm{d}}
+\newcommand{\me}{\mathrm{e}}
+
+% string variables
+\newcommand{\thesisTitle}
+{Title line 1 \\Title line 2 \\Title line 3}
+\newcommand{\thesisTitleDe}
+{German Title line 1 \\German Title line 2}
+\newcommand{\supervisors}
+{Prof.\:Dr.\:Superman \& Prof.\:Dr.\:Superwoman}
+\newcommand{\authorName}
+{David Beckham}
+\newcommand{\birthplace}
+{Mars, Solar System}
+\newcommand{\submissionYear}
+{March, 3030 }
+\newcommand{\addBlank}{\newpage \thispagestyle{empty} \mbox{}}
+
+\DeclareMathSizes{11}{11}{6}{4}
+
+\begin{document}
+
+	% custom title page, instead of maketitle
+	%\include{./tex/ch0A_titlepages}
+		
+	%\addcontentsline{toc}{chapter}{Acknowledgements}
+	%\include{./tex/ch0B_acknowledgement}
+
+	%\addcontentsline{toc}{chapter}{Abstract}
+	%\include{./tex/ch0C_abstracts} 
+	%\addBlank
+	
+	%\tableofcontents
+
+	%\addtocontents{lof}{\protect\addcontentsline{toc}{chapter}{List of Figures}}
+	%\listoffigures
+	%\addtocontents{lot}{\protect\addcontentsline{toc}{chapter}{List of Tables}}
+	%\listoftables
+	%\include{./tex/ch0D_abbreviations}
+	
+	% Main body of the thesis
+	
+	\include{./tex/ch01_Intro}
+	\include{./tex/ch02_DynamicalSystems}
+	\include{./tex/ch03_LCS}
+	
+	%%... your chapters in "tex" subfolder
+	
+	%\include{./tex/ch07_Conclusion}
+
+	%\begin{appendices}
+	%\include{./tex/ch98_Appendix}
+	%\end{appendices}
+
+	%\addcontentsline{toc}{chapter}{Bibliography}
+	%\bibliographystyle{acm}	
+	%\bibliography{./tex/ch98_references}
+
+	\clearpage
+	%\include{./tex/ch99_deposition}
+
+\end{document}
+

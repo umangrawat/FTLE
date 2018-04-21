@@ -24,13 +24,15 @@
                 </DataTypeDomain>
             </InputProperty>
 
-            <IntVectorProperty
-                    name="LimitEigenValue"
+
+            <DoubleVectorProperty
+                    name="SetEigenvalueLimit"
                     command="SetLimitEigenValue"
                     number_of_elements="1"
-                    default_values="0">
+                    default_values="0.0">
+                <DoubleRangeDomain name="range" min="-10000.0" max="10000.0" />
                 <Documentation>Set the minimum limit of eigenvalue of the data.</Documentation>
-            </IntVectorProperty>
+            </DoubleVectorProperty>
 
         </SourceProxy>
     </ProxyGroup>

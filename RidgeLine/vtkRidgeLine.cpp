@@ -58,7 +58,7 @@
 #include <limits>
 #include <iomanip>
 
-#include <memory>
+#include <vtkPassArrays.h>
 
 
 using namespace std;
@@ -81,7 +81,7 @@ void FlipMinEigenVecs(vtkDoubleArray* pcaMaxEigenVec, vtkDoubleArray* MinEigenve
 void Ridges( vtkImageData* input, vtkDoubleArray* gradient, vtkDoubleArray* hessian, vtkDoubleArray* MinEigenvecs, int* dims, vtkPoints* RidgePoints );
 bool RidgeEigenValue (double IntHessian[4]);
 
-double limit;
+double limit = 0.;
 
 
 vtkStandardNewMacro(vtkRidgeLine);
@@ -89,7 +89,8 @@ vtkStandardNewMacro(vtkRidgeLine);
 //-----------------------------------------------------------------------------
 vtkRidgeLine::vtkRidgeLine()
 {
-    this->SetNumberOfOutputPorts(1);
+    this->SetNumberOfInputPorts(1);
+    this->SetNumberOfOutputPorts(1);                                                        ////changing to 2
 	this->SetInputArrayToProcess(0,0,0,vtkDataObject::FIELD_ASSOCIATION_POINTS,
                                vtkDataSetAttributes::SCALARS);
 }
@@ -105,10 +106,10 @@ vtkRidgeLine::~vtkRidgeLine()
 int vtkRidgeLine::FillInputPortInformation( int port, vtkInformation* info )
 {
 
-  if (port == 0) {
-      info->Set(vtkAlgorithm::INPUT_REQUIRED_DATA_TYPE(), "vtkImageData");
-      return 1;
-  }
+    if (port == 0) {
+        info->Set(vtkAlgorithm::INPUT_REQUIRED_DATA_TYPE(), "vtkImageData");
+        return 1;
+    }
     return 0;
 }
 
@@ -124,6 +125,7 @@ int vtkRidgeLine::FillOutputPortInformation( int port, vtkInformation* info )
 
     return 0;
 }
+//----------------------------------------------------------------------------
 
 
 /*
@@ -147,37 +149,18 @@ int vtkRidgeLine::RequestUpdateExtent(vtkInformation*,vtkInformationVector** inp
     return 1;
 }
 */
+//----------------------------------------------------------------------------
 
 int vtkRidgeLine::RequestInformation(vtkInformation *vtkNotUsed(request), vtkInformationVector **inputVector, vtkInformationVector *outputVector)
 {
     vtkInformation *outInfo = outputVector->GetInformationObject(0);
     vtkInformation *inInfo = inputVector[0]->GetInformationObject(0);
 
-    /*
-
-    int resolutionSeedGrid[6];
-    resolutionSeedGrid[0] = 0;
-    resolutionSeedGrid[1] = static_cast<int>(this->dimensionSeedGrid[0])-1;
-    resolutionSeedGrid[2] = 0;
-    resolutionSeedGrid[3] = static_cast<int>(this->dimensionSeedGrid[1])-1;
-    resolutionSeedGrid[4] = 0;
-    resolutionSeedGrid[5] = static_cast<int>(this->dimensionSeedGrid[2])-1;
-
-
-    this->spacingSeedGrid[0] = this->boundsSeedGrid[0] / static_cast<double>(resolutionSeedGrid[1]);
-    this->spacingSeedGrid[1] = this->boundsSeedGrid[1] / static_cast<double>(resolutionSeedGrid[3]);
-    this->spacingSeedGrid[2] = this->boundsSeedGrid[2] / static_cast<double>(resolutionSeedGrid[5]);
-
-    outInfo->Set(vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(), resolutionSeedGrid,6);
-    outInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), resolutionSeedGrid,6);
-    outInfo->Set(vtkDataObject::SPACING(), this->spacingSeedGrid,3);
-    outInfo->Set(vtkDataObject::ORIGIN(),this->originSeedGrid,3);
-*/
-
     return 1;
 
 }
 
+//----------------------------------------------------------------------------
 
 
 int vtkRidgeLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInformationVector **inputVector, vtkInformationVector *outputVector) {
@@ -190,38 +173,17 @@ int vtkRidgeLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInformatio
     vtkPolyData* output = vtkPolyData::SafeDownCast(outInfo->Get(vtkDataObject::DATA_OBJECT()));
 
 
-    limit = LimitEigenValue * ( -1 );
+    limit = this->LimitEigenValue;
 
     //// Input dimensions
     int* dims = input->GetDimensions();
 
-    //std::cout << dims[0] <<", " << dims[1] << ", " << dims[2] << std::endl;
-
     //// Getting the scalar values in an array
     vtkSmartPointer<vtkDoubleArray> field = vtkSmartPointer<vtkDoubleArray>::New();
-    field = vtkDoubleArray::SafeDownCast(input->GetPointData()->GetArray(2));
+    //field = vtkDoubleArray::SafeDownCast(input->GetPointData()->GetArray(0));
+    field = vtkDoubleArray::SafeDownCast(input->GetPointData()->GetAbstractArray("FTLE"));
 
-    /*
-    //// New grid with an increased resolution
-    vtkSmartPointer<vtkStructuredGrid> input = vtkSmartPointer<vtkStructuredGrid>::New();
-
-
-    //// Adjusting the dimension of new grid. Factor= number of new points between two successive points from old data
-    int dims[3]= {0};
-    dims[0] = (olddims[0] - 1) * ResolutionFactor + olddims[0];
-    dims[1] = (olddims[1] - 1) * ResolutionFactor + olddims[1];
-    dims[2] = 1;
-
-    input->SetDimensions( dims );
-
-    //// Interpolating new grid points and respective values
-    Interpolation (oldinput, oldfield, olddims, dims, ResolutionFactor, input);
-
-    //// New field with increased resolution
-    vtkSmartPointer<vtkDoubleArray> field = vtkSmartPointer<vtkDoubleArray>::New();
-    field = vtkDoubleArray::SafeDownCast(input->GetPointData()->GetArray(0));
-    */
-
+    std::cout<<"Starts" <<std::endl;
     //// Gradient
     vtkSmartPointer<vtkDoubleArray> gradient = vtkSmartPointer<vtkDoubleArray>::New();
     gradient->SetNumberOfComponents(2);
@@ -232,7 +194,6 @@ int vtkRidgeLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInformatio
     vtkSmartPointer<vtkDoubleArray> hessian = vtkSmartPointer<vtkDoubleArray>::New();
     hessian->SetNumberOfComponents(4);
     Hessian(input, gradient, dims, hessian);
-
 
 
     //// Eigenvalues and Eigenvectors and get the minimum eigenvalue and corresponding eigenvector
@@ -256,25 +217,10 @@ int vtkRidgeLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInformatio
     Ridges(input, gradient, hessian, MinEigenvecs, dims, RidgePoints);
 
     vtkIdType numRidgePoints = RidgePoints->GetNumberOfPoints();
-    //std::cout<< "numpoints" << numPoints << std::endl;
+
+    std::cout<< "Points calculated"<<std::endl;
 
     //// Create a line
-
-    /*
-
-    vtkSmartPointer<vtkPolyLine> polyLine = vtkSmartPointer<vtkPolyLine>::New();
-    polyLine->GetPointIds()->SetNumberOfIds(numPoints);
-
-    for (unsigned int i = 0; i < numPoints; i++)
-    {
-        polyLine->GetPointIds()->SetId(i,i);
-    }
-
-    //// Create a cell array to store the lines in and add the lines to it
-    vtkSmartPointer<vtkCellArray> cells = vtkSmartPointer<vtkCellArray>::New();
-    cells->InsertNextCell(polyLine);
-    */
-
 
     vtkSmartPointer<vtkCellArray> outputLines = vtkSmartPointer<vtkCellArray>::New();
 
@@ -297,19 +243,18 @@ int vtkRidgeLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInformatio
         }
     }
 
+    std::cout<< "Creating lines"<<std::endl;
 
     vtkSmartPointer<vtkPolyData> linesPolyData = vtkSmartPointer<vtkPolyData>::New();
 
     linesPolyData->SetPoints(outputPoints);
     linesPolyData->SetLines(outputLines);
 
-
-    //// Copying in the output array
+    //// Copying the lines output array
     output->ShallowCopy(linesPolyData);
 
 
     /////////////////// Get the Length of ridge lines ///////////////////////////////
-
 
     //// storing all the cellpoints of ridges
     std::vector<vector<double>> cellpoints;
@@ -374,33 +319,7 @@ int vtkRidgeLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInformatio
 
         int idPoints = storeid.size();
 
-        /*
-        for (int pt = 0; pt < linepts->GetNumberOfPoints(); pt++ )
-        {
-            double ridgept[3] = {0.};
-            vtkIdType ptId = vtkIdType(pt);
-            linepts->GetPoint(ptId, ridgept);
-
-            std::cout<< ridgept[0] << " " << ridgept[1] << " " <<ridgept[2] << std::endl;
-
-            pointsOfline->InsertNextPoint(ridgept);
-            vtkIdType nextPt = pointsOfline->InsertNextPoint(ridgept);
-            linesridge->InsertCellPoint(nextPt);
-        }
-
-
-
-        vtkSmartPointer<vtkLine> line = vtkSmartPointer<vtkLine>::New();
-        for (int pt = 0; pt < linepts->GetNumberOfPoints(); pt++ )
-        {
-            double ridgept[3] = {0.};
-            vtkIdType ptId = vtkIdType(pt);
-            linepts->GetPoint(ptId, ridgept);
-
-            line->GetPointIds()->SetId(pt, pt);
-        }*/
-
-            for (int l = 0; l < storeid.size(); l++)
+        for (int l = 0; l < storeid.size(); l++)
         {
             int indexvalue = storeid.at(l);
             std::vector<vector<double>>::iterator indexIt = cellpoints.begin() + indexvalue - l;
@@ -412,27 +331,33 @@ int vtkRidgeLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInformatio
 
     }
 
+    vtkSmartPointer<vtkDoubleArray> RidgeLineLengthArray = vtkSmartPointer<vtkDoubleArray>::New();
+    RidgeLineLengthArray->SetNumberOfTuples(numRidgePoints);
+    RidgeLineLengthArray->SetName("RidgeLineLengthArray");
 
-
-
-    for (int len  = 0; len < ridgeLinelength.size(); len++)
+    for ( int null = 0; null < numRidgePoints; null ++)
     {
-        std::cout <<"length of ridge " << len << " " << ridgeLinelength.at(len) <<std::endl;
+        vtkIdType idNull = vtkIdType(null);
+        RidgeLineLengthArray->InsertTuple1( idNull, 0. );
     }
 
+    double totalLength = 0.;
+    for (int len  = 0; len < ridgeLinelength.size(); len++)
+    {
+        vtkIdType idLen = vtkIdType(len);
+        double length = 0.;
+        length = ridgeLinelength.at(len);
+        totalLength += length;
 
-    /*
-    vtkSmartPointer<vtkPolyData> linesPolyData = vtkSmartPointer<vtkPolyData>::New();
+        RidgeLineLengthArray->SetTuple1(idLen, length);
 
-    linesPolyData->SetPoints(pointsOfline);
-    linesPolyData->SetLines(linesridge);
+        std::cout <<"Length of ridge " << len << " " << ridgeLinelength.at(len) <<std::endl;
+    }
 
-    //std::cout<< "reaches here2 "<<std::endl;
+    std::cout <<"Total length " << totalLength << std::endl;
+    std::cout<< "numpoints" << numRidgePoints << std::endl;
 
-    //// Copying in the output array
-    output->ShallowCopy(linesPolyData);
-*/
-
+    //output->GetPointData()->AddArray(RidgeLineLengthArray);
 
     return 1;
 }
@@ -491,186 +416,8 @@ double distance(std::vector<double> x, std::vector<double> y)
     return std::sqrt( xdirec + ydirec + zdirec );
 }
 
-/*
-//// Interpolating for new points and field values
-void Interpolation (vtkImageData* oldinput, vtkDoubleArray* oldfield, int* olddims, int* dims,  int factor, vtkStructuredGrid* input)
-{
-    //// New field array and points
-    vtkSmartPointer <vtkDoubleArray> newfield = vtkSmartPointer<vtkDoubleArray>::New();
-    newfield->SetNumberOfComponents(1);
-
-    vtkSmartPointer <vtkPoints> newpoints = vtkSmartPointer<vtkPoints>::New();
-
-    vtkIdType ip4;
-    ip4 = 0;
-
-    //// Inserting new points and values in the new grid, except the max. y boundary line
-    for (int k = 0; k < 1; k++)
-    {
-        double pointY, stepY = 0.;
-
-        for (int j = 0; j < olddims[1] - 1; j++)
-        {
-
-            for (int l = 0; l <= factor; l++)
-            {
-
-                double pointX = 0;
-
-                for (int i = 0; i < olddims[0] -1 ; i++)
-                {
-
-                    int index_ip = getIndex(k, j, i, olddims);
-                    vtkIdType ip1 = vtkIdType(index_ip);
-                    vtkIdType ip2 = vtkIdType(index_ip);
-                    vtkIdType ip3 = vtkIdType(index_ip);
-
-
-                    double r1, r2, r3, r4 = 0.;
-                    double pts1[3], pts2[3], pts3[3], pts4[3] = {0.};
-
-                    double newValue, stepFX, stepX, stepFY;
-
-
-                    //// Get points and field values at cell points for interpolation, points (i,j) and (i+1, j) in X direction, and points (i,j) and (i, j+1)
-                    ip1 = getIndex(k, j, i, olddims);
-                    oldinput->GetPoint(ip1, pts1);
-                    r1 = oldfield->GetTuple1(ip1);
-
-                    ip2 = getIndex(k, j, i + 1, olddims);
-                    oldinput->GetPoint(ip2, pts2);
-                    r2 = oldfield->GetTuple1(ip2);
-
-                    ip3 = getIndex(k, j + 1, i, olddims);
-                    oldinput->GetPoint(ip3, pts3);
-                    r3 = oldfield->GetTuple1(ip3);
-
-                    //// Calculating the step between two successive points
-                    stepFX = (r2 - r1) / (factor + 1);
-                    stepX = (pts2[0] - pts1[0]) / (factor + 1);
-
-                    stepFY = (r3 - r1) / (factor + 1);
-                    stepY = (pts3[1] - pts1[1]) / (factor + 1);
-
-
-                    newValue = r1 + stepFY * l;
-
-
-                    //// Inserting points in between 2 X points, number of points inserted = factor
-                    for (int h = 0; h <= factor; h++)
-                    {
-
-                        newfield->InsertTuple1(ip4, newValue);
-                        newpoints->InsertPoint(ip4, pointX, pointY, 0.);
-
-                        newValue = newValue + stepFX;
-
-                        ip4 = ip4 + 1;
-
-                        pointX = pointX + stepX;
-
-                        //// Values for point on max X boundary.
-                        if ( i == olddims[0] - 2 && h == factor )
-                        {
-                            newfield->InsertTuple1(ip4, newValue);
-                            newpoints->InsertPoint(ip4, pointX, pointY, 0.);
-
-                            ip4 = ip4 + 1;
-
-                        }
-
-                    }
-
-                }
-
-                pointY = pointY + stepY;
-
-            }
-
-        }
-
-    }
-
-    //// Points on max Y boundary
-    for ( int k = 0; k < 1; k++)
-    {
-        double pointY = 0.;
-
-        for (int j = olddims[1] - 1; j < olddims[1]; j++)
-        {
-            double pointX = 0;
-
-            for (int i = 0; i < olddims[0] -1; i++)
-            {
-
-                int index_ip = getIndex(k, j, i, olddims);
-                vtkIdType ip1 = vtkIdType(index_ip);
-                vtkIdType ip2 = vtkIdType(index_ip);
-
-
-                double r1, r2, r3 = 0.;
-                double pts1[3], pts2[3] = {0.};
-
-                double newValue, stepFX, stepX;
-
-                std::cout<< olddims[1] <<std::endl;
-
-                ip1 = getIndex(k, j, i, olddims);
-                oldinput->GetPoint(ip1, pts1);
-                r1 = oldfield->GetTuple1(ip1);
-
-                ip2 = getIndex(k, j, i + 1, olddims);
-                oldinput->GetPoint(ip2, pts2);
-                r2 = oldfield->GetTuple1(ip2);
-
-                newValue = r1;
-
-                stepFX = (r2 - r1) / (factor + 1);
-                stepX = (pts2[0] - pts1[0]) / (factor + 1);
-
-                pointY = pts1[1];
-
-
-                for (int h = 0; h <= factor; h++)
-                {
-
-                    newfield->InsertTuple1(ip4, newValue);
-                    newpoints->InsertPoint(ip4, pointX, pointY, 0.);
-
-                    newValue = newValue + stepFX;
-
-                    ip4 = ip4 + 1;
-
-                    pointX = pointX + stepX;
-
-                    if ( i == olddims[0] -2 && h == factor)
-                    {
-                        newfield->InsertTuple1(ip4, newValue);
-                        newpoints->InsertPoint(ip4, pointX, pointY, 0.);
-                    }
-
-                    std::cout<< pointX << ", " <<pointY <<std::endl;
-
-                }
-
-            }
-
-        }
-    }
-
-    //// Setting new points in the grid
-    input->SetPoints(newpoints);
-    input->GetPointData()->AddArray( newfield );
-
-    return;
-
-}
-*/
-
-
 
 ///Gradient Calculation
-
 
 void Gradient(vtkImageData* input, vtkDoubleArray* field, int* dims, vtkDoubleArray* gradient)
 {
@@ -680,9 +427,9 @@ void Gradient(vtkImageData* input, vtkDoubleArray* field, int* dims, vtkDoubleAr
 
     for ( int k = 0; k < 1; k++)
     {
-        for (int j = 0; j < dims[1]; j++)
+        for (int j = 0; j < dims[1]; j++)                                              ////
         {
-            for (int i = 0; i < dims[0]; i++)
+            for (int i = 0; i < dims[0]; i++)                                          ////
             {
 
                 int index_gradient = getIndex(k, j, i, dims);
@@ -707,13 +454,10 @@ void Gradient(vtkImageData* input, vtkDoubleArray* field, int* dims, vtkDoubleAr
                     spaceY = pt2[1] - pt1[1];
 
                     du[1] = forwardDiff(t1[0],t2[0], spaceY);
-                    //dv[1] = forwardDiff(t1[1],t2[1], spaceY);
-                    //gradients->InsertTuple3 (id1, du[1], dv[1], 0. );
-                    //std::cout<< t1[0]<<", " <<t2[0] <<std::endl;
 
                 }
 
-                else if ( j == dims[1]-1 )
+                else if ( j == dims[1] - 1 )                                                ////
                 {
 
                     id1 = getIndex(k, j, i, dims);
@@ -727,9 +471,6 @@ void Gradient(vtkImageData* input, vtkDoubleArray* field, int* dims, vtkDoubleAr
                     spaceY = (pt2[1] - pt1[1]) * ( - 1 );
 
                     du[1] = backwardDiff( t1[0],t2[0], spaceY );
-                    //dv[1] = backwardDiff(t1,t2, spaceY);
-                    //gradients->InsertTuple3 (id1, du[1], dv[1], 0. );
-                    //std::cout<< t1[0]<<", " <<t2[0] <<std::endl;
 
                 }
 
@@ -749,9 +490,6 @@ void Gradient(vtkImageData* input, vtkDoubleArray* field, int* dims, vtkDoubleAr
                     id1 = getIndex (k, j, i, dims);
 
                     du[1] = centralDiff(t1[0],t2[0], spaceY);
-                    //dv[1] = centralDiff(t1[1],t2[1], spaceY);
-                    //gradients->InsertTuple3 (id1, du[1], dv[1], 0. );
-                    //std::cout<< t1[0]<<", " <<t2[0] <<std::endl;
 
                 }
 
@@ -773,9 +511,6 @@ void Gradient(vtkImageData* input, vtkDoubleArray* field, int* dims, vtkDoubleAr
                     spaceX = pt2[0] - pt1[0];
 
                     du[0] = forwardDiff(t1[0],t2[0], spaceX);
-                    //dv[0] = forwardDiff(t1[1],t2[1], spaceX);
-                    //gradients->InsertTuple3 (id1, du, dv, 0. );
-
                 }
 
                 else if ( i == dims[0] - 1 )
@@ -792,8 +527,7 @@ void Gradient(vtkImageData* input, vtkDoubleArray* field, int* dims, vtkDoubleAr
                     spaceX = (pt2[0] - pt1[0]) * ( -1 );
 
                     du[0] = backwardDiff(t1[0],t2[0], spaceX);
-                    //dv[0] = backwardDiff(t1[1],t2[1], spaceX);
-                    //gradients->InsertTuple3 (id1, du, dv, 0. );
+
                 }
 
                 else
@@ -812,21 +546,17 @@ void Gradient(vtkImageData* input, vtkDoubleArray* field, int* dims, vtkDoubleAr
                     id1 = getIndex (k, j, i, dims);
 
                     du[0] = centralDiff(t1[0],t2[0], spaceX);
-                    //dv[0] = centralDiff(t1[1],t2[1], spaceX);
-                    //gradients->InsertTuple3 (id1, du, dv, 0. );
 
                 }
 
                 gradient->InsertTuple2 (id1, du[0], du[1] );
 
-                //std::cout<<"kewl"<<std::endl;
 
             }
 
         }
 
     }
-
 
 
     return;
@@ -870,11 +600,8 @@ void Hessian ( vtkImageData* input, vtkDoubleArray* gradient, int* dims, vtkDoub
 
                     spaceY = point2[1] - point1[1];
 
-                    //dxdx = forwardDiff(s1[0], s2[0], space[0]);
-                    //dxdy = forwardDiff(s1[1], s2[1], space[0]);
                     dydx = forwardDiff(s1[0], s2[0], spaceY);
                     dydy = forwardDiff(s1[1], s2[1], spaceY);
-                    //hessian->InsertTuple4(id1_hess, dxdx, dxdy, dydx, dydy);
 
                 }
 
@@ -891,11 +618,8 @@ void Hessian ( vtkImageData* input, vtkDoubleArray* gradient, int* dims, vtkDoub
 
                     spaceY = (point2[1] - point1[1]) * (-1);
 
-                    //dxdx = backwardDiff(s1[0], s2[0], space[0]);
-                    //dxdy = backwardDiff(s1[1], s2[1], space[0]);
                     dydx = backwardDiff(s1[0], s2[0], spaceY);
                     dydy = backwardDiff(s1[1], s2[1], spaceY);
-                    //hessian->InsertTuple4(id1_hess,dxdx, dxdy, dydx, dydy);
                 }
 
                     ////rest central differences
@@ -914,11 +638,8 @@ void Hessian ( vtkImageData* input, vtkDoubleArray* gradient, int* dims, vtkDoub
 
                     spaceY = point2[1] - point1[1];
 
-                    //dxdx = centralDiff(s1[0], s2[0], space[0]);
-                    //dxdy = centralDiff(s1[1], s2[1], space[0]);
                     dydx = centralDiff(s1[0], s2[0], spaceY);
                     dydy = centralDiff(s1[1], s2[1], spaceY);
-                    //hessian->InsertTuple4(id1_hess,dxdx, dxdy, dydx,dydy);
                 }
 
 
@@ -937,13 +658,10 @@ void Hessian ( vtkImageData* input, vtkDoubleArray* gradient, int* dims, vtkDoub
 
                     dxdx = forwardDiff(s1[0], s2[0], spaceX);
                     dxdy = forwardDiff(s1[1], s2[1], spaceX);
-                    //dydx = forwardDiff(s1[0], s2[0], space[1]);
-                    //dydy = forwardDiff(s1[1], s2[1], space[1]);
-                    //hessian->InsertTuple4(id1_hess, dxdx, dxdy, dydx, dydy);
 
                 }
 
-                else if (i == dims[0] - 1 )
+                else if (i == dims[0] - 1)
                 {
                     id1_hess = getIndex(k, j, i, dims);
                     gradient->GetTuple(id1_hess, s1);
@@ -957,9 +675,7 @@ void Hessian ( vtkImageData* input, vtkDoubleArray* gradient, int* dims, vtkDoub
 
                     dxdx = backwardDiff(s1[0], s2[0], spaceX);
                     dxdy = backwardDiff(s1[1], s2[1], spaceX);
-                    //dydx = backwardDiff(s1[0], s2[0], space[1]);
-                    //dydy = backwardDiff(s1[1], s2[1], space[1]);
-                    //hessian->InsertTuple4(id1_hess,dxdx, dxdy, dydx, dydy);
+
                 }
 
                 else
@@ -978,14 +694,11 @@ void Hessian ( vtkImageData* input, vtkDoubleArray* gradient, int* dims, vtkDoub
 
                     dxdx = centralDiff(s1[0], s2[0], spaceX);
                     dxdy = centralDiff(s1[1], s2[1], spaceX);
-                    //dydx = centralDiff(s1[0], s2[0], space[1]);
-                    //dydy = centralDiff(s1[1], s2[1], space[1]);
-                    //hessian->InsertTuple4(id1_hess,dxdx, dxdy, dydx,dydy);
+
                 }
 
                 ////storing the hessian components
                 hessian->InsertTuple4(id1_hess,dxdx, dxdy, dydx, dydy);
-                //std::cout<<dxdx <<", "<<dxdy << ", "<<dydx<< ", "<<dydy<<std::endl;
             }
 
         }
@@ -1069,6 +782,8 @@ void MinEigenVector (vtkDoubleArray* hessian, int* dims, vtkDoubleArray* MinEige
     return;
 }
 
+////changed from here
+
 
 //// Principal Component Analysis, PCA
 
@@ -1081,9 +796,9 @@ void PCA ( vtkDoubleArray* MinEigenvecs , int* dims, vtkDoubleArray* pcaMaxEigen
 
     for ( int k = 0; k < 1; k++)  ////doing the iteration till x-1 and y-1 to avoid boundary problems
     {
-        for (int j = 0; j < dims[1] - 1; j++)
+        for (int j = 0; j < dims[1] - 1 ; j++)
         {
-            for (int i = 0; i < dims[0] - 1 ; i++)
+            for (int i = 0; i < dims[0] - 1; i++)
             {
                 double evec1[2], evec2[2], evec3[2], evec4[2] = {0.};
                 double XComp[8], YComp[8] = {0.};
@@ -1196,7 +911,7 @@ void PCA ( vtkDoubleArray* MinEigenvecs , int* dims, vtkDoubleArray* pcaMaxEigen
 }
 
 
-//// Dot product between PCA max eigenvector and minimum eigenvector of each node and flipping if opposite
+//// Dot product between PCA max eigenvector and minimum eigenvector of each node and flipping opposite if <0
 
 void FlipMinEigenVecs(vtkDoubleArray* pcaMaxEigenVec, vtkDoubleArray* MinEigenvecs, int* dims)
 {
@@ -1205,7 +920,7 @@ void FlipMinEigenVecs(vtkDoubleArray* pcaMaxEigenVec, vtkDoubleArray* MinEigenve
     {
         for (int j = 0; j < dims[1] - 1; j++)
         {
-            for (int i = 0; i < dims[0] - 1 ; i++)
+            for (int i = 0; i < dims[0] - 1; i++)
             {
                 double minEvec1[2], minEvec2[2], minEvec3[2], minEvec4[2], pcaMaxEvec[2] = {0.};
 
@@ -1322,7 +1037,7 @@ void Ridges( vtkImageData* input, vtkDoubleArray* gradient, vtkDoubleArray* hess
     {
         for (int j = 0; j < dims[1] - 1; j++)
         {
-            for (int i = 0; i < dims[0] - 1 ; i++)
+            for (int i = 0; i < dims[0] - 1; i++)
             {
                 double grad1[2], grad2[2], grad3[2], grad4[2], hess1[4], hess2[4], hess3[4], hess4[4], IntHess1[4], IntHess2[4], IntHess3[4], IntHess4[4],
                         minEV1[2], minEV2[2], minEV3[2], minEV4[2], point1[3], point2[3], point3[3], point4[3] = {0.};
@@ -1438,9 +1153,16 @@ void Ridges( vtkImageData* input, vtkDoubleArray* gradient, vtkDoubleArray* hess
                         X_Id = X_Id + 2;
                         Y_Id = Y_Id + 2;
 
-                        //std::cout<<"Case 2: " << "X line " << RidgeX[0] << " " << RidgeX[1] << " "<<RidgeX[2] <<std::endl;
-                        //std::cout<<"Case 2: "<< "Y line " << RidgeY[0] << " " << RidgeY[1] << " "<<RidgeY[2] <<std::endl;
+                        /*
+                        if ( i == dims[0] - 1 || j == dims[1] - 1) {
+                            std::cout << "Case 2: " << "X line " << RidgeX[0] << " " << RidgeX[1] << " " << RidgeX[2]
+                                      << std::endl;
+                            std::cout << "Case 2: " << "Y line " << RidgeY[0] << " " << RidgeY[1] << " " << RidgeY[2]
+                                      << std::endl;
+                        }*/
                     }
+
+
 
 
                 }
@@ -1482,8 +1204,12 @@ void Ridges( vtkImageData* input, vtkDoubleArray* gradient, vtkDoubleArray* hess
                         X_Id = X_Id + 2;
                         Y_Id = Y_Id + 2;
 
-                        //std::cout<<"Case 3: "<< "X line " << RidgeX[0] << " " << RidgeX[1] << " "<<RidgeX[2] <<std::endl;
-                        //std::cout<<"Case 3: "<< "Y line " << RidgeY[0] << " " << RidgeY[1] << " "<<RidgeY[2] <<std::endl;
+                        /*
+                        if ( i == dims[0] - 1 || j == dims[1] - 1) {
+
+                            std::cout<<"Case 3: "<< "X line " << RidgeX[0] << " " << RidgeX[1] << " "<<RidgeX[2] <<std::endl;
+                            std::cout<<"Case 3: "<< "Y line " << RidgeY[0] << " " << RidgeY[1] << " "<<RidgeY[2] <<std::endl;
+                        }*/
                     }
 
                 }
@@ -1524,9 +1250,11 @@ void Ridges( vtkImageData* input, vtkDoubleArray* gradient, vtkDoubleArray* hess
                         X_Id = X_Id + 2;
                         Y_Id = Y_Id + 2;
 
-                        //std::cout<<"Case 4: "<< "X line " << RidgeX[0] << " " << RidgeX[1] << " "<<RidgeX[2] <<std::endl;
-                        //std::cout<<"Case 4: "<< "Y line " << RidgeY[0] << " " << RidgeY[1] << " "<<RidgeY[2] <<std::endl;
-
+                        /*
+                        if ( i == dims[0] - 1 || j == dims[1] - 1) {
+                            std::cout<<"Case 4: "<< "X line " << RidgeX[0] << " " << RidgeX[1] << " "<<RidgeX[2] <<std::endl;
+                            std::cout<<"Case 4: "<< "Y line " << RidgeY[0] << " " << RidgeY[1] << " "<<RidgeY[2] <<std::endl;
+                        }*/
                     }
 
 
@@ -1568,9 +1296,11 @@ void Ridges( vtkImageData* input, vtkDoubleArray* gradient, vtkDoubleArray* hess
                         X_Id = X_Id + 2;
                         Y_Id = Y_Id + 2;
 
-                        //std::cout<<"Case 5: "<< "X line " << RidgeX[0] << " " << RidgeX[1] << " "<<RidgeX[2] <<std::endl;
-                        //std::cout<<"Case 5: "<< "Y line " << RidgeY[0] << " " << RidgeY[1] << " "<<RidgeY[2] <<std::endl;
-
+                        /*
+                        if ( i == dims[0] - 1 || j == dims[1] - 1) {
+                            std::cout<<"Case 5: "<< "X line " << RidgeX[0] << " " << RidgeX[1] << " "<<RidgeX[2] <<std::endl;
+                            std::cout<<"Case 5: "<< "Y line " << RidgeY[0] << " " << RidgeY[1] << " "<<RidgeY[2] <<std::endl;
+                        }*/
                     }
 
                 }
@@ -1612,9 +1342,11 @@ void Ridges( vtkImageData* input, vtkDoubleArray* gradient, vtkDoubleArray* hess
                         X_Id = X_Id + 2;
                         Y_Id = Y_Id + 2;
 
-                        //std::cout<<"Case 6: "<< "X line " << RidgeX[0] << " " << RidgeX[1] << " "<<RidgeX[2] <<std::endl;
-                        //std::cout<<"Case 6: "<< "Y line " << RidgeY[0] << " " << RidgeY[1] << " "<<RidgeY[2] <<std::endl;
-
+                        /*
+                        if ( i == dims[0] - 1 || j == dims[1] - 1) {
+                            std::cout<<"Case 6: "<< "X line " << RidgeX[0] << " " << RidgeX[1] << " "<<RidgeX[2] <<std::endl;
+                            std::cout<<"Case 6: "<< "Y line " << RidgeY[0] << " " << RidgeY[1] << " "<<RidgeY[2] <<std::endl;
+                        }*/
                     }
 
                 }
@@ -1654,9 +1386,12 @@ void Ridges( vtkImageData* input, vtkDoubleArray* gradient, vtkDoubleArray* hess
                         X_Id = X_Id + 2;
                         Y_Id = Y_Id + 2;
 
-                        //std::cout<<"Case 7: "<< "X line " << RidgeX[0] << " " << RidgeX[1] << " "<<RidgeX[2] <<std::endl;
-                        //std::cout<<"Case 7: "<< "X line " << RidgeY[0] << " " << RidgeY[1] << " "<<RidgeY[2] <<std::endl;
+                        /*
+                        if ( i == dims[0] - 1 || j == dims[1] - 1) {
 
+                            std::cout<<"Case 7: "<< "X line " << RidgeX[0] << " " << RidgeX[1] << " "<<RidgeX[2] <<std::endl;
+                            std::cout<<"Case 7: "<< "X line " << RidgeY[0] << " " << RidgeY[1] << " "<<RidgeY[2] <<std::endl;
+                        }*/
                     }
 
 
@@ -1735,8 +1470,14 @@ void Ridges( vtkImageData* input, vtkDoubleArray* gradient, vtkDoubleArray* hess
                             X_Id = X_Id + 2;
                             Y_Id = Y_Id + 2;
 
-                            //std::cout<<"Case 8: "<< "X line " << RidgeX[0] << " " << RidgeX[1] << " "<<RidgeX[2] <<std::endl;
-                            //std::cout<<"Case 8: "<< "Y line " << RidgeY[0] << " " << RidgeY[1] << " "<<RidgeY[2] <<std::endl;
+                            /*
+                            if ( i == dims[0] - 1 || j == dims[1] - 1) {
+                                std::cout<<"Case 8 first: "<< "X line " << RidgeX[0] << " " << RidgeX[1] << " "<<RidgeX[2] <<std::endl;
+                                std::cout<<"Case 8 first: "<< "Y line " << RidgeY[0] << " " << RidgeY[1] << " "<<RidgeY[2] <<std::endl;
+
+                            }*/
+
+
 
                         }
 
@@ -1747,6 +1488,15 @@ void Ridges( vtkImageData* input, vtkDoubleArray* gradient, vtkDoubleArray* hess
 
                             X_Id = X_Id + 2;
                             Y_Id = Y_Id + 2;
+
+                            /*
+                            if ( i == dims[0] - 1 || j == dims[1] - 1) {
+                                std::cout<<"Case 8 second: "<< "X line " << RidgeX2[0] << " " << RidgeX2[1] << " "<<RidgeX2[2] <<std::endl;
+                                std::cout<<"Case 8 second: "<< "Y line " << RidgeY2[0] << " " << RidgeY2[1] << " "<<RidgeY2[2] <<std::endl;
+
+                            }*/
+
+
                         }
 
                     }
@@ -1794,9 +1544,12 @@ void Ridges( vtkImageData* input, vtkDoubleArray* gradient, vtkDoubleArray* hess
                             X_Id = X_Id + 2;
                             Y_Id = Y_Id + 2;
 
-                            //std::cout<<"Case 8: "<< "X line " << RidgeX[0] << " " << RidgeX[1] << " "<<RidgeX[2] <<std::endl;
-                            //std::cout<<"Case 8: "<< "Y line " << RidgeY[0] << " " << RidgeY[1] << " "<<RidgeY[2] <<std::endl;
+                            /*
+                            if ( i == dims[0] - 1 || j == dims[1] - 1) {
 
+                                std::cout<<"Case 8 first: "<< "X line " << RidgeX[0] << " " << RidgeX[1] << " "<<RidgeX[2] <<std::endl;
+                                std::cout<<"Case 8 first: "<< "Y line " << RidgeY[0] << " " << RidgeY[1] << " "<<RidgeY[2] <<std::endl;
+                            }*/
                         }
 
                         if (RidgeEigenValue(IntHess3)  && RidgeEigenValue(IntHess4))
@@ -1806,6 +1559,14 @@ void Ridges( vtkImageData* input, vtkDoubleArray* gradient, vtkDoubleArray* hess
 
                             X_Id = X_Id + 2;
                             Y_Id = Y_Id + 2;
+
+                            /*
+                            if ( i == dims[0] - 1 || j == dims[1] - 1) {
+                                std::cout<<"Case 8 second: "<< "X line " << RidgeX2[0] << " " << RidgeX2[1] << " "<<RidgeX2[2] <<std::endl;
+                                std::cout<<"Case 8 second: "<< "Y line " << RidgeY2[0] << " " << RidgeY2[1] << " "<<RidgeY2[2] <<std::endl;
+
+                            }*/
+
                         }
 
 
@@ -1890,9 +1651,12 @@ void Ridges( vtkImageData* input, vtkDoubleArray* gradient, vtkDoubleArray* hess
                             X_Id = X_Id + 2;
                             Y_Id = Y_Id + 2;
 
-                            //std::cout<<"Case 9: "<< "X line " << RidgeX[0] << " " << RidgeX[1] << " "<<RidgeX[2] <<std::endl;
-                            //std::cout<<"Case 9: "<< "Y line " << RidgeY[0] << " " << RidgeY[1] << " "<<RidgeY[2] <<std::endl;
+                            /*
+                            if ( i == dims[0] - 1 || j == dims[1] - 1) {
 
+                                std::cout<<"Case 9 first: "<< "X line " << RidgeX[0] << " " << RidgeX[1] << " "<<RidgeX[2] <<std::endl;
+                                std::cout<<"Case 9 first: "<< "Y line " << RidgeY[0] << " " << RidgeY[1] << " "<<RidgeY[2] <<std::endl;
+                            }*/
                         }
 
                         if (RidgeEigenValue(IntHess3)  && RidgeEigenValue(IntHess4))
@@ -1902,6 +1666,13 @@ void Ridges( vtkImageData* input, vtkDoubleArray* gradient, vtkDoubleArray* hess
 
                             X_Id = X_Id + 2;
                             Y_Id = Y_Id + 2;
+
+                            /*
+                            if ( i == dims[0] - 1 || j == dims[1] - 1) {
+                                std::cout<<"Case 9 second: "<< "X line " << RidgeX2[0] << " " << RidgeX2[1] << " "<<RidgeX2[2] <<std::endl;
+                                std::cout<<"Case 9 second: "<< "Y line " << RidgeY2[0] << " " << RidgeY2[1] << " "<<RidgeY2[2] <<std::endl;
+                            }*/
+
                         }
 
                     }
@@ -1946,11 +1717,16 @@ void Ridges( vtkImageData* input, vtkDoubleArray* gradient, vtkDoubleArray* hess
                             RidgePoints->InsertPoint(X_Id, RidgeX);
                             RidgePoints->InsertPoint(Y_Id, RidgeY);
 
+
+
                             X_Id = X_Id + 2;
                             Y_Id = Y_Id + 2;
 
-                            //std::cout<<"Case 9: "<< "X line " << RidgeX[0] << " " << RidgeX[1] << " "<<RidgeX[2] <<std::endl;
-                            //std::cout<<"Case 9: "<< "Y line " << RidgeY[0] << " " << RidgeY[1] << " "<<RidgeY[2] <<std::endl;
+                            /*
+                            if ( i == dims[0] - 1 || j == dims[1] - 1) {
+                                std::cout<<"Case 9 first: "<< "X line " << RidgeX[0] << " " << RidgeX[1] << " "<<RidgeX[2] <<std::endl;
+                                std::cout<<"Case 9 first: "<< "Y line " << RidgeY[0] << " " << RidgeY[1] << " "<<RidgeY[2] <<std::endl;
+                            }*/
 
                         }
 
@@ -1961,6 +1737,12 @@ void Ridges( vtkImageData* input, vtkDoubleArray* gradient, vtkDoubleArray* hess
 
                             X_Id = X_Id + 2;
                             Y_Id = Y_Id + 2;
+
+                            /*
+                            if ( i == dims[0] - 1 || j == dims[1] - 1) {
+                                std::cout<<"Case 9 second: "<< "X line " << RidgeX2[0] << " " << RidgeX2[1] << " "<<RidgeX2[2] <<std::endl;
+                                std::cout<<"Case 9 second: "<< "Y line " << RidgeY2[0] << " " << RidgeY2[1] << " "<<RidgeY2[2] <<std::endl;
+                            }*/
                         }
 
                     }
@@ -2008,8 +1790,11 @@ void Ridges( vtkImageData* input, vtkDoubleArray* gradient, vtkDoubleArray* hess
                         X_Id = X_Id + 2;
                         Y_Id = Y_Id + 2;
 
-                        //std::cout<<"Case 10: "<< "X line " << RidgeX[0] << " " << RidgeX[1] << " "<<RidgeX[2] <<std::endl;
-                        //std::cout<<"Case 10: "<< "Y line " << RidgeY[0] << " " << RidgeY[1] << " "<<RidgeY[2] <<std::endl;
+                        /*
+                        if ( i == dims[0] - 1 || j == dims[1] - 1) {
+                            std::cout<<"Case 10: "<< "X line " << RidgeX[0] << " " << RidgeX[1] << " "<<RidgeX[2] <<std::endl;
+                            std::cout<<"Case 10: "<< "Y line " << RidgeY[0] << " " << RidgeY[1] << " "<<RidgeY[2] <<std::endl;
+                        }*/
                     }
 
 
@@ -2050,8 +1835,14 @@ void Ridges( vtkImageData* input, vtkDoubleArray* gradient, vtkDoubleArray* hess
                         X_Id = X_Id + 2;
                         Y_Id = Y_Id + 2;
 
-                        //std::cout<<"Case 11: "<< "X line " << RidgeX[0] << " " << RidgeX[1] << " "<<RidgeX[2] <<std::endl;
-                        //std::cout<<"Case 11: "<< "Y line " << RidgeY[0] << " " << RidgeY[1] << " "<<RidgeY[2] <<std::endl;
+                        /*
+                        if ( i == dims[0] - 1 || j == dims[1] - 1) {
+
+                            std::cout << "Case 11: " << "X line " << RidgeX[0] << " " << RidgeX[1] << " " << RidgeX[2]
+                                      << std::endl;
+                            std::cout << "Case 11: " << "Y line " << RidgeY[0] << " " << RidgeY[1] << " " << RidgeY[2]
+                                      << std::endl;
+                        }*/
 
                     }
 
@@ -2092,8 +1883,13 @@ void Ridges( vtkImageData* input, vtkDoubleArray* gradient, vtkDoubleArray* hess
                         X_Id = X_Id + 2;
                         Y_Id = Y_Id + 2;
 
-                        //std::cout<<"Case 12: "<< "X line " << RidgeX[0] << " " << RidgeX[1] << " "<<RidgeX[2] <<std::endl;
-                        //std::cout<<"Case 12: "<< "Y line " << RidgeY[0] << " " << RidgeY[1] << " "<<RidgeY[2] <<std::endl;
+                        /*
+                        if ( i == dims[0] - 1 || j == dims[1] - 1) {
+                            std::cout << "Case 12: " << "X line " << RidgeX[0] << " " << RidgeX[1] << " " << RidgeX[2]
+                                      << std::endl;
+                            std::cout << "Case 12: " << "Y line " << RidgeY[0] << " " << RidgeY[1] << " " << RidgeY[2]
+                                      << std::endl;
+                        }*/
                     }
 
 
@@ -2135,8 +1931,13 @@ void Ridges( vtkImageData* input, vtkDoubleArray* gradient, vtkDoubleArray* hess
                         X_Id = X_Id + 2;
                         Y_Id = Y_Id + 2;
 
-                        //std::cout<<"Case 13: "<< "X line " << RidgeX[0] << " " << RidgeX[1] << " "<<RidgeX[2] <<std::endl;
-                        //std::cout<<"Case 13: "<< "Y line " << RidgeY[0] << " " << RidgeY[1] << " "<<RidgeY[2] <<std::endl;
+                        /*
+                        if ( i == dims[0] - 1 || j == dims[1] - 1) {
+                            std::cout << "Case 13: " << "X line " << RidgeX[0] << " " << RidgeX[1] << " " << RidgeX[2]
+                                      << std::endl;
+                            std::cout << "Case 13: " << "Y line " << RidgeY[0] << " " << RidgeY[1] << " " << RidgeY[2]
+                                      << std::endl;
+                        }*/
                     }
 
                 }
@@ -2180,8 +1981,11 @@ void Ridges( vtkImageData* input, vtkDoubleArray* gradient, vtkDoubleArray* hess
                         X_Id = X_Id + 2;
                         Y_Id = Y_Id + 2;
 
-                        //std::cout<<"Case 14: "<< "X line " << RidgeX[0] << " " << RidgeX[1] << " "<<RidgeX[2] <<std::endl;
-                        //std::cout<<"Case 14: "<< "Y line " << RidgeY[0] << " " << RidgeY[1] << " "<<RidgeY[2] <<std::endl;
+                        /*
+                        if ( i == dims[0] - 1 || j == dims[1] - 1) {
+                            std::cout<<"Case 14: "<< "X line " << RidgeX[0] << " " << RidgeX[1] << " "<<RidgeX[2] <<std::endl;
+                            std::cout<<"Case 14: "<< "Y line " << RidgeY[0] << " " << RidgeY[1] << " "<<RidgeY[2] <<std::endl;
+                        }*/
                     }
 
 
@@ -2223,9 +2027,13 @@ void Ridges( vtkImageData* input, vtkDoubleArray* gradient, vtkDoubleArray* hess
                         X_Id = X_Id + 2;
                         Y_Id = Y_Id + 2;
 
-                        //std::cout<<"Case 15: "<< "X line " << RidgeX[0] << " " << RidgeX[1] << " "<<RidgeX[2] <<std::endl;
-                        //std::cout<<"Case 15: "<< "Y line " << RidgeY[0] << " " << RidgeY[1] << " "<<RidgeY[2] <<std::endl;
-
+                        /*
+                        if ( i == dims[0] - 2 || j == dims[1] - 2) {
+                            std::cout << "Case 15: " << "X line " << RidgeX[0] << " " << RidgeX[1] << " " << RidgeX[2]
+                                      << std::endl;
+                            std::cout << "Case 15: " << "Y line " << RidgeY[0] << " " << RidgeY[1] << " " << RidgeY[2]
+                                      << std::endl;
+                        }*/
                     }
 
 
@@ -2239,9 +2047,12 @@ void Ridges( vtkImageData* input, vtkDoubleArray* gradient, vtkDoubleArray* hess
                     continue;
                 }
 
+
+
             }
         }
     }
+
 
     //std::cout<<"number of ridge points in loop " <<number <<std::endl;
 
@@ -2250,8 +2061,6 @@ void Ridges( vtkImageData* input, vtkDoubleArray* gradient, vtkDoubleArray* hess
 
 bool RidgeEigenValue (double IntHessian[4])
 {
-
-
 
     Eigen::Matrix2d IntHessianmatrix(2,2);
     IntHessianmatrix(0, 0) = IntHessian[0];
@@ -2280,10 +2089,16 @@ bool RidgeEigenValue (double IntHessian[4])
     lambda[1] = IntValueReal(1,0);
 
 
-    if (lambda[0] <= limit || lambda[1] <= limit)
+    if (lambda[0] < limit || lambda[1] < limit)
     {
-        //std::cout << "eigenvalues " << lambda[0] << ", " << lambda[1] << ", " <<  limit << std::endl;
+        //std::cout << "eigenvalues " << lambda[0] << ", " << lambda[1] << ", " <<  limit  << std::endl;
+
         return true;
+    }
+
+    else
+    {
+        return false;
     }
 
 }
