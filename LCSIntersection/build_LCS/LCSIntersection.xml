@@ -1,0 +1,38 @@
+<xml>
+    <proxy>
+        <group>filters</group>
+        <name>LCSIntersection</name>
+        <label>LCSIntersection</label>
+        <documentation>
+            <brief>Calculates number of LCS Intersections</brief>
+            <long>
+                Extracts ridge lines on uniform grids.
+            </long>
+        </documentation>
+        <property>
+            <name>Input</name>
+            <label>Input</label>
+            <defaults/>
+            <domains>
+                <domain>
+                    <text>Accepts input of following types:</text>
+                    <list>
+                        <item>vtkPolyData</item>
+                    </list>
+                </domain>
+            </domains>
+        </property>
+        <property>
+            <name>Number of cells</name>
+            <label>Number of cells</label>
+            <documentation>
+                <brief/>
+                <long>
+                    Number of cells in each direction.
+                </long>
+            </documentation>
+            <defaults>200 100 1</defaults>
+            <domains/>
+        </property>
+    </proxy>
+</xml>

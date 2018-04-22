@@ -1,0 +1,39 @@
+<ServerManagerConfiguration>
+    <ProxyGroup name="filters">
+        <SourceProxy
+                name="LCSIntersection"
+                class="vtkLCSIntersection"
+                label="LCSIntersection">	<!-- name as it will appear in ParaView under "Filters" menu -->
+
+            <Documentation
+                    long_help="Calculates number of LCS Intersections"
+                    short_help="Calculates LCS Intersections">
+                Extracts ridge lines on uniform grids.
+            </Documentation>
+
+            <InputProperty
+                    name="Input"
+                    command="AddInputConnection"
+                    clean_command="RemoveAllInputs">
+                <ProxyGroupDomain name="groups">
+                    <Group name="sources"/> <!-- the input might come either from a reader-->
+                    <Group name="filters"/> <!-- ... or from another filter -->
+                </ProxyGroupDomain>
+                <DataTypeDomain name="input_type">
+                    <DataType value="vtkPolyData"/> <!-- We require that the data has type vtkDataSet; might as well be more specific (e.g., vtkRectilinearGrid) -->
+                </DataTypeDomain>
+            </InputProperty>
+
+            <IntVectorProperty
+                    name="Number of cells"
+                    command="SetcellsNumber"
+                    number_of_elements="3"
+                    default_values="200 100 1">
+                <Documentation>
+                    Number of cells in each direction.
+                </Documentation>
+            </IntVectorProperty>
+
+        </SourceProxy>
+    </ProxyGroup>
+</ServerManagerConfiguration>
