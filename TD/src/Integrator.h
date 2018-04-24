@@ -20,54 +20,7 @@ using namespace std;
 
 const double LIMIT_DOUBLE = 1000* std::numeric_limits<double>::epsilon();
 
-/*
-class Integrator
-{
 
-
-private:
-
-
-    vtkSmartPointer<vtkPoints> integratePointRK4(vec3 startLocation);
-
-public:
-    Integrator();
-    Integrator(int intDirection, double stepsize, double intTime, double stagThresh,
-               vtkSmartPointer<vtkImageData> inputGrid, vtkSmartPointer<vtkImageData> source);
-    ~Integrator();
-
-
-
-    int integrationDirection;
-    double stepSize;
-    double integrationTime;
-    int maxNumberOfSteps;
-    double integrationLength;
-    double stagnationThreshold;
-    vtkSmartPointer<vtkImageData> input;
-    vtkSmartPointer<vtkImageData> source;
-
-    double origin[3];
-    double originSource[3];
-    bool calcStreamlines;
-
-
-
-    void trilinInterpolator(vec3 a,vec3 b, vec3 c, vec3 d, vec3 e, vec3 f, vec3 g, vec3 h, double spacingX, double spacingY, double spacingZ, vec3 location, vec3& output);
-    bool cellLocator(vec3& output,vec3 location);
-
-
-
-    vtkSmartPointer<vtkPolyData> integrateRK4();
-    void integrateRK4GPUWrapper();
-    void setOrigin(double ori[3]);
-    void setOriginSource(double ori[3]);
-
-    bool pointInterpolator(vec3 currentLocation, vec3& vecNextLocation);
-
-
-};
-*/
 
 ////changed 3D to 2D
 class Integrator
@@ -98,6 +51,7 @@ public:
 
     std::vector<vector<double>> NewEndPoints;
     std::vector<vector<double>> PathlineEndPoints;
+    std::vector<vector<double>> StartPoint;
 
     double startTime;               ////
     double endTime;                 ////

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/Integrator.cxx" line="1187" />
+    <bookmark url="file://$PROJECT_DIR$/Integrator.cxx" line="881" />
   </component>
   <component name="CMakeRunConfigurationManager" shouldGenerate="true" shouldDeleteObsolete="true" buildAllGenerated="true">
     <generated>
@@ -36,88 +36,53 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="DockManager">
+    <window id="1">
+      <content type="file-editors">
+        <state>
+          <leaf>
+            <file leaf-file-name="vtkRidgeLine.h" pinned="false" current-in-tab="true">
+              <entry file="file://$PROJECT_DIR$/../../RidgeLine/vtkRidgeLine.h">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state relative-caret-position="783">
+                    <caret line="29" column="0" lean-forward="false" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+                    <folding />
+                  </state>
+                </provider>
+              </entry>
+            </file>
+            <file leaf-file-name="vtkRidgeLine.cpp" pinned="false" current-in-tab="false">
+              <entry file="file://$PROJECT_DIR$/../../RidgeLine/vtkRidgeLine.cpp">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state relative-caret-position="-4479">
+                    <caret line="165" column="0" lean-forward="false" selection-start-line="165" selection-start-column="0" selection-end-line="165" selection-end-column="140" />
+                    <folding />
+                  </state>
+                </provider>
+              </entry>
+            </file>
+            <file leaf-file-name="RidgeLine.xml" pinned="false" current-in-tab="false">
+              <entry file="file://$PROJECT_DIR$/../../RidgeLine/RidgeLine.xml">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state relative-caret-position="675">
+                    <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+                    <folding />
+                  </state>
+                </provider>
+              </entry>
+            </file>
+          </leaf>
+        </state>
+      </content>
+    </window>
+  </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="525">
-      <file leaf-file-name="vtkFTLE.cxx" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/vtkFTLE.cxx">
+      <file leaf-file-name="scratch_1.cpp" pinned="false" current-in-tab="true">
+        <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_1.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="486">
-              <caret line="591" column="21" lean-forward="false" selection-start-line="591" selection-start-column="21" selection-end-line="591" selection-end-column="21" />
-              <folding>
-                <element signature="e#0#20#0" expanded="true" />
-                <element signature="e#66#84#0" expanded="true" />
-                <element signature="e#5838#6565#0" expanded="false" />
-                <element signature="e#8352#9646#0" expanded="false" />
-                <element signature="e#14256#14395#0" expanded="true" />
-                <element signature="e#14540#14759#0" expanded="false" />
-                <element signature="e#29457#30694#0" expanded="false" />
-                <element signature="e#33028#33418#0" expanded="false" />
-                <element signature="e#33424#33701#0" expanded="false" />
-                <element signature="e#33710#35810#0" expanded="false" />
-                <element signature="e#37522#44096#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="vtkFTLE.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/vtkFTLE.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2673">
-              <caret line="99" column="25" lean-forward="false" selection-start-line="99" selection-start-column="25" selection-end-line="99" selection-end-column="25" />
-              <folding>
-                <element signature="e#3366#5741#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Integrator.cxx" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Integrator.cxx">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="790">
-              <caret line="1166" column="61" lean-forward="false" selection-start-line="1166" selection-start-column="61" selection-end-line="1166" selection-end-column="61" />
-              <folding>
-                <element signature="e#0#23#0" expanded="true" />
-                <element signature="e#467#1114#0" expanded="false" />
-                <element signature="e#3278#6083#0" expanded="false" />
-                <element signature="e#14464#14847#0" expanded="false" />
-                <element signature="e#15376#17243#0" expanded="false" />
-                <element signature="e#21230#27190#0" expanded="false" />
-                <element signature="e#28871#31661#0" expanded="false" />
-                <element signature="e#34195#35086#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Integrator.h" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Integrator.h">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2673">
-              <caret line="99" column="44" lean-forward="false" selection-start-line="99" selection-start-column="44" selection-end-line="99" selection-end-column="44" />
-              <folding>
-                <element signature="e#390#1520#0" expanded="false" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CMakeLists.txt" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/CMakeLists.txt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="729">
-              <caret line="27" column="0" lean-forward="false" selection-start-line="27" selection-start-column="0" selection-end-line="27" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="FTLE_Server.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/FTLE_Server.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1944">
-              <caret line="72" column="20" lean-forward="false" selection-start-line="72" selection-start-column="20" selection-end-line="72" selection-end-column="20" />
+            <state relative-caret-position="891">
+              <caret line="39" column="30" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="125" selection-end-column="1" />
               <folding />
             </state>
           </provider>
@@ -127,8 +92,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>currentIntTime</find>
-      <find>seedgrid</find>
       <find>source</find>
       <find>bilininterpol</find>
       <find>cellloca</find>
@@ -157,6 +120,8 @@
       <find>streamlines</find>
       <find>ftleField</find>
       <find>requestdata</find>
+      <find>getabstr</find>
+      <find>arrayname</find>
     </findStrings>
     <replaceStrings>
       <replace>MAKEGLOBAL</replace>
@@ -190,8 +155,13 @@
         <option value="$PROJECT_DIR$/vtkFTLE.h" />
         <option value="$PROJECT_DIR$/FTLE_Server.xml" />
         <option value="$PROJECT_DIR$/../../FTLE/Time_Dependent/Time_Dependent.cpp" />
+        <option value="$PROJECT_DIR$/../../Velocity_field/Velocity_field.cpp" />
+        <option value="$PROJECT_DIR$/../../RidgeLine/RidgeLine.xml" />
+        <option value="$PROJECT_DIR$/../../RidgeLine/vtkRidgeLine.h" />
         <option value="$PROJECT_DIR$/Integrator.cxx" />
         <option value="$PROJECT_DIR$/vtkFTLE.cxx" />
+        <option value="$PROJECT_DIR$/../../RidgeLine/vtkRidgeLine.cpp" />
+        <option value="$APPLICATION_CONFIG_DIR$/scratches/scratch_1.cpp" />
       </list>
     </option>
   </component>
@@ -202,8 +172,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1201" />
-    <option name="y" value="289" />
+    <option name="x" value="-150" />
+    <option name="y" value="404" />
     <option name="width" value="3743" />
     <option name="height" value="2168" />
   </component>
@@ -274,7 +244,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="settings.editor.selected.configurable" value="CMakeSettings" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../libs/linalg/linalg.h" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../.." />
     <property name="settings.editor.splitter.proportion" value="0.20454545" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$2/Languages" value="ObjectiveC" />
   </component>
@@ -584,6 +554,13 @@
       <workItem from="1520506015490" duration="27518000" />
       <workItem from="1520682112122" duration="7554000" />
       <workItem from="1520692402633" duration="5425000" />
+      <workItem from="1520845608504" duration="2713000" />
+      <workItem from="1520949455589" duration="539000" />
+      <workItem from="1520950934603" duration="38000" />
+      <workItem from="1521374904499" duration="9925000" />
+      <workItem from="1524060044647" duration="8466000" />
+      <workItem from="1524238565641" duration="8986000" />
+      <workItem from="1524312075517" duration="971000" />
     </task>
     <servers />
   </component>
@@ -620,7 +597,7 @@
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="703506000" />
+    <option name="totallyTimeSpent" value="735144000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -632,12 +609,11 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1201" y="289" width="3741" height="2160" extended-state="6" />
+    <frame x="99" y="-6" width="3743" height="2168" extended-state="6" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14602835" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.14602835" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3376422" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33985943" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32931727" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3172691" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3293692" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -647,6 +623,7 @@
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39968976" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33985943" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
@@ -657,22 +634,22 @@
     <layout-to-restore>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3376422" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.33985943" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33985943" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32931727" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="CMake" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3172691" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="true" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3293692" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3293692" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14602835" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32988626" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39968976" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39968976" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Data View" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
     </layout-to-restore>
   </component>
@@ -689,23 +666,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Integrator.cxx" />
-    <entry file="file://$PROJECT_DIR$/cudaIntegrator.cu" />
-    <entry file="file://$PROJECT_DIR$/vtkFTLE.cxx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="10574">
-          <caret line="311" column="53" lean-forward="false" selection-start-line="311" selection-start-column="53" selection-end-line="311" selection-end-column="53" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vtkFTLE.cxx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/unitTests.cxx" />
     <entry file="file://$PROJECT_DIR$/../../bins/ftlecuda/vtkFTLEClientServer.cxx" />
     <entry file="file://$PROJECT_DIR$/../../catch/catch.h" />
     <entry file="file://$PROJECT_DIR$/linalgCUDA.h" />
@@ -802,13 +762,6 @@
     <entry file="file://$PROJECT_DIR$/../../TD_random/src/Integrator.cxx" />
     <entry file="file://$PROJECT_DIR$/../../TD_fixedTime/src/vtkFTLE.cxx" />
     <entry file="file://$PROJECT_DIR$/../../TD_fixedTime/src/Integrator.cxx" />
-    <entry file="file://$PROJECT_DIR$/../../FTLE/Velocity_field/Velocity_field.cpp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2187">
-          <caret line="96" column="41" lean-forward="false" selection-start-line="96" selection-start-column="41" selection-end-line="96" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../../TD_random/new/src/vtkFTLE.cxx" />
     <entry file="file:///run/user/4419/gvfs/archive:host=file%253A%252F%252F%252Fexport%252Fhome%252Furawat%252FDesktop%252FTDadvection.tar.gz/TD/src/vtkFTLE.cxx" />
     <entry file="file://$PROJECT_DIR$/../../FTLE/src/vtkFTLE.cxx">
@@ -860,13 +813,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Integrator.h">
+    <entry file="file://$PROJECT_DIR$/../../FTLE/Velocity_field/Velocity_field.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2673">
-          <caret line="99" column="44" lean-forward="false" selection-start-line="99" selection-start-column="44" selection-end-line="99" selection-end-column="44" />
-          <folding>
-            <element signature="e#390#1520#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="2592">
+          <caret line="96" column="41" lean-forward="false" selection-start-line="96" selection-start-column="41" selection-end-line="96" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../Velocity_field/Velocity_field.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="570">
+          <caret line="105" column="53" lean-forward="false" selection-start-line="105" selection-start-column="53" selection-end-line="105" selection-end-column="53" />
         </state>
       </provider>
     </entry>
@@ -880,8 +837,27 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/FTLE_Server.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1944">
-          <caret line="72" column="20" lean-forward="false" selection-start-line="72" selection-start-column="20" selection-end-line="72" selection-end-column="20" />
+        <state relative-caret-position="1107">
+          <caret line="41" column="55" lean-forward="false" selection-start-line="41" selection-start-column="55" selection-end-line="41" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Integrator.cxx">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="20169">
+          <caret line="747" column="77" lean-forward="false" selection-start-line="747" selection-start-column="77" selection-end-line="747" selection-end-column="77" />
+          <folding>
+            <element signature="e#0#23#0" expanded="true" />
+            <element signature="e#2636#5441#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Integrator.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1053">
+          <caret line="39" column="18" lean-forward="false" selection-start-line="39" selection-start-column="18" selection-end-line="39" selection-end-column="18" />
           <folding />
         </state>
       </provider>
@@ -890,46 +866,52 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2673">
           <caret line="99" column="25" lean-forward="false" selection-start-line="99" selection-start-column="25" selection-end-line="99" selection-end-column="25" />
-          <folding>
-            <element signature="e#3366#5741#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Integrator.cxx">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="790">
-          <caret line="1166" column="61" lean-forward="false" selection-start-line="1166" selection-start-column="61" selection-end-line="1166" selection-end-column="61" />
-          <folding>
-            <element signature="e#0#23#0" expanded="true" />
-            <element signature="e#467#1114#0" expanded="false" />
-            <element signature="e#3278#6083#0" expanded="false" />
-            <element signature="e#14464#14847#0" expanded="false" />
-            <element signature="e#15376#17243#0" expanded="false" />
-            <element signature="e#21230#27190#0" expanded="false" />
-            <element signature="e#28871#31661#0" expanded="false" />
-            <element signature="e#34195#35086#0" expanded="false" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/vtkFTLE.cxx">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="486">
-          <caret line="591" column="21" lean-forward="false" selection-start-line="591" selection-start-column="21" selection-end-line="591" selection-end-column="21" />
+        <state relative-caret-position="1144">
+          <caret line="806" column="0" lean-forward="false" selection-start-line="806" selection-start-column="0" selection-end-line="806" selection-end-column="0" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
             <element signature="e#66#84#0" expanded="true" />
-            <element signature="e#5838#6565#0" expanded="false" />
-            <element signature="e#8352#9646#0" expanded="false" />
-            <element signature="e#14256#14395#0" expanded="true" />
-            <element signature="e#14540#14759#0" expanded="false" />
-            <element signature="e#29457#30694#0" expanded="false" />
-            <element signature="e#33028#33418#0" expanded="false" />
-            <element signature="e#33424#33701#0" expanded="false" />
-            <element signature="e#33710#35810#0" expanded="false" />
-            <element signature="e#37522#44096#0" expanded="false" />
+            <element signature="e#7140#7473#0" expanded="false" />
+            <element signature="e#11274#11413#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../RidgeLine/RidgeLine.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="675">
+          <caret line="25" column="0" lean-forward="false" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../RidgeLine/vtkRidgeLine.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-4479">
+          <caret line="165" column="0" lean-forward="false" selection-start-line="165" selection-start-column="0" selection-end-line="165" selection-end-column="140" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_1.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="891">
+          <caret line="39" column="30" lean-forward="true" selection-start-line="0" selection-start-column="0" selection-end-line="125" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../../RidgeLine/vtkRidgeLine.h">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="783">
+          <caret line="29" column="0" lean-forward="false" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>

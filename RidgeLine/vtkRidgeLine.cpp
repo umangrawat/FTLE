@@ -208,6 +208,7 @@ int vtkRidgeLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInformatio
     PCA(MinEigenvecs, dims, pcaMaxEigenVec);
 
 
+
     //// Dot product between PCA max eigenvector and minimum eigenvector of each node and flipping if opposite
     FlipMinEigenVecs(pcaMaxEigenVec, MinEigenvecs, dims);
 
@@ -237,7 +238,7 @@ int vtkRidgeLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInformatio
             vtkIdType id = vtkIdType(k + j);
             RidgePoints->GetPoint(id, point);
 
-            outputPoints->InsertNextPoint(point);
+            //outputPoints->InsertNextPoint(point);
             vtkIdType nextPoint = outputPoints->InsertNextPoint(point);
             outputLines->InsertCellPoint(nextPoint);
         }
@@ -252,6 +253,7 @@ int vtkRidgeLine::RequestData(vtkInformation *vtkNotUsed(request), vtkInformatio
 
     //// Copying the lines output array
     output->ShallowCopy(linesPolyData);
+
 
 
     /////////////////// Get the Length of ridge lines ///////////////////////////////
@@ -558,6 +560,7 @@ void Gradient(vtkImageData* input, vtkDoubleArray* field, int* dims, vtkDoubleAr
 
     }
 
+    std::cout<<"gradient calculation finished" <<std::endl;
 
     return;
 
@@ -705,6 +708,7 @@ void Hessian ( vtkImageData* input, vtkDoubleArray* gradient, int* dims, vtkDoub
 
     }
 
+    std::cout<<"Hessian calculation finished" <<std::endl;
     return;
 
 }
@@ -778,6 +782,7 @@ void MinEigenVector (vtkDoubleArray* hessian, int* dims, vtkDoubleArray* MinEige
         }
     }
 
+    std::cout<<"Eigenvalue calculation finished" <<std::endl;
 
     return;
 }
@@ -798,10 +803,12 @@ void PCA ( vtkDoubleArray* MinEigenvecs , int* dims, vtkDoubleArray* pcaMaxEigen
     {
         for (int j = 0; j < dims[1] - 1 ; j++)
         {
-            for (int i = 0; i < dims[0] - 1; i++)
-            {
+            std::cout<<"PCA Progress "<< int(double (j+1)/double (dims[1])* 100 ) <<"%\r";
+            for (int i = 0; i < dims[0] - 1; i++) {
+                int nodeCnt = 4;
                 double evec1[2], evec2[2], evec3[2], evec4[2] = {0.};
-                double XComp[8], YComp[8] = {0.};
+                //double XComp[8], YComp[8] = {0.};
+                double X[2][2 * nodeCnt] = {0.};
 
                 int pcaIndex = getIndex(k, j, i, dims);
                 vtkIdType pcaId1 = vtkIdType(pcaIndex);
@@ -811,102 +818,230 @@ void PCA ( vtkDoubleArray* MinEigenvecs , int* dims, vtkDoubleArray* pcaMaxEigen
 
 
                 ////Get all the eigenvectors of a cell
-                pcaId1 = getIndex( k, j, i, dims );
-                MinEigenvecs->GetTuple( pcaId1, evec1 );
+                pcaId1 = getIndex(k, j, i, dims);
+                MinEigenvecs->GetTuple(pcaId1, evec1);
 
-                pcaId2 = getIndex( k, j, i+1, dims );
-                MinEigenvecs->GetTuple( pcaId2, evec2 );
+                pcaId2 = getIndex(k, j, i + 1, dims);
+                MinEigenvecs->GetTuple(pcaId2, evec2);
 
-                pcaId3 = getIndex( k, j+1, i, dims );
-                MinEigenvecs->GetTuple( pcaId3, evec3 );
+                pcaId3 = getIndex(k, j + 1, i, dims);
+                MinEigenvecs->GetTuple(pcaId3, evec3);
 
-                pcaId4 = getIndex( k, j+1, i+1, dims );
-                MinEigenvecs->GetTuple( pcaId4, evec4 );
+                pcaId4 = getIndex(k, j + 1, i + 1, dims);
+                MinEigenvecs->GetTuple(pcaId4, evec4);
+
+
 
                 ////store X & Y component differently and negative of each
 
-                XComp[0] = evec1[0];
-                XComp[1] = -1 * evec1[0];
-                XComp[2] = evec2[0];
-                XComp[3] = -1 * evec2[0];
-                XComp[4] = evec3[0];
-                XComp[5] = -1 * evec3[0];
-                XComp[6] = evec4[0];
-                XComp[7] = -1 * evec4[0];
+                X[0][0] = evec1[0];
+                X[1][0] = evec1[1];
+                X[0][1] = -1 * evec1[0];
+                X[1][1] = -1 * evec1[1];
+                X[0][2] = evec2[0];
+                X[1][2] = evec2[1];
+                X[0][3] = -1 * evec2[0];
+                X[1][3] = -1 * evec2[1];
+                X[0][4] = evec3[0];
+                X[1][4] = evec3[1];
+                X[0][5] = -1 * evec3[0];
+                X[1][5] = -1 * evec3[1];
+                X[0][6] = evec4[0];
+                X[1][6] = evec4[1];
+                X[0][7] = -1 * evec4[0];
+                X[1][7] = -1 * evec4[1];
 
-                YComp[0] = evec1[1];
-                YComp[1] = -1 * evec1[1];
-                YComp[2] = evec2[1];
-                YComp[3] = -1 * evec2[1];
-                YComp[4] = evec3[1];
-                YComp[5] = -1 * evec3[1];
-                YComp[6] = evec4[1];
-                YComp[7] = -1 * evec4[1];
-
-                vtkSmartPointer<vtkDoubleArray> xArray = vtkSmartPointer<vtkDoubleArray>::New();
-                xArray->SetNumberOfComponents(1);
-                xArray->SetName("x");
-
-                vtkSmartPointer<vtkDoubleArray> yArray = vtkSmartPointer<vtkDoubleArray>::New();
-                yArray->SetNumberOfComponents(1);
-                yArray->SetName("y");
-
-
-                for ( int l = 0; l < 8; l++)
+                mat2 C;
                 {
+                    for (int j = 0; j < 2; j++) {
+                        for (int i = 0; i < 2; i++) {
 
-                    vtkIdType idx_e;
-                    idx_e = l;
+                            double sum = 0.0;
+                            for (int k = 0; k < 2 * nodeCnt; k++) {
+                                sum += X[i][k] * X[j][k];
+                            }
 
-                    xArray->InsertTuple1(idx_e, XComp[l]);
-                    yArray->InsertTuple1(idx_e, YComp[l]);
+                            C[i][j] = sum / (2 * nodeCnt - 1);
+                        }
+                    }
                 }
 
-
-                vtkSmartPointer<vtkTable> datasetTable = vtkSmartPointer<vtkTable>::New();
-
-                datasetTable->AddColumn(xArray);
-                datasetTable->AddColumn(yArray);
-
-
-                #if VTK_MAJOR_VERSION <= 5
-                pcaStatistics->SetInput( vtkStatisticsAlgorithm::INPUT_DATA, datasetTable );
-                #else
-                pcaStatistics->SetInputData( vtkStatisticsAlgorithm::INPUT_DATA, datasetTable );
-                #endif
-
-                pcaStatistics->SetColumnStatus("x", 1 );
-                pcaStatistics->SetColumnStatus("y", 1 );
-
-                pcaStatistics->RequestSelectedColumns();
-                pcaStatistics->SetDeriveOption(true);
-                pcaStatistics->Update();
-
-                ///////// Eigenvalues ////////////
-                vtkSmartPointer<vtkDoubleArray> eval = vtkSmartPointer<vtkDoubleArray>::New();
-                pcaStatistics->GetEigenvalues(eval);
-
-                ///////// Eigenvectors ////////////
-
-                pcaStatistics->GetEigenvectors(pcaEigenvecs);
-
-                for(vtkIdType m = 0; m < pcaEigenvecs->GetNumberOfTuples(); m++)
+                // compute eigenvalues and eigenvectors
+                vec2 eigenvalues;
+                vec2 eigenvectors[2];
                 {
-                    double* evector = new double[pcaEigenvecs->GetNumberOfComponents()];
-                    pcaEigenvecs->GetTuple( m, evector );
+                    // force C to be symmetric (added 2007-08-15, untested)
+                    mat2symm(C, C);
 
-                    ////store the maximum eigenvector for each cell, which is the first one
-                    if (m == 0)
-                    {
-                        pcaMaxEigenVec->InsertTuple2( pcaId1, evector[0], evector[1] );
+                    // eigenvalues
+                    bool allReal = (mat2eigenvalues(C, eigenvalues) == 2);
+
+                    if (!allReal) {
+                        //printf("got complex eigenvalues: %g, %g, %g, returning zero\n", eigenvalues[0], eigenvalues[1], eigenvalues[2]);
+                        //mat3dump(C, stdout);
+
+                        return;
+                    }
+                    // eigenvectors
+                    mat2realEigenvector(C, eigenvalues[0], eigenvectors[0]);
+                    mat2realEigenvector(C, eigenvalues[1], eigenvectors[1]);
+                }
+
+#if 0
+                // get largest eigenvalue
+                int maxEVIdx;
+                {
+                        if (eigenvalues[0] > eigenvalues[1])
+                        {
+                                maxEVIdx = 0;
+                         }
+                        else {
+                            maxEVIdx = 1;
+                        }
+
+                }
+#else
+                // sort eigenvalues in descending order
+                int evalDescIndices[2];
+                {
+                    if (eigenvalues[0] > eigenvalues[1]) {
+
+                        evalDescIndices[0] = 0;
+                    } else {
+                        evalDescIndices[0] = 1;
                     }
 
-                }
 
+                    int remainingIndices[2];
+                    switch (evalDescIndices[0]) {
+                        case 0:
+                            remainingIndices[0] = 1;
+                            remainingIndices[1] = 2;
+                            break;
+                        case 1:
+                            remainingIndices[0] = 0;
+                            remainingIndices[1] = 2;
+                            break;
+                        case 2:
+                            remainingIndices[0] = 0;
+                            remainingIndices[1] = 1;
+                            break;
+                    }
+
+                    if (eigenvalues[remainingIndices[0]] > eigenvalues[remainingIndices[1]]) {
+                        evalDescIndices[1] = remainingIndices[0];
+                        //evalDescIndices[2] = remainingIndices[1];
+                    } else {
+                        evalDescIndices[1] = remainingIndices[1];
+                        //evalDescIndices[2] = remainingIndices[0];
+                    }
+
+                    /*
+                    if (eigenValuesDesc) {
+                        eigenValuesDesc[0] = eigenvalues[evalDescIndices[0]];
+                        eigenValuesDesc[1] = eigenvalues[evalDescIndices[1]];
+                        //eigenValuesDesc[2] = eigenvalues[evalDescIndices[2]];
+                    }*/
+                }
+#endif
+
+            vec2 evMax;
+            {
+                vec2copy(eigenvectors[evalDescIndices[0]], evMax);
+            }
+
+            pcaMaxEigenVec->InsertTuple2( pcaId1, evMax[0], evMax[1] );
+
+                /*
+                    ////store X & Y component differently and negative of each
+
+                    XComp[0] = evec1[0];
+                    XComp[1] = -1 * evec1[0];
+                    XComp[2] = evec2[0];
+                    XComp[3] = -1 * evec2[0];
+                    XComp[4] = evec3[0];
+                    XComp[5] = -1 * evec3[0];
+                    XComp[6] = evec4[0];
+                    XComp[7] = -1 * evec4[0];
+
+                    YComp[0] = evec1[1];
+                    YComp[1] = -1 * evec1[1];
+                    YComp[2] = evec2[1];
+                    YComp[3] = -1 * evec2[1];
+                    YComp[4] = evec3[1];
+                    YComp[5] = -1 * evec3[1];
+                    YComp[6] = evec4[1];
+                    YComp[7] = -1 * evec4[1];
+
+                    vtkSmartPointer<vtkDoubleArray> xArray = vtkSmartPointer<vtkDoubleArray>::New();
+                    xArray->SetNumberOfComponents(1);
+                    xArray->SetName("x");
+
+                    vtkSmartPointer<vtkDoubleArray> yArray = vtkSmartPointer<vtkDoubleArray>::New();
+                    yArray->SetNumberOfComponents(1);
+                    yArray->SetName("y");
+
+
+                    for ( int l = 0; l < 8; l++)
+                    {
+
+                        vtkIdType idx_e;
+                        idx_e = l;
+
+                        xArray->InsertTuple1(idx_e, XComp[l]);
+                        yArray->InsertTuple1(idx_e, YComp[l]);
+                    }
+
+
+                    vtkSmartPointer<vtkTable> datasetTable = vtkSmartPointer<vtkTable>::New();
+
+                    datasetTable->AddColumn(xArray);
+                    datasetTable->AddColumn(yArray);
+
+
+                    #if VTK_MAJOR_VERSION <= 5
+                    pcaStatistics->SetInput( vtkStatisticsAlgorithm::INPUT_DATA, datasetTable );
+                    #else
+                    pcaStatistics->SetInputData( vtkStatisticsAlgorithm::INPUT_DATA, datasetTable );
+                    #endif
+
+                    pcaStatistics->SetColumnStatus("x", 1 );
+                    pcaStatistics->SetColumnStatus("y", 1 );
+
+                    pcaStatistics->RequestSelectedColumns();
+                    pcaStatistics->SetDeriveOption(true);
+                    pcaStatistics->Update();
+
+
+
+                    ///////// Eigenvalues ////////////
+                    vtkSmartPointer<vtkDoubleArray> eval = vtkSmartPointer<vtkDoubleArray>::New();
+                    pcaStatistics->GetEigenvalues(eval);
+
+                    ///////// Eigenvectors ////////////
+
+                    pcaStatistics->GetEigenvectors(pcaEigenvecs);
+
+
+                    for(vtkIdType m = 0; m < pcaEigenvecs->GetNumberOfTuples(); m++)
+                    {
+                        //double* evector = new double[pcaEigenvecs->GetNumberOfComponents()];
+                        double evector[2] = {0.};
+                        pcaEigenvecs->GetTuple( m, evector );
+
+                        ////store the maximum eigenvector for each cell, which is the first one
+                        if (m == 0)
+                        {
+                            pcaMaxEigenVec->InsertTuple2( pcaId1, evector[0], evector[1] );
+                        }
+
+                    }
+                     */
             }
         }
     }
 
+    std::cout<<"PCA calculation finished" <<std::endl;
     return;
 }
 
@@ -920,6 +1055,8 @@ void FlipMinEigenVecs(vtkDoubleArray* pcaMaxEigenVec, vtkDoubleArray* MinEigenve
     {
         for (int j = 0; j < dims[1] - 1; j++)
         {
+            std::cout<<"Flip Progress "<< int(double (j+1)/double (dims[1])* 100 ) <<"%\r";
+
             for (int i = 0; i < dims[0] - 1; i++)
             {
                 double minEvec1[2], minEvec2[2], minEvec3[2], minEvec4[2], pcaMaxEvec[2] = {0.};
@@ -1014,6 +1151,7 @@ void FlipMinEigenVecs(vtkDoubleArray* pcaMaxEigenVec, vtkDoubleArray* MinEigenve
         }
     }
 
+    std::cout<<"DotProd calculation finished" <<std::endl;
     return;
 }
 
@@ -1037,6 +1175,7 @@ void Ridges( vtkImageData* input, vtkDoubleArray* gradient, vtkDoubleArray* hess
     {
         for (int j = 0; j < dims[1] - 1; j++)
         {
+            std::cout<<"Ridge Pt Progress " << int(double (j+1)/double (dims[1])* 100 ) <<"%\r";
             for (int i = 0; i < dims[0] - 1; i++)
             {
                 double grad1[2], grad2[2], grad3[2], grad4[2], hess1[4], hess2[4], hess3[4], hess4[4], IntHess1[4], IntHess2[4], IntHess3[4], IntHess4[4],
@@ -2053,7 +2192,7 @@ void Ridges( vtkImageData* input, vtkDoubleArray* gradient, vtkDoubleArray* hess
         }
     }
 
-
+    std::cout<<"RidgePoints calculation finished" <<std::endl;
     //std::cout<<"number of ridge points in loop " <<number <<std::endl;
 
     return;

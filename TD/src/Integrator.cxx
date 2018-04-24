@@ -9,9 +9,9 @@
 #include <math.h>
 
 
-int iter1 = 0;
-int iter2 = 0;
-int iter3 = 0;
+//int iter1 = 0;
+//int iter2 = 0;
+//int iter3 = 0;
 
 
 
@@ -34,29 +34,6 @@ Integrator::Integrator()
 
 }
 
-/*
-Integrator::Integrator(int intDirection, double stepsize, double intTime, double stagThresh, vtkSmartPointer<vtkImageData> inputGrid, vtkSmartPointer<vtkImageData> sourcePoints)
-{
-
-    this->integrationDirection =  intDirection;
-    this->stepSize = stepsize;
-    this->integrationTime = intTime;
-    this->integrationLength = intTime;
-    this->stagnationThreshold = stagThresh;
-    this->input = inputGrid;
-    this->source = sourcePoints;
-    this->origin[0] = 0;
-    this->origin[1] = 0;
-    this->origin[2] = 0;
-
-    if(!this->input || ! this->source)
-    {
-        std::cerr<<" Input or source not set correctly"<< std::endl;
-
-    }
-
-}
-*/
 
 Integrator::Integrator(int intDirection, double stepsize, double starttime, double endtime, double stagThresh,
                        vtkSmartPointer<vtkImageData> inputGrid, vtkSmartPointer<vtkImageData> sourcePoints, vtkSmartPointer<vtkImageData> nextinputGrid,
@@ -280,6 +257,11 @@ bool Integrator::cellLocator(vec2& output, vec2& nextoutput, vec2 location)
     yIndex = static_cast<int>(loc[1]/spacing[1]);
     ////int zIndex = 0;
     ////zIndex = static_cast<int>(loc[2]/spacing[2]);
+
+    int nextxIndex = 0;
+    nextxIndex = static_cast<int>(loc[0]/nextspacing[0]);
+    int nextyIndex = 0;
+    nextyIndex = static_cast<int>(loc[1]/nextspacing[1]);
 
     ////changed 3 to 2 and removed e,f,g,h
     vec2 a,b,c,d;
@@ -524,23 +506,7 @@ bool Integrator::cellLocator(vec2& output, vec2& nextoutput, vec2 location)
 
 }
 
-/*
-bool Integrator::pointInterpolator(vec3 currentLocation, vec3& vecNextLocation)
-{
-    vec3 location;
-    vec3copy(currentLocation,location);
-    bool result = this->cellLocator(vecNextLocation, location);
-    if(this->integrationDirection < 0)
-    {
-        vecNextLocation[0] *=-1;
-        vecNextLocation[1] *=-1;
-        vecNextLocation[2] *=-1;
-    }
 
-    return result;
-
-}
-*/
 ////changed 3 to 2
 bool Integrator::pointInterpolator(vec2 currentLocation, vec2& vecNextLocation, vec2& vecNextSliceLocation)
 {
@@ -560,68 +526,6 @@ bool Integrator::pointInterpolator(vec2 currentLocation, vec2& vecNextLocation, 
 
 }
 
-/*
-vtkSmartPointer<vtkPolyData> Integrator::integrateRK4()
-{
-
-
-    vtkSmartPointer<vtkCellArray> outputLines = vtkSmartPointer<vtkCellArray>::New();
-    vtkSmartPointer<vtkPoints> outputPoints = vtkSmartPointer<vtkPoints>::New();
-    vtkSmartPointer<vtkPolyData> output = vtkSmartPointer<vtkPolyData>::New();
-    if(!this->source || ! this->input)
-    {
-        std::cerr<<"Source or Input not set correctly"<<std::endl;
-        return output;
-    }
-
-    int numOfSeedPoints = this->source->GetNumberOfPoints();
-    vtkSmartPointer<vtkPoints> line;
-
-
-
-    int currentProgress = 0;
-    for(int i = 0; i < numOfSeedPoints; i++)
-    {
-        if(int((double(i)/double(numOfSeedPoints))  * 100.0) >= currentProgress)
-        {
-            std::cout << " Progress: " << int((double(i)/double(numOfSeedPoints))  * 100.0)
-                      << "%\r";
-            std::cout.flush();
-            ++currentProgress;
-        }
-        vec3 startLocation;
-        double p[3];
-        double point[3];
-        vtkIdType currentId = vtkIdType(i);
-        this->source->GetPoint(currentId,p);
-        vec3set(startLocation,p[0],p[1],p[2]);
-
-
-        line =  this->integratePointRK4(startLocation);
-        //std::cout<< "Number of Points in stream line "<< i<< " " <<line->GetNumberOfPoints()<<std::endl;
-        outputLines->InsertNextCell(line->GetNumberOfPoints());
-        for(int j = 0; j < line->GetNumberOfPoints(); j++)
-        {
-            vtkIdType id = vtkIdType(j);
-            line->GetPoint(id,point);
-            vtkIdType nextPoint = outputPoints->InsertNextPoint(point);
-            outputLines->InsertCellPoint(nextPoint);
-
-
-        }
-    }
-
-    output->SetPoints(outputPoints);
-    //std::cout<<" \n"<<outputPoints->GetNumberOfPoints()<<std::endl;
-    //if(outputPoints->GetNumberOfPoints() > 1)
-    output->SetLines(outputLines);
-
-
-    return output;
-
-}
-
-*/
 
 vtkSmartPointer<vtkPolyData> Integrator::integrateRK4()                                             ////changed from vtkPolyData
 {
@@ -664,9 +568,11 @@ vtkSmartPointer<vtkPolyData> Integrator::integrateRK4()                         
 
             this->source->GetPoint(currentId, p);
 
+            std::vector<double> startLoc = {p[0], p[1]};
+            this->StartPoint.push_back(startLoc);
+
             ////changed 3 to 2 and removed p[2]
             vec2set(startLocation, p[0], p[1]);
-
 
             line = this->integratePointRK4(startLocation);
             //std::cout<< "Number of Points in stream line "<< i<< " " <<line->GetNumberOfPoints()<<std::endl;
@@ -726,7 +632,7 @@ vtkSmartPointer<vtkPolyData> Integrator::integrateRK4()                         
 
     }
 
-    std::cout << "iter 1 " <<iter1 << " iter 2 " << iter2 << " iter 3 " << iter3 << std::endl;
+    //std::cout << "iter 1 " <<iter1 << " iter 2 " << iter2 << " iter 3 " << iter3 << std::endl;
     vtkIdType numPoints = outputPoints->GetNumberOfPoints();
     std::cout<< "number of points " << numPoints <<std::endl;
 
@@ -740,178 +646,6 @@ vtkSmartPointer<vtkPolyData> Integrator::integrateRK4()                         
 
 }
 
-/*
-vtkSmartPointer<vtkPoints> Integrator::integratePointRK4(vec3 startLocation)
-{
-    double currentIntTime = 0;
-    double currentIntLength = 0;
-    vec3 currentLocation;
-    vec3 nextLocation;
-    vec3 vecNextLocation;
-    vec3 currentLocationSave;
-    vec3 k1,k2,k3,k4;
-    vec3 k1norm, k2norm, k3norm, k4norm;
-    vec3 k1scal, k2scal, k3scal, k4scal;
-    vec3 step;
-    vec3 temp;
-    vec3copy(startLocation,currentLocation);
-    vtkSmartPointer<vtkPoints> outputPoints = vtkSmartPointer<vtkPoints>::New();
-
-    double interStepWeights[3] = {.5,.5,1.0};
-    double finalStepWeights[4] = {1.0/6.0, 1.0/3.0,1.0/3.0,1.0/6.0};
-
-    // std::cout<<"Start Location"<<std::endl;
-    // vec3print(startLocation);
-
-    double point[3] = {currentLocation[0] + this->origin[0] ,
-                        currentLocation[1] + this->origin[1],
-                        currentLocation[2] + this->origin[2]};
-    vtkIdType id = outputPoints->InsertNextPoint(point);
-     id = outputPoints->InsertNextPoint(point);
-
-    bool pointValid = true;
-    while(currentIntTime < this->integrationTime)
-        //while(currentIntLength < this->integrationLength)
-    {
-        pointValid = true;
-        vec3copy(currentLocation, currentLocationSave);
-        if(!this->pointInterpolator(currentLocation, vecNextLocation))
-        {
-            //vec3print(currentLocation);
-            //std::cout<< "k1"<<std::endl;
-            pointValid = false;
-            break;
-        }
-
-        vec3copy(vecNextLocation,k1);
-        vec3nrm(k1,k1norm);
-        vec3scal(k1, stepSize,k1scal);
-
-        vec3copy(k1scal,temp);
-        vec3scal(temp, interStepWeights[0],temp);
-        vec3copy(currentLocationSave, currentLocation);
-        vec3add(currentLocation,temp,currentLocation);
-
-        if(!this->pointInterpolator(currentLocation,vecNextLocation))
-        {
-            //vec3print(currentLocation);
-            // std::cout<< "k2"<<std::endl;
-            pointValid = false;
-            break;pointInterpolator(currentLocation, vecNextLocation, vecNextSliceLocation))
-        }
-        vec3copy(vecNextLocation,k2);
-        vec3nrm(k2,k2norm);
-        vec3scal(k2,stepSize,k2scal);
-
-        vec3copy(k2scal,temp);
-        vec3scal(temp,interStepWeights[1],temp);
-        vec3copy(currentLocationSave, currentLocation);
-        vec3add(currentLocation,temp,currentLocation);
-
-        if(!this->pointInterpolator(currentLocation,vecNextLocation))
-        {
-            // vec3print(currentLocation);
-            // std::cout<< "k3"<<std::endl;
-            pointValid = false;
-            break;
-        }
-
-        vec3copy(vecNextLocation,k3);
-        vec3nrm(k3,k3norm);
-        vec3scal(k3,stepSize,k3scal);
-
-        vec3copy(k3scal,temp);
-        vec3scal(temp,interStepWeights[2],temp);
-        vec3copy(currentLocationSave, currentLocation);
-        vec3add(currentLocation,temp,currentLocation);
-
-        if(!this->pointInterpolator(currentLocation,vecNextLocation))
-        {
-            // vec3print(currentLocation);
-            // std::cout<< "k4"<<std::endl;
-            pointValid = false;
-            break;
-        }
-
-        vec3copy(vecNextLocation,k4);
-        vec3nrm(k4,k4norm);
-        vec3scal(k4,stepSize,k4scal);
-
-        vec3scal(k1norm, finalStepWeights[0],temp);
-        vec3copy(temp, step);
-        vec3scal(k2norm, finalStepWeights[1], temp);
-        vec3add(step, temp,step);
-        vec3scal(k3norm, finalStepWeights[2], temp);
-        vec3add(step, temp,step);
-        vec3scal(k4norm, finalStepWeights[3],temp);
-        vec3add(step,temp,step);
-        vec3nrm(step,step);
-        vec3scal(step, stepSize, step);
-        currentIntLength += vec3mag(step);
-
-        vec3 vel;
-        vec3copy(k1,vel);
-        vec3scal(k1,finalStepWeights[0],vel);
-        vec3scal(k2,finalStepWeights[1],temp);
-        vec3add(vel,temp,vel);
-        vec3scal(k3,finalStepWeights[2],temp);
-        vec3add(vel,temp,vel);
-        vec3scal(k4,finalStepWeights[3],temp);
-        vec3add(vel,temp,vel);
-        currentIntTime += stepSize/vec3mag(vel);
-
-        vec3copy(currentLocationSave, currentLocation);
-
-        //vec3copy(k1,step);
-        //vec3nrm(step,step);
-        //vec3scal(step,stepSize,step);
-        // std::cout<<"Step"<<std::endl;
-        // vec3print(currentLocation);
-        vec3add(currentLocation,step,currentLocation);
-        // vec3print(currentLocation);
-
-        if(!this->pointInterpolator(currentLocation,vecNextLocation))
-        {
-            // vec3print(currentLocation);
-            // std::cout<< "k"<<std::endl;
-            pointValid = false;
-            break;
-        }
-        if(vec3mag(vel)<this->stagnationThreshold)
-        {
-            //std::cout<< "Stagnation break "<<this->stagnationThreshold<<std::endl;
-            //vec3print(step);
-            break;
-        }
-        // vec3print(step);
-
-        //std::cout<<  "next Point inserted "<< outputPoints->GetNumberOfPoints()<<endl;
-        /// Add each point of the integration to the streamline if flag is set
-        if(this->calcStreamlines) {
-            double point2[3] = {currentLocation[0] + this->origin[0] ,
-                                currentLocation[1] + this->origin[1],
-                                currentLocation[2] + this->origin[2]};
-            vtkIdType id = outputPoints->InsertNextPoint(point2);
-        }
-
-
-        //std::cout<< " currentIntTime "<< currentIntTime<< " this->integrationTime "<< this->integrationTime << std::endl;
-    }
-    ///If flag is not set only set end location of integration
-    if(pointValid) {
-        double point2[3] = {currentLocation[0] + this->origin[0] ,
-                            currentLocation[1] + this->origin[1],
-                            currentLocation[2] + this->origin[2]};
-        id = outputPoints->InsertNextPoint(point2);
-    }
-
-
-    //vec3print(currentLocation);
-
-    //std::cout<<"new line Numer of points "<< outputPoints->GetNumberOfPoints()<< std::endl;
-    return outputPoints;
-}
-*/
 
 ////changed 3 to 2
 vtkSmartPointer<vtkPoints> Integrator::integratePointRK4(vec2 startLocation)
@@ -938,8 +672,6 @@ vtkSmartPointer<vtkPoints> Integrator::integratePointRK4(vec2 startLocation)
         currentIntLength = this->startTime * this->integrationDirection;
     }
 
-    //std::cout << " " << currentIntTime << " " << currentIntLength<< " " << timeDiff << " " << this->integrationTime <<std::endl;
-
 
     ////changed 3 to 2 and removed currentLocation[2] + this->origin[2]
     double point[2] = {currentLocation[0] + this->origin[0],
@@ -950,94 +682,6 @@ vtkSmartPointer<vtkPoints> Integrator::integratePointRK4(vec2 startLocation)
 
     bool pointValid = true;
 
-    //std::cout << " ___________________________________________________________________" << std::endl;
-
-    /*
-
-    if ( this->iter == this->finalNum - 1)
-    {
-        while (currentIntTime <= this->endTime)
-        {
-
-            pointValid = true;
-
-            vec2copy(currentLocation, currentLocationSave);
-
-            if (!this->pointInterpolator(currentLocation, velCurrLocation, velNextLocation)) {
-                pointValid = false;
-                break;
-            }
-
-            //// changed 3 to 2
-
-            vec2 vel;
-            vec2 nextvel;
-            vec2copy(velCurrLocation, vel);
-            vec2copy(velNextLocation, nextvel);
-            vec2lint(vel, nextvel, currentIntTime, temp);
-            vec2copy(temp, vel);
-
-            vec2scal(vel, stepSize, traverseDist);
-
-            vec2copy(traverseDist, temp);
-            vec2copy(currentLocationSave, currentLocation);
-            vec2add(currentLocation, temp, currentLocation);
-
-            currentIntTime += stepSize;
-
-            if ( this->endTime - currentIntTime < stepSize )     ///points at irregular time step
-            {
-                double interpolator = this->endTime - currentIntTime;    //// new step size
-                double offset = this->endTime - this->timestep[this->iter];   //// offset from last timestep for velocity calculations
-
-                if (!this->pointInterpolator(currentLocation, velCurrLocation, velNextLocation)) {
-                    pointValid = false;
-                    break;
-                }
-
-                vec2copy(velCurrLocation, vel);
-                vec2copy(velNextLocation, nextvel);
-                vec2lint(vel, nextvel, offset , temp);
-                vec2copy(temp, vel);
-
-                vec2scal(vel, interpolator, traverseDist);
-
-                vec2copy(traverseDist, temp);
-                vec2copy(currentLocationSave, currentLocation);
-                vec2add(currentLocation, temp, currentLocation);
-
-                std::vector<double> currloc = {currentLocation[0], currentLocation[1]};
-                this->PathlineEndPoints.push_back(currloc);
-
-                currentIntTime += stepSize;
-            }
-
-            if (!this->pointInterpolator(currentLocation, velCurrLocation, velNextLocation)) {
-                pointValid = false;
-                break;
-            }
-
-            if (vec2mag(vel) < this->stagnationThreshold) {
-                break;
-            }
-
-
-            ////changed 3 to 2 and removed currentLocation[2] + this->origin[2]
-            /// Add each point of the integration to the streamline if flag is set
-            if (this->calcStreamlines) {
-                double point2[2] = {currentLocation[0] + this->origin[0],
-                                    currentLocation[1] + this->origin[1]};
-                vtkIdType id = outputPoints->InsertNextPoint(point2);
-            }
-
-        }
-
-
-    }
-
-     */
-
-    //else
 
     /// for every iteration run between the last time step and for the last iteration stop at the integration time
 
@@ -1048,8 +692,8 @@ vtkSmartPointer<vtkPoints> Integrator::integratePointRK4(vec2 startLocation)
 
         if (!this->pointInterpolator(currentLocation, velCurrLocation, velNextLocation)) {
 
-            iter2 += 1;
-            std::cout << currentLocation[0] << " " << currentLocation[1] << " " << startLocation[0] << " " << startLocation[1] << std::endl;
+            //iter2 += 1;
+            //std::cout << currentLocation[0] << " " << currentLocation[1] << " " << startLocation[0] << " " << startLocation[1] << std::endl;
             pointValid = false;
             break;
         }
@@ -1061,7 +705,6 @@ vtkSmartPointer<vtkPoints> Integrator::integratePointRK4(vec2 startLocation)
         vec2copy(velCurrLocation, vel);
         vec2copy(velNextLocation, nextvel);
         vec2lint(vel, nextvel, intFac, temp);                                                   ///// edited
-        //std::cout << vel[0]<< " " << vel[1] << " " << nextvel[0] << " " << nextvel[1] << " " << intFac << " " << temp[0] << " " << temp[1] << std::endl;
         vec2copy(temp, vel);
 
         int iterator = 0;
@@ -1080,7 +723,6 @@ vtkSmartPointer<vtkPoints> Integrator::integratePointRK4(vec2 startLocation)
                 starttimevalue = starttimevalue - static_cast<int>(starttimevalue);
             }
 
-            //auto nearestValue = static_cast<double>( ceilf(static_cast<float>(this->startTime) * 100)/ 100 );
             double nearestValue = floor(this->startTime * pow(10.0, count - 1)) / pow(10.0, count - 1) + stepSize;
             double firstTimestep = nearestValue - this->startTime;
 
@@ -1098,44 +740,15 @@ vtkSmartPointer<vtkPoints> Integrator::integratePointRK4(vec2 startLocation)
             currentIntTime += firstTimestep;
             currentIntLength += firstTimestep;
 
-            iter1 += 1;
+            //iter1 += 1;
 
         }
 
-            /*
-        //// for the last point, need to again calculate the new timestep
-        //else if ( this-> iter == this->finalNum - 1  && this->endTime - currentIntTime < stepSize )
-        else if ( this->endTime - currentIntTime < stepSize )
-        {
-            double interpolator = this->endTime - currentIntTime;    //// new step size
-
-            if (interpolator <= LIMIT_DOUBLE)
-            {
-                interpolator = this->stepSize;
-                //currentIntTime = nearestValue - this->timestep[this->iter];
-            }
-
-            vec2scal(vel, interpolator, traverseDist);
-
-            vec2copy(traverseDist, temp);
-            vec2copy(currentLocationSave, currentLocation);
-            vec2add(currentLocation, temp, currentLocation);
-
-            currentIntTime += stepSize;
-            currentIntLength += stepSize;
-            iter2 += 1;
-        }
-             */
-
+            //// for the last point, need to again calculate the new timestep
         else if ( this->integrationTime - currentIntLength < this->stepSize )
         {
             double lastTimestep = this->integrationTime - currentIntLength;    //// new step size
 
-            if (lastTimestep < LIMIT_DOUBLE)
-            {
-                lastTimestep = this->stepSize;
-                //currentIntTime = nearestValue - this->timestep[this->iter];
-            }
 
             vec2scal(vel, lastTimestep, traverseDist);
 
@@ -1161,10 +774,8 @@ vtkSmartPointer<vtkPoints> Integrator::integratePointRK4(vec2 startLocation)
             currentIntTime += this->stepSize;
             currentIntLength += this->stepSize;
 
-            iter3 += 1;
+            //iter3 += 1;
         }
-
-        std::cout << " " << currentIntTime << " " << currentIntLength<< " " << timeDiff << " " << this->integrationTime <<std::endl;
 
         if (currentIntTime >= timeDiff || currentIntLength >= this->integrationTime)
         {
@@ -1174,8 +785,8 @@ vtkSmartPointer<vtkPoints> Integrator::integratePointRK4(vec2 startLocation)
 
         if (!this->pointInterpolator(currentLocation, velCurrLocation, velNextLocation)) {
 
-            iter2 += 1;
-            std::cout << currentLocation[0] << " " << currentLocation[1] << " " << startLocation[0] << " " << startLocation[1] << " " << this->timestep[this->iter] <<std::endl;
+            //iter2 += 1;
+            //std::cout << currentLocation[0] << " " << currentLocation[1] << " " << startLocation[0] << " " << startLocation[1] << " " << this->timestep[this->iter] <<std::endl;
             pointValid = false;
             break;
         }
@@ -1188,12 +799,6 @@ vtkSmartPointer<vtkPoints> Integrator::integratePointRK4(vec2 startLocation)
             vtkIdType id = outputPoints->InsertNextPoint(point2);
         }
 
-        /*
-        if(pointValid) {                                                                    ////added new
-            double point2[2] = {currentLocation[0] + this->origin[0] ,
-                                currentLocation[1] + this->origin[1]};
-            id = outputPoints->InsertNextPoint(point2);
-        }*/
 
     }
 
@@ -1213,65 +818,6 @@ vtkSmartPointer<vtkPoints> Integrator::integratePointRK4(vec2 startLocation)
 
 }
 
-/*
-void Integrator::integrateRK4GPUWrapper()
-{
-    ///TODO check if this is still needed
-    //this->originSource[0] -= this->origin[0];
-    //this->originSource[1] -= this->origin[1];
-    //this->originSource[2] -= this->origin[2];
-
-    CudaIntegrator gpuIntegrator = CudaIntegrator(this->source->GetDimensions(),
-                                                  this->input->GetDimensions(), this->origin,
-                                                  this->originSource,
-                                                  this->source->GetNumberOfPoints(),
-                                                  this->input->GetNumberOfPoints(),
-                                                  this->source->GetSpacing(),
-                                                  this->input->GetSpacing(),
-                                                  this->integrationDirection,
-                                                  this->stepSize, this->integrationTime,
-                                                  this->stagnationThreshold,
-                                                  this->maxNumberOfSteps);
-
-
-    auto floatInput = vtkSmartPointer<vtkFloatArray>::New();
-    floatInput->SetNumberOfComponents(3);
-    floatInput->SetNumberOfTuples(this->input->GetPointData()->GetArray(0)->GetNumberOfTuples());
-    for(unsigned int index = 0; index < floatInput->GetNumberOfTuples();++index)
-    {
-        floatInput->SetTuple(index,this->input->GetPointData()->GetArray(0)->GetTuple(index));
-    }
-    float* inputArray = (float*)floatInput->GetVoidPointer(0);
-    //int sizeFlowMap = sizeof(float) * this->source->GetNumberOfPoints()* 3;
-    int sizeFlowMap = sizeof(double) * this->source->GetNumberOfPoints()* 3;
-#ifndef UNITTEST
-    //float* flowArray = (float*) malloc(sizeFlowMap);
-    double* flowArray = (double*) malloc(sizeFlowMap);
-    double* ftleArray = gpuIntegrator.integrate(inputArray,flowArray);
-#else
-    double* ftleArray;
-    double* flowArray;
-#endif
-
-    //auto flowMap = vtkSmartPointer<vtkFloatArray>::New();
-    auto flowMap = vtkSmartPointer<vtkDoubleArray>::New();
-    flowMap->SetNumberOfComponents(3);
-    //Black Pointer Voodoo Magic
-#ifndef CPUEXEC
-    auto ftleField = vtkSmartPointer<vtkDoubleArray>::New();
-    ftleField->SetVoidArray(ftleArray, this->source->GetNumberOfPoints(),0);
-    ftleField->SetName("FTLE");
-    this->source->GetPointData()->AddArray(ftleField);
-#endif
-    flowMap->SetVoidArray(flowArray, this->source->GetNumberOfPoints()*3,0);
-    //ftleField->Print(std::cout);
-    flowMap->SetName("FlowMap");
-    this->source->GetPointData()->AddArray(flowMap);
-
-    //return ftleField;
-
-}
-*/
 
 void Integrator::integrateRK4GPUWrapper()
 {

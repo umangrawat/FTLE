@@ -108,9 +108,9 @@
 
             </DoubleVectorProperty>
 
-
-            <OutputPort name="FTLE Field" index="0" id="port0"/>
-            <OutputPort name="Trajectories(CPU ONLY)" index="1" id="port1"/>
+            <OutputPort name="Ignore" index="0" id="port0"/>
+            <OutputPort name="FTLE Field" index="1" id="port1"/>
+            <OutputPort name="Trajectories(CPU ONLY)" index="2" id="port2"/>
 
         </SourceProxy>
     </ProxyGroup>
