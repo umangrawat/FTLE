@@ -12,6 +12,7 @@
 //int iter1 = 0;
 //int iter2 = 0;
 //int iter3 = 0;
+int iter1,iter2,iter3,iter4, iter5, iter6 = 0;
 
 
 
@@ -563,7 +564,7 @@ vtkSmartPointer<vtkPolyData> Integrator::integrateRK4()                         
             ////changed 3 to 2
             vec2 startLocation;
             double p[2];
-            double point[2];
+            double point[3];
             vtkIdType currentId = vtkIdType(i);
 
             this->source->GetPoint(currentId, p);
@@ -613,7 +614,7 @@ vtkSmartPointer<vtkPolyData> Integrator::integrateRK4()                         
             vec2 startLocation;
             std::vector<double> p = NewEndPoints.at(i);
 
-            double point[2];
+            double point[3];
 
             vec2set(startLocation, p[0], p[1]);
 
@@ -632,7 +633,7 @@ vtkSmartPointer<vtkPolyData> Integrator::integrateRK4()                         
 
     }
 
-    //std::cout << "iter 1 " <<iter1 << " iter 2 " << iter2 << " iter 3 " << iter3 << std::endl;
+    std::cout << "iter 1 " <<iter1 << " iter 2 " << iter2 << " iter 3 " << iter3 << " iter 4 " << iter4<< " iter 5 " << iter5 <<" iter 6 " << iter6<<std::endl;
     vtkIdType numPoints = outputPoints->GetNumberOfPoints();
     std::cout<< "number of points " << numPoints <<std::endl;
 
@@ -646,7 +647,500 @@ vtkSmartPointer<vtkPolyData> Integrator::integrateRK4()                         
 
 }
 
+////changed 3 to 2
+vtkSmartPointer<vtkPoints> Integrator::integratePointRK4(vec2 startLocation)
+{
 
+    vec2 currentLocation;
+    vec2 velCurrLocation;
+    vec2 currentLocationSave;
+    vec2 traverseDist;
+    vec2 temp;
+    vec2copy(startLocation,currentLocation);
+    vec2 velNextLocation;
+    vtkSmartPointer<vtkPoints> outputPoints = vtkSmartPointer<vtkPoints>::New();
+    double intFac;
+    double currentIntTime = 0.;
+    double currentIntLength = this->timestep[this->iter] * this->integrationDirection;                             /// start from the particular iteration time step
+    double timeDiff = (this->timestep[this->iter + 1 * this->integrationDirection ] - this->timestep[this->iter]) * this->integrationDirection;                ////                /// Time gap between 2 consecutive intervals
+
+    vec2 k1,k2,k3,k4;
+    vec2 k1norm, k2norm, k3norm, k4norm;
+    vec2 k1scal, k2scal, k3scal, k4scal;
+    vec2 step;
+    //vec2 k1, k1scal;
+
+    double interStepWeights[3] = {.5,.5,1.0};
+    double finalStepWeights[4] = {1.0/6.0, 1.0/3.0,1.0/3.0,1.0/6.0};
+
+
+    ////setting initial currenttime only for the first iteration
+    if (this->iter == this->initialNum)
+    {
+        currentIntTime = (this->startTime - this->timestep[this->iter]) * this->integrationDirection;
+        currentIntLength = this->startTime * this->integrationDirection;
+    }
+
+
+    ////changed 3 to 2 and removed currentLocation[2] + this->origin[2]
+    double point[3] = {currentLocation[0] + this->origin[0],
+                       currentLocation[1] + this->origin[1],0.};
+
+    vtkIdType id = outputPoints->InsertNextPoint(point);
+    id = outputPoints->InsertNextPoint(point);
+
+    bool pointValid = true;
+
+
+    /// for every iteration run between the last time step and for the last iteration stop at the integration time
+
+    while ( currentIntTime < timeDiff && currentIntLength < this->integrationTime )
+    {
+        pointValid = true;
+        vec2copy(currentLocation, currentLocationSave);
+
+        if (!this->pointInterpolator(currentLocation, velCurrLocation, velNextLocation)) {
+
+            iter1 += 1;
+            std::cout <<"outside loop " <<  currentLocation[0] << " " << currentLocation[1] << " " << startLocation[0] << " " << startLocation[1] << std::endl;
+            //pointValid = false;
+            //break;
+        }
+
+
+        int iterator = 0;
+
+        //// very first Starting point, first step, need to calculate the new timestep
+        if (this->iter == this->initialNum && currentIntTime == (this->startTime - this->timestep[this->iter]) * this->integrationDirection )
+        {
+
+            int count = 0;
+            double starttimevalue = fabs(this->startTime);
+            starttimevalue = starttimevalue - static_cast<int>(starttimevalue);
+
+            while (starttimevalue != 0)
+            {
+                starttimevalue = starttimevalue * 10;
+                count += 1;
+                starttimevalue = starttimevalue - static_cast<int>(starttimevalue);
+            }
+
+            double nearestValue = floor(this->startTime * pow(10.0, count - 1)) / pow(10.0, count - 1) + stepSize;
+            double firstTimestep = nearestValue - this->startTime;
+
+            if (firstTimestep < LIMIT_DOUBLE)
+            {
+                firstTimestep = this->stepSize;
+            }
+
+            intFac = currentIntTime / timeDiff;
+
+            vec2 vel;
+            vec2 nextvel;
+            vec2copy(velCurrLocation, vel);
+            vec2copy(velNextLocation, nextvel);
+            vec2lint(vel, nextvel, intFac, temp);                                                   ///// edited
+            vec2copy(temp, vel);
+
+            vec2copy(vel, k1);
+            //vec2nrm(k1,k1norm);
+            vec2scal(k1,firstTimestep,k1scal);
+
+            vec2copy(k1scal,temp);
+            vec2scal(temp, interStepWeights[0],temp);
+            vec2copy(currentLocationSave, currentLocation);
+            vec2add(currentLocation,temp,currentLocation);
+
+
+            if(!this->pointInterpolator(currentLocation,velCurrLocation, velNextLocation))
+            {
+                iter2 += 1;
+                //vec3print(currentLocation);
+                // std::cout<< "k2"<<std::endl;
+                pointValid = false;
+                break;
+            }
+
+            vec2copy(velCurrLocation, vel);
+            vec2copy(velNextLocation, nextvel);
+
+            intFac = (currentIntTime + (firstTimestep / 2.) )/ timeDiff;
+
+            vec2lint(vel, nextvel, intFac, temp);                                                   ///// edited
+            vec2copy(temp, vel);
+
+            vec2copy(vel, k2);
+            //vec2nrm(k2,k2norm);
+            vec2scal(k2,firstTimestep,k2scal);
+
+            vec2copy(k2scal,temp);
+            vec2scal(temp, interStepWeights[1],temp);
+            vec2copy(currentLocationSave, currentLocation);
+            vec2add(currentLocation,temp,currentLocation);
+
+            if(!this->pointInterpolator(currentLocation,velCurrLocation, velNextLocation))
+            {
+                iter3+=1;
+                //vec3print(currentLocation);
+                // std::cout<< "k2"<<std::endl;
+                pointValid = false;
+                break;
+            }
+
+            vec2copy(velCurrLocation, vel);
+            vec2copy(velNextLocation, nextvel);
+            vec2lint(vel, nextvel, intFac, temp);                                                   ///// edited
+            vec2copy(temp, vel);
+
+            vec2copy(vel, k3);
+            //vec2nrm(k3,k3norm);
+            vec2scal(k3,firstTimestep,k3scal);
+
+            vec2copy(k3scal,temp);
+            vec2scal(temp, interStepWeights[2],temp);
+            vec2copy(currentLocationSave, currentLocation);
+            vec2add(currentLocation,temp,currentLocation);
+
+            if(!this->pointInterpolator(currentLocation,velCurrLocation, velNextLocation))
+            {
+                iter4+=1;
+
+                //vec3print(currentLocation);
+                // std::cout<< "k2"<<std::endl;
+                pointValid = false;
+                break;
+            }
+
+            vec2copy(velCurrLocation, vel);
+            vec2copy(velNextLocation, nextvel);
+            intFac = (currentIntTime + firstTimestep) / timeDiff;                                        ///
+            vec2lint(vel, nextvel, intFac, temp);                                                   ///// edited
+            vec2copy(temp, vel);
+
+            vec2copy(vel, k4);
+            //vec2nrm(k4,k4norm);
+            vec2scal(k4,firstTimestep,k4scal);
+
+
+            vec2copy(k1scal,vel);
+            vec2scal(k1scal,finalStepWeights[0],vel);
+            vec2scal(k2scal,finalStepWeights[1],temp);
+            vec2add(vel,temp,vel);
+            vec2scal(k3scal,finalStepWeights[2],temp);
+            vec2add(vel,temp,vel);
+            vec2scal(k4scal,finalStepWeights[3],temp);
+            vec2add(vel,temp,vel);
+            currentIntTime += firstTimestep;
+            currentIntLength += firstTimestep;
+
+            vec2copy(currentLocationSave, currentLocation);
+            vec2add(currentLocation, vel, currentLocation);
+            //vec2add(currentLocation, step, currentLocation);
+
+            if(!this->pointInterpolator(currentLocation,velCurrLocation, velNextLocation))
+            {
+                iter5+=1;
+                std::cout <<"iter5 first loop " <<  currentLocation[0] << " " << currentLocation[1] << " " << startLocation[0] << " " << startLocation[1] << std::endl;
+                // vec3print(currentLocation);
+                // std::cout<< "k"<<std::endl;
+                pointValid = false;
+                break;
+            }
+
+        }
+
+            //// for the last point, need to again calculate the new timestep
+        else if ( this->integrationTime - currentIntLength < this->stepSize )
+        {
+
+            double lastTimestep = this->integrationTime - currentIntLength;    //// new step size
+
+            intFac = currentIntTime / timeDiff;
+
+            vec2 vel;
+            vec2 nextvel;
+            vec2copy(velCurrLocation, vel);
+            vec2copy(velNextLocation, nextvel);
+            vec2lint(vel, nextvel, intFac, temp);                                                   ///// edited
+            vec2copy(temp, vel);
+
+            vec2copy(vel, k1);
+            //vec2nrm(k1,k1norm);
+            vec2scal(k1,lastTimestep,k1scal);
+
+            vec2copy(k1scal,temp);
+            vec2scal(temp, interStepWeights[0],temp);
+            vec2copy(currentLocationSave, currentLocation);
+            vec2add(currentLocation,temp,currentLocation);
+
+
+            if(!this->pointInterpolator(currentLocation,velCurrLocation, velNextLocation))
+            {
+                iter2 += 1;
+                //vec3print(currentLocation);
+                // std::cout<< "k2"<<std::endl;
+                pointValid = false;
+                break;
+            }
+
+            vec2copy(velCurrLocation, vel);
+            vec2copy(velNextLocation, nextvel);
+
+            intFac = (currentIntTime + lastTimestep / 2. )/ timeDiff;
+
+            vec2lint(vel, nextvel, intFac, temp);                                                   ///// edited
+            vec2copy(temp, vel);
+
+            vec2copy(vel, k2);
+            //vec2nrm(k2,k2norm);
+            vec2scal(k2,lastTimestep,k2scal);
+
+            vec2copy(k2scal,temp);
+            vec2scal(temp, interStepWeights[1],temp);
+            vec2copy(currentLocationSave, currentLocation);
+            vec2add(currentLocation,temp,currentLocation);
+
+            if(!this->pointInterpolator(currentLocation,velCurrLocation, velNextLocation))
+            {
+                iter3+=1;
+                //vec3print(currentLocation);
+                // std::cout<< "k2"<<std::endl;
+                pointValid = false;
+                break;
+            }
+
+            vec2copy(velCurrLocation, vel);
+            vec2copy(velNextLocation, nextvel);
+            vec2lint(vel, nextvel, intFac, temp);                                                   ///// edited
+            vec2copy(temp, vel);
+
+            vec2copy(vel, k3);
+            //vec2nrm(k3,k3norm);
+            vec2scal(k3,lastTimestep,k3scal);
+
+            vec2copy(k3scal,temp);
+            vec2scal(temp, interStepWeights[2],temp);
+            vec2copy(currentLocationSave, currentLocation);
+            vec2add(currentLocation,temp,currentLocation);
+
+            if(!this->pointInterpolator(currentLocation,velCurrLocation, velNextLocation))
+            {
+                iter4+=1;
+
+                //vec3print(currentLocation);
+                // std::cout<< "k2"<<std::endl;
+                pointValid = false;
+                break;
+            }
+
+            vec2copy(velCurrLocation, vel);
+            vec2copy(velNextLocation, nextvel);
+            intFac = (currentIntTime + lastTimestep) / timeDiff;                                        ///
+            vec2lint(vel, nextvel, intFac, temp);                                                   ///// edited
+            vec2copy(temp, vel);
+
+            vec2copy(vel, k4);
+            //vec2nrm(k4,k4norm);
+            vec2scal(k4,lastTimestep,k4scal);
+
+
+            vec2copy(k1scal,vel);
+            vec2scal(k1scal,finalStepWeights[0],vel);
+            vec2scal(k2scal,finalStepWeights[1],temp);
+            vec2add(vel,temp,vel);
+            vec2scal(k3scal,finalStepWeights[2],temp);
+            vec2add(vel,temp,vel);
+            vec2scal(k4scal,finalStepWeights[3],temp);
+            vec2add(vel,temp,vel);
+            currentIntTime += lastTimestep;
+            currentIntLength += lastTimestep;
+
+            vec2copy(currentLocationSave, currentLocation);
+            vec2add(currentLocation, vel, currentLocation);
+            //vec2add(currentLocation, step, currentLocation);
+
+            if(!this->pointInterpolator(currentLocation,velCurrLocation, velNextLocation))
+            {
+                iter5+=1;
+                std::cout <<"iter5 second loop " <<  currentLocation[0] << " " << currentLocation[1] << " " << startLocation[0] << " " << startLocation[1] << std::endl;
+                // vec3print(currentLocation);
+                // std::cout<< "k"<<std::endl;
+                pointValid = false;
+                break;
+            }
+
+        }
+            //// implementing RK4
+            //// rest points
+
+        else {
+
+            intFac = currentIntTime / timeDiff;
+
+            vec2 vel;
+            vec2 nextvel;
+            vec2copy(velCurrLocation, vel);
+            vec2copy(velNextLocation, nextvel);
+            vec2lint(vel, nextvel, intFac, temp);                                                   ///// edited
+            vec2copy(temp, vel);
+
+            vec2copy(vel, k1);
+            //vec2nrm(k1,k1norm);
+            vec2scal(k1,this->stepSize,k1scal);
+
+            vec2copy(k1scal,temp);
+            vec2scal(temp, interStepWeights[0],temp);
+            vec2copy(currentLocationSave, currentLocation);
+            vec2add(currentLocation,temp,currentLocation);
+
+
+            if(!this->pointInterpolator(currentLocation,velCurrLocation, velNextLocation))
+            {
+                iter2 += 1;
+                //vec3print(currentLocation);
+                // std::cout<< "k2"<<std::endl;
+                pointValid = false;
+                break;
+            }
+
+            vec2copy(velCurrLocation, vel);
+            vec2copy(velNextLocation, nextvel);
+
+            intFac = (currentIntTime + this->stepSize / 2. )/ timeDiff;
+
+            vec2lint(vel, nextvel, intFac, temp);                                                   ///// edited
+            vec2copy(temp, vel);
+
+            vec2copy(vel, k2);
+            //vec2nrm(k2,k2norm);
+            vec2scal(k2,this->stepSize,k2scal);
+
+            vec2copy(k2scal,temp);
+            vec2scal(temp, interStepWeights[1],temp);
+            vec2copy(currentLocationSave, currentLocation);
+            vec2add(currentLocation,temp,currentLocation);
+
+            if(!this->pointInterpolator(currentLocation,velCurrLocation, velNextLocation))
+            {
+                iter3+=1;
+                //vec3print(currentLocation);
+                // std::cout<< "k2"<<std::endl;
+                pointValid = false;
+                break;
+            }
+
+            vec2copy(velCurrLocation, vel);
+            vec2copy(velNextLocation, nextvel);
+            vec2lint(vel, nextvel, intFac, temp);                                                   ///// edited
+            vec2copy(temp, vel);
+
+            vec2copy(vel, k3);
+            //vec2nrm(k3,k3norm);
+            vec2scal(k3,this->stepSize,k3scal);
+
+            vec2copy(k3scal,temp);
+            vec2scal(temp, interStepWeights[2],temp);
+            vec2copy(currentLocationSave, currentLocation);
+            vec2add(currentLocation,temp,currentLocation);
+
+            if(!this->pointInterpolator(currentLocation,velCurrLocation, velNextLocation))
+            {
+                iter4+=1;
+
+                //vec3print(currentLocation);
+                // std::cout<< "k2"<<std::endl;
+                pointValid = false;
+                break;
+            }
+
+            vec2copy(velCurrLocation, vel);
+            vec2copy(velNextLocation, nextvel);
+            intFac = (currentIntTime + this->stepSize) / timeDiff;                                        ///
+            vec2lint(vel, nextvel, intFac, temp);                                                   ///// edited
+            vec2copy(temp, vel);
+
+            vec2copy(vel, k4);
+            //vec2nrm(k4,k4norm);
+            vec2scal(k4,this->stepSize,k4scal);
+
+
+            vec2copy(k1scal,vel);
+            vec2scal(k1scal,finalStepWeights[0],vel);
+            vec2scal(k2scal,finalStepWeights[1],temp);
+            vec2add(vel,temp,vel);
+            vec2scal(k3scal,finalStepWeights[2],temp);
+            vec2add(vel,temp,vel);
+            vec2scal(k4scal,finalStepWeights[3],temp);
+            vec2add(vel,temp,vel);
+            currentIntTime += this->stepSize;
+            currentIntLength += this->stepSize;
+
+            vec2copy(currentLocationSave, currentLocation);
+            vec2add(currentLocation, vel, currentLocation);
+            //vec2add(currentLocation, step, currentLocation);
+
+
+            if(!this->pointInterpolator(currentLocation,velCurrLocation, velNextLocation))
+            {
+                iter5+=1;
+                //std::cout << "third loop " << currentLocation[0] << " " << currentLocation[1] << " " << startLocation[0] << " " << startLocation[1] << " " << this->timestep[this->iter] <<std::endl;
+
+                //std::cout<< "step "<< step[0] <<" " << step[1] <<std::endl;
+                //std::cout<< "temp "<< temp[0] <<" " << temp[1] <<std::endl;
+
+                // vec3print(currentLocation);
+                // std::cout<< "k"<<std::endl;
+                pointValid = false;
+                break;
+            }
+
+            //iter3 += 1;
+        }
+
+        if (currentIntTime >= timeDiff || currentIntLength >= this->integrationTime)
+        {
+            //std::cout<< currentLocation[0] << " " << currentLocation[1] << std::endl;
+            std::vector<double> currloc = {currentLocation[0], currentLocation[1]};
+            this->PathlineEndPoints.push_back(currloc);
+        }
+
+
+        if (!this->pointInterpolator(currentLocation, velCurrLocation, velNextLocation)) {
+
+            iter6 += 1;
+            //mstd::cout << "outside loop " << currentLocation[0] << " " << currentLocation[1] << " " << startLocation[0] << " " << startLocation[1] << " " << this->timestep[this->iter] <<std::endl;
+            pointValid = false;
+            break;
+        }
+
+        ////changed 3 to 2 and removed currentLocation[2] + this->origin[2]
+        /// Add each point of the integration to the streamline if flag is set
+        if (this->calcStreamlines) {
+            double point2[2] = {currentLocation[0] + this->origin[0],
+                                currentLocation[1] + this->origin[1]};
+            vtkIdType id = outputPoints->InsertNextPoint(point2);
+        }
+
+
+    }
+
+
+    ////changed 3 to 2 and removed currentLocation[2] + this->origin[2]
+    ///If flag is not set only set end location of integration
+
+
+    if(pointValid) {
+        double point2[3] = {currentLocation[0] + this->origin[0] ,
+                            currentLocation[1] + this->origin[1], 0.};
+        id = outputPoints->InsertNextPoint(point2);
+    }
+
+    return outputPoints;
+
+
+}
+
+/*
 ////changed 3 to 2
 vtkSmartPointer<vtkPoints> Integrator::integratePointRK4(vec2 startLocation)
 {
@@ -817,7 +1311,7 @@ vtkSmartPointer<vtkPoints> Integrator::integratePointRK4(vec2 startLocation)
 
 
 }
-
+*/
 
 void Integrator::integrateRK4GPUWrapper()
 {

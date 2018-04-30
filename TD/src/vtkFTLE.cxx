@@ -39,6 +39,7 @@
 #include <vtkCompositeDataPipeline.h>
 #include <vtkAppendPolyData.h>
 #include <vtkImageAppend.h>
+#include <vtkXMLImageDataWriter.h>
 
 using namespace std;
 using namespace std::chrono;
@@ -184,7 +185,7 @@ int vtkFTLE::RequestUpdateExtent(vtkInformation*,vtkInformationVector** inputVec
         inInfo->Set(vtkStreamingDemandDrivenPipeline::WHOLE_EXTENT(), tmp, 6);
         inInfo->Set(vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(), tmp, 6);
 
-        std::cout << "request update extent " << tmp[1] << " " << tmp[3] << " " << tmp[5] << std::endl;
+        //std::cout << "request update extent " << tmp[1] << " " << tmp[3] << " " << tmp[5] << std::endl;
         //outInfo1->Set(vtkStreamingDemandDrivenPipeline::UPDATE_EXTENT(), resolutionSeedGrid, 6);
 
     }
@@ -223,7 +224,7 @@ int vtkFTLE::RequestInformation(vtkInformation *vtkNotUsed(request),
     outInfo1->Set(vtkDataObject::SPACING(), this->spacingSeedGrid,3);
     outInfo1->Set(vtkDataObject::ORIGIN(),this->originSeedGrid,3);
 
-    std::cout << "request info " << resolutionSeedGrid[1] << " " <<resolutionSeedGrid[3] << " "<<resolutionSeedGrid[5]<<std::endl;
+    //std::cout << "request info " << resolutionSeedGrid[1] << " " <<resolutionSeedGrid[3] << " "<<resolutionSeedGrid[5]<<std::endl;
 
 
 
@@ -816,15 +817,33 @@ int vtkFTLE::RequestData(vtkInformation *vtkNotUsed(request),
         this->seedGrid->GetPointData()->AddArray(endPoints);
     }
 
+    std::stringstream initTime;
+    initTime << this->tauInitial;
+    std::stringstream advecTime;
+    advecTime << this->tauInitial+ this->tauFinal;
+
+    std::string filename = "ftle_";
+    std::string filename2 = "to";
+    std::string filename3 = ".vti";
+    std::string path = filename + std::string(initTime.str()) + filename2 + std::string(advecTime.str()) + filename3;
+
+    vtkSmartPointer<vtkXMLImageDataWriter> writer =vtkSmartPointer<vtkXMLImageDataWriter>::New();
+   #if VTK_MAJOR_VERSION <= 5
+    writer->SetInputConnection(imageData->GetProducerPort());
+   #else
+    writer->SetInputData(this->seedGrid);
+   #endif
+    writer->SetFileName(path.c_str());
+    writer->Write();
 
 
-        ///Translate SeedGrid to correct origin
-        double newOrigin[3];
-        this->inputGrid->GetOrigin(newOrigin);
-        newOrigin[0] += this->originSeedGrid[0];
-        newOrigin[1] += this->originSeedGrid[1];
-        newOrigin[2] += this->originSeedGrid[2];
-        this->seedGrid->SetOrigin(newOrigin);
+    ///Translate SeedGrid to correct origin
+    double newOrigin[3];
+    this->inputGrid->GetOrigin(newOrigin);
+    newOrigin[0] += this->originSeedGrid[0];
+    newOrigin[1] += this->originSeedGrid[1];
+    newOrigin[2] += this->originSeedGrid[2];
+    this->seedGrid->SetOrigin(newOrigin);
 
     vtkSmartPointer<vtkImageData> copy = vtkImageData::SafeDownCast(inData->GetBlock(0));
 
@@ -892,6 +911,8 @@ vtkSmartPointer<vtkDoubleArray> vtkFTLE::computeDerivatives(vtkSmartPointer<vtkI
     mat2 jacobi;
     vec2 du;
     vec2 dv;
+
+    double total = 0.;
 
 
     for (int z=0; z< dataDims[2]; z++)                                        ////changed to 1
@@ -1000,15 +1021,17 @@ vtkSmartPointer<vtkDoubleArray> vtkFTLE::computeDerivatives(vtkSmartPointer<vtkI
                 }
 
                 eMax = 1.0/ fabs((this->tauFinal)) * log(sqrt(eMax));
+                //eMax = 1.0/ fabs((this->tauFinal))*sqrt(eMax);
                 id = getIndex(z,y,x,dataDims);
                 /// Possible error source because eMax is only a scalar
                 ftle->SetTuple(id,&eMax);
+                total += eMax;
 
             }
         }
     }
 
-
+    //std::cout<< "FTLE Total w/o log " << total << std::endl;
     return ftle;
 
 }
